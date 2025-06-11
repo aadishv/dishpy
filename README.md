@@ -114,6 +114,20 @@ Build and upload your project:
 ### `dishpy vexcom [args...]`
 Direct access to the underlying vexcom tool for advanced usage. Pass any vexcom arguments directly.
 
+## Using VEXcom Directly
+
+DishPy includes the vexcom binary which can be called directly for advanced usage or troubleshooting. The `dishpy vexcom` command is a convenience wrapper that passes all arguments to the underlying vexcom binary.
+
+examples
+
+```bash
+uvx dishpy vexcom --flag1 arg1 --etc
+```
+
+```bash
+--python=my_python_vm.bin --json --progress
+```
+
 ## Project Configuration
 
 The `dishpy.json` file contains project settings:
