@@ -5,8 +5,8 @@ import json
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
-from vexcom import run_vexcom
-from amalgamator import combine_project
+from .vexcom import run_vexcom
+from .amalgamator import combine_project
 
 console = Console()
 
