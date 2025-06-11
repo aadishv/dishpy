@@ -2,6 +2,36 @@
 
 A Python development tool for VEX Competition robotics that combines multi-file Python projects into single scripts and uploads them to VEX V5 brains.
 
+## Roadmap
+
+ - [x] Bindings to vexcom
+ - [x] Project initialization CLI
+ - [x] Script amalgamation through AST parsing
+ - [ ] Custom libraries for projects
+ - [ ] Better documentation for using vexcom's common functions
+
+## Why/when should I use DishPy over X?
+
+* PROS/VEXcode text -> you don't like C++
+* vexide -> you don't like Rust
+* VEXcode blocks -> you're a grown up /j
+* VEXcode Python -> you want multifile support, an editor other than VEXcode/VSCode, libraries (coming soon!), and a CLI
+
+Note that, unlike PROS & vexide, DishPy is not a *from-scratch* rewrite that does scheduling and everything (as an eight grader I am physically unable to make such a thing). Instead, it uses the exact same Python VM as VEXcode and the VScode extension and uploads code in the exact same way and binds to the same SDK -- the only difference is that the DX of DishPy is wayyy better.
+
+## Should you use DishPy?
+
+Unfortunately, the answer right now is **probably not** if you are a competition team. I cannot confirm I will be available to debug or maintain this at all times, so keep that in mind.
+
+If you do want to use this in competition, make sure to read the amalgamated files before running the programs to make sure nothing was lost in translation.
+
+If you want to make this better, feel free to
+
+1. Contribute and file a PR. The entire repository is open-source (that's probably how you are reading this :P)
+2. Fork it! This is MIT licensed so you can do whatever you want
+3. Play with it, report errors, and ping me in VTOW about them.
+
+
 ## Features
 
 - **Project Management**: Initialize new VEX robotics projects with a structured template
@@ -148,3 +178,12 @@ DishPy is designed to streamline VEX Competition robotics development in Python.
 ## License
 
 This project is licensed under the MIT License.
+
+## Credits
+
+* Lewis | vexide (reverse-engineering vexcom calls)
+* andrew | 781X (digging thru extension code w/ me)
+* Aadish | 3151A (me)
+* Chroma | 3332A | 3151A (inspiration)
+* Gemini 2.5 Pro (LLM -- first run)
+* Claude 4 Sonnet (LLM -- agentic tasks)
