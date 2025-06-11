@@ -11,14 +11,26 @@ A Python development tool for VEX Competition robotics that combines multi-file 
 
 ## Installation
 
-todo!
+Make sure you have [uv](https://github.com/astral-sh/uv) installed.
+
+Add the following to your `.zshrc`, `.bashrc`, etc.:
+```bash
+export UV_INDEX_STRATEGY="unsafe-best-match"
+export UV_EXTRA_INDEX_URL="https://test.pypi.org/simple/"
+```
+Open a new terminal to apply changes, and then run dishpy:
+```bash
+uv tool run dishpy
+# or
+uvx dishpy
+```
 
 ## Quick Start
 
 ### 1. Initialize a New Project
 
 ```bash
-dishpy init
+uvx dishpy init
 ```
 
 This creates:
@@ -50,7 +62,7 @@ my-robot/
 ### 3. Build and Upload
 
 ```bash
-dishpy mu
+uvx dishpy mu
 ```
 
 This command:
