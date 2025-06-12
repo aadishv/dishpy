@@ -43,8 +43,56 @@ class Prefixer(ast.NodeTransformer):
         original_name = node.name
         if original_name in self.declarations:
             node.name = self.file_renames.get(original_name, original_name)
+        # Visit argument annotations
+        for arg in node.args.args + node.args.kwonlyargs:
+            self.visit(arg)
+        if node.args.vararg:
+            self.visit(node.args.vararg)
+        if node.args.kwarg:
+            self.visit(node.args.kwarg)
+        # Visit return annotation
+        if node.returns:
+            node.returns = self._visit_annotation(node.returns)
         self.generic_visit(node)
         return node
+
+    def visit_AsyncFunctionDef(self, node):
+        # Same logic as FunctionDef
+        return self.visit_FunctionDef(node)
+
+    def visit_arg(self, node):
+        if node.annotation:
+            node.annotation = self._visit_annotation(node.annotation)
+        return node
+
+    def visit_AnnAssign(self, node):
+        if node.annotation:
+            node.annotation = self._visit_annotation(node.annotation)
+        self.generic_visit(node)
+        return node
+
+    def _visit_annotation(self, annotation):
+        # Recursively visit annotation nodes and rename if needed
+        if isinstance(annotation, ast.Name):
+            original_name = annotation.id
+            # Check if this is a declaration in the current file
+            if original_name in self.declarations:
+                annotation.id = self.file_renames.get(original_name, original_name)
+            # Check if this is a reference to an imported symbol
+            elif original_name in self.origins:
+                origin_file, original_import_name = self.origins[original_name]
+                new_name = self.rename_map.get(origin_file, {}).get(original_import_name)
+                if new_name:
+                    annotation.id = new_name
+        elif isinstance(annotation, ast.Attribute):
+            # Handle qualified names (e.g., module.C)
+            annotation.value = self._visit_annotation(annotation.value)
+        elif isinstance(annotation, ast.Subscript):
+            annotation.value = self._visit_annotation(annotation.value)
+            annotation.slice = self._visit_annotation(annotation.slice)
+        elif isinstance(annotation, ast.Tuple):
+            annotation.elts = [self._visit_annotation(e) for e in annotation.elts]
+        return annotation
 
     def visit_ClassDef(self, node):
         original_name = node.name

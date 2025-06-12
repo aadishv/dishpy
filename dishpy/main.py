@@ -2,6 +2,7 @@ import sys
 import os
 import shutil
 import json
+from . import __version__
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
@@ -75,7 +76,7 @@ def mu_command(verbose=False):
 def show_help():
     """Display help information"""
     help_text = Text()
-    help_text.append("dishpy", style="bold magenta")
+    help_text.append(f"dishpy {__version__}", style="bold magenta")
     help_text.append(" - VEX Competition Development Tool\n\n", style="white")
     help_text.append("Commands:\n", style="bold white")
     help_text.append("  init    ", style="bold cyan")
