@@ -291,6 +291,9 @@ def combine_project(main_file, output_file, verbose=False):
     if verbose:
         print("DEBUG: Sorting files topologically...")
     sorted_files = _topological_sort(dep_graph)
+    # Ensure main file is always included, even if it's not in the dependency graph (e.g., single-file project)
+    if main_file_abs not in sorted_files:
+        sorted_files.append(main_file_abs)
     if verbose:
         print(f"DEBUG: File processing order: {[os.path.basename(f) for f in sorted_files]}")
 

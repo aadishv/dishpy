@@ -1,0 +1,16 @@
+site_name: DishPy Docs
+theme:
+  name: terminal
+  pygments_style: dracula # set by default
+  icon: heroicons:rocket-launch # use the shadcn svg by default
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_labels: false
+            docstring_style: google
+            show_source: false
+            show_root_heading: true
+            heading_level: 2
