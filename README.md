@@ -60,7 +60,17 @@ uvx dishpy
 ### 1. Initialize a New Project
 
 ```bash
+# Initialize in current directory with defaults
 uvx dishpy init
+
+# Initialize with custom name and slot
+uvx dishpy init --name "My Competition Robot" --slot 3
+
+# Create new directory and initialize project
+uvx dishpy create --name "awesome-robot"
+
+# Create with custom slot
+uvx dishpy create --name "competition-bot" --slot 2
 ```
 
 This creates:
@@ -103,13 +113,45 @@ This command:
 ## Commands
 
 ### `dishpy init`
-Initialize a new VEX robotics project with template files and project structure.
+Initialize a new VEX robotics project in the current directory with template files and project structure.
+
+**Options:**
+- `--name <name>` - Set project name (optional, defaults to "My DishPy Project")
+- `--slot <slot>` - Set program slot number (optional, defaults to 1)
+
+**Examples:**
+```bash
+dishpy init                                    # Use defaults
+dishpy init --name "Competition Bot"           # Custom name
+dishpy init --name "Test Robot" --slot 3      # Custom name and slot
+```
+
+### `dishpy create`
+Create a new project directory and initialize it with template files.
+
+**Options:**
+- `--name <name>` - Project name and directory name (**required**)
+- `--slot <slot>` - Set program slot number (optional, defaults to 1)
+
+**Examples:**
+```bash
+dishpy create --name "my-robot"                # Creates my-robot/ directory
+dishpy create --name "competition-bot" --slot 2 # Custom slot
+```
 
 ### `dishpy mu`
-Build and upload your project:
+Build and upload your project to a VEX V5 brain:
 - Combines multi-file project into single script
 - Uploads to VEX V5 brain using project configuration
-- Add `--verbose` flag for detailed output
+
+**Options:**
+- `--verbose` - Enable detailed output during build and upload
+
+**Examples:**
+```bash
+dishpy mu              # Standard build and upload
+dishpy mu --verbose    # Detailed output
+```
 
 ### `dishpy vexcom [args...]`
 Direct access to the underlying vexcom tool for advanced usage. Pass any vexcom arguments directly.
@@ -194,6 +236,11 @@ DishPy is designed to streamline VEX Competition robotics development in Python.
 This project is licensed under the MIT License.
 
 ## Changelog
+
+**v0.3**
+
+* Added a breaking bug that affected all users on v0.2.2. In the port to vexcom downloading, I accidentally deleted the vex.py resource. This will not affect creating or uploading projects, but will throw an error with running `dishpy init` or `dishpy create`. Fixed by adding back the file.
+* Made docs look more modern! Plus, updated the home page with all of the new tidbits we have here.
 
 **v0.2.2**
 
