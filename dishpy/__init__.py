@@ -11,11 +11,12 @@ __author__ = "Aadish V"
 __email__ = "aadish@ohs.stanford.edu"
 
 # Make main functions available at package level
-from .main import main, init_project, mu_command, show_help
+from .main import main, init_project, create_project, mu_command, show_help
 
 __all__ = [
     "main",
     "init_project",
+    "create_project",
     "mu_command",
     "show_help",
     "__version__",

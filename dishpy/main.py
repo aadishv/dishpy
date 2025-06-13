@@ -2,6 +2,7 @@ import sys
 import os
 import shutil
 import json
+import argparse
 from . import __version__
 from rich.console import Console
 from rich.panel import Panel
@@ -11,7 +12,7 @@ from .amalgamator import combine_project
 
 console = Console()
 
-def init_project():
+def init_project(name=None, slot=None):
     """Initialize a new project with src/main.py from template"""
     # Create src directory if it doesn't exist
     os.makedirs("src", exist_ok=True)
@@ -37,14 +38,28 @@ def init_project():
 
     # Create project.json in root directory
     project_config = {
-        "name": "My DishPy Project",
-        "slot": 1
+        "name": name or "My DishPy Project",
+        "slot": slot or 1
     }
     project_json_path = "dishpy.json"
     with open(project_json_path, "w") as f:
         json.dump(project_config, f, indent=2)
 
     console.print(f"✨ [green]Initialized project with[/green] [bold cyan]{dest_path}[/bold cyan][green],[/green] [bold cyan]{vex_dest_path}[/bold cyan][green],[/green] [bold cyan]{project_json_path}[/bold cyan][green], and[/green] [bold cyan].out/[/bold cyan]")
+
+def create_project(name, slot=None):
+    """Create a new project directory and initialize it"""
+    if os.path.exists(name):
+        console.print(f"❌ [red]Directory '{name}' already exists[/red]")
+        return
+    
+    # Create the project directory
+    os.makedirs(name)
+    os.chdir(name)
+    
+    # Initialize the project
+    init_project(name, slot)
+    console.print(f"✨ [green]Created and initialized project in[/green] [bold cyan]{name}/[/bold cyan]")
 
 def is_dishpy_project():
     """Check if current directory is a dishpy project"""
@@ -79,11 +94,19 @@ def show_help():
     help_text.append(f"dishpy {__version__}", style="bold magenta")
     help_text.append(" - VEX Competition Development Tool\n\n", style="white")
     help_text.append("Commands:\n", style="bold white")
-    help_text.append("  init    ", style="bold cyan")
-    help_text.append("Initialize a new project with src/main.py\n", style="white")
-    help_text.append("  mu      ", style="bold cyan")
-    help_text.append("Check if in a DishPy project\n", style="white")
-    help_text.append("  vexcom  ", style="bold cyan")
+    help_text.append("  init     ", style="bold cyan")
+    help_text.append("Initialize a new project in current directory\n", style="white")
+    help_text.append("           ", style="bold cyan")
+    help_text.append("Options: --name <name> --slot <slot>\n", style="dim white")
+    help_text.append("  create   ", style="bold cyan")
+    help_text.append("Create new directory and initialize project\n", style="white")
+    help_text.append("           ", style="bold cyan")
+    help_text.append("Options: --name <name> (required) --slot <slot>\n", style="dim white")
+    help_text.append("  mu       ", style="bold cyan")
+    help_text.append("Build and upload project to VEX V5 brain\n", style="white")
+    help_text.append("           ", style="bold cyan")
+    help_text.append("Options: --verbose\n", style="dim white")
+    help_text.append("  vexcom   ", style="bold cyan")
     help_text.append("Run vexcom with specified arguments (auto-installs if needed)", style="white")
 
     panel = Panel(
@@ -93,18 +116,60 @@ def show_help():
     )
     console.print(panel)
 
+def parse_args():
+    """Parse command line arguments"""
+    parser = argparse.ArgumentParser(description="DishPy - VEX Competition Development Tool", add_help=False)
+    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    
+    # Init command
+    init_parser = subparsers.add_parser('init', help='Initialize a new project in current directory')
+    init_parser.add_argument('--name', help='Project name')
+    init_parser.add_argument('--slot', type=int, help='Project slot number')
+    
+    # Create command
+    create_parser = subparsers.add_parser('create', help='Create new directory and initialize project')
+    create_parser.add_argument('--name', required=True, help='Project name (required)')
+    create_parser.add_argument('--slot', type=int, help='Project slot number')
+    
+    # Mu command
+    mu_parser = subparsers.add_parser('mu', help='Build and upload project to VEX V5 brain')
+    mu_parser.add_argument('--verbose', action='store_true', help='Enable verbose output')
+    
+    # Vexcom command
+    vexcom_parser = subparsers.add_parser('vexcom', help='Run vexcom with specified arguments')
+    vexcom_parser.add_argument('args', nargs='*', help='Arguments to pass to vexcom')
+    
+    return parser
+
 def main():
     if len(sys.argv) == 1:
         show_help()
-    elif len(sys.argv) > 1 and sys.argv[1] == "init":
-        init_project()
-    elif len(sys.argv) > 1 and sys.argv[1] == "mu":
-        verbose = "--verbose" in sys.argv
-        mu_command(verbose)
-    elif len(sys.argv) > 1 and sys.argv[1] == "vexcom":
-        # Pass all arguments after "vexcom" to run_vexcom
-        vexcom_args = sys.argv[2:]
-        run_vexcom(*vexcom_args)
+        return
+    
+    parser = parse_args()
+    
+    # Handle help manually since we disabled add_help
+    if sys.argv[1] in ['-h', '--help', 'help']:
+        show_help()
+        return
+    
+    try:
+        args = parser.parse_args()
+    except SystemExit:
+        # argparse called sys.exit(), likely due to unknown command
+        show_help()
+        return
+    
+    if args.command == "init":
+        init_project(args.name, args.slot)
+    elif args.command == "create":
+        create_project(args.name, args.slot)
+    elif args.command == "mu":
+        mu_command(args.verbose)
+    elif args.command == "vexcom":
+        run_vexcom(*args.args)
+    else:
+        show_help()
 
 if __name__ == "__main__":
     main()
