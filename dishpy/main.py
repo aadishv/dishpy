@@ -84,7 +84,7 @@ def show_help():
     help_text.append("  mu      ", style="bold cyan")
     help_text.append("Check if in a DishPy project\n", style="white")
     help_text.append("  vexcom  ", style="bold cyan")
-    help_text.append("Run vexcom with specified arguments", style="white")
+    help_text.append("Run vexcom with specified arguments (auto-installs if needed)", style="white")
 
     panel = Panel(
         help_text,

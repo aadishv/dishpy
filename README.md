@@ -8,7 +8,7 @@ A Python development tool for VEX Competition robotics that combines multi-file 
  - [x] Project initialization CLI
  - [x] Script amalgamation through AST parsing
  - [ ] Custom libraries for projects
- - [ ] Better documentation for using vexcom's common functions
+ - [x] Better documentation for using vexcom's common functions
 
 ## Why/when should I use DishPy over X?
 
@@ -192,6 +192,15 @@ DishPy is designed to streamline VEX Competition robotics development in Python.
 ## License
 
 This project is licensed under the MIT License.
+
+## Changelog
+
+**v0.2.2**
+
+* Created a changelog!
+* Instead of bundling the VEXcom executable with the repository, we now extract it from the VSCode extension. This better accomodates VEX licensing, although it does slightly worsen the UX as the CLI takes a few minutes to install on first VEXcom call.
+* Vastly improved [documentation](https://aadishv.github.io/dishpy)! Hopefully I'll start writing topical tutorials as well soon.
+
 
 ## Credits
 
