@@ -366,7 +366,7 @@
 <li>[x] Project initialization CLI</li>
 <li>[x] Script amalgamation through AST parsing</li>
 <li>[ ] Custom libraries for projects</li>
-<li>[ ] Better documentation for using vexcom's common functions</li>
+<li>[x] Better documentation for using vexcom's common functions</li>
 </ul>
 <h2 id="whywhen-should-i-use-dishpy-over-x">Why/when should I use DishPy over X?</h2>
 <ul>
@@ -377,8 +377,7 @@
 </ul>
 <p>Note that, unlike PROS &amp; vexide, DishPy is not a <em>from-scratch</em> rewrite that does scheduling and everything (as an eight grader I am physically unable to make such a thing). Instead, it uses the exact same Python VM as VEXcode and the VScode extension and uploads code in the exact same way and binds to the same SDK -- the only difference is that the DX of DishPy is wayyy better.</p>
 <h2 id="should-you-use-dishpy">Should you use DishPy?</h2>
-<p>To get things straight, DishPy is <strong>fully</strong> competition-legal. It uploads regular Python programs to the Brain, just with better DX.</p>
-<p>Unfortunately, the answer to "Should you use DishPy?" right now is <strong>probably not</strong> if you are a competition team. I cannot confirm I will be available to debug or maintain this at all times, so keep that in mind.</p>
+<p>Unfortunately, the answer right now is <strong>probably not</strong> if you are a competition team. I cannot confirm I will be available to debug or maintain this at all times, so keep that in mind.</p>
 <p>If you do want to use this in competition, make sure to read the amalgamated files before running the programs to make sure nothing was lost in translation.</p>
 <p>If you want to make this better, feel free to</p>
 <ol>
@@ -406,7 +405,17 @@ uvx dishpy
 </code></pre>
 <h2 id="quick-start">Quick Start</h2>
 <h3 id="1-initialize-a-new-project">1. Initialize a New Project</h3>
-<pre><code class="language-bash">uvx dishpy init
+<pre><code class="language-bash"># Initialize in current directory with defaults
+uvx dishpy init
+
+# Initialize with custom name and slot
+uvx dishpy init --name &quot;My Competition Robot&quot; --slot 3
+
+# Create new directory and initialize project
+uvx dishpy create --name &quot;awesome-robot&quot;
+
+# Create with custom slot
+uvx dishpy create --name &quot;competition-bot&quot; --slot 2
 </code></pre>
 <p>This creates:
 - <code>src/main.py</code> - Main robot code from template
@@ -436,12 +445,34 @@ uvx dishpy
 3. Uploads the combined code to your VEX V5 brain</p>
 <h2 id="commands">Commands</h2>
 <h3 id="dishpy-init"><code>dishpy init</code></h3>
-<p>Initialize a new VEX robotics project with template files and project structure.</p>
+<p>Initialize a new VEX robotics project in the current directory with template files and project structure.</p>
+<p><strong>Options:</strong>
+- <code>--name &lt;name&gt;</code> - Set project name (optional, defaults to "My DishPy Project")
+- <code>--slot &lt;slot&gt;</code> - Set program slot number (optional, defaults to 1)</p>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash">dishpy init                                    # Use defaults
+dishpy init --name &quot;Competition Bot&quot;           # Custom name
+dishpy init --name &quot;Test Robot&quot; --slot 3      # Custom name and slot
+</code></pre>
+<h3 id="dishpy-create"><code>dishpy create</code></h3>
+<p>Create a new project directory and initialize it with template files.</p>
+<p><strong>Options:</strong>
+- <code>--name &lt;name&gt;</code> - Project name and directory name (<strong>required</strong>)
+- <code>--slot &lt;slot&gt;</code> - Set program slot number (optional, defaults to 1)</p>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash">dishpy create --name &quot;my-robot&quot;                # Creates my-robot/ directory
+dishpy create --name &quot;competition-bot&quot; --slot 2 # Custom slot
+</code></pre>
 <h3 id="dishpy-mu"><code>dishpy mu</code></h3>
-<p>Build and upload your project:
+<p>Build and upload your project to a VEX V5 brain:
 - Combines multi-file project into single script
-- Uploads to VEX V5 brain using project configuration
-- Add <code>--verbose</code> flag for detailed output</p>
+- Uploads to VEX V5 brain using project configuration</p>
+<p><strong>Options:</strong>
+- <code>--verbose</code> - Enable detailed output during build and upload</p>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash">dishpy mu              # Standard build and upload
+dishpy mu --verbose    # Detailed output
+</code></pre>
 <h3 id="dishpy-vexcom-args"><code>dishpy vexcom [args...]</code></h3>
 <p>Direct access to the underlying vexcom tool for advanced usage. Pass any vexcom arguments directly.</p>
 <h2 id="using-vexcom-directly">Using VEXcom Directly</h2>
@@ -503,6 +534,18 @@ def drive():
 - Documentation and examples</p>
 <h2 id="license">License</h2>
 <p>This project is licensed under the MIT License.</p>
+<h2 id="changelog">Changelog</h2>
+<p><strong>v0.3</strong></p>
+<ul>
+<li>Added a breaking bug that affected all users on v0.2.2. In the port to vexcom downloading, I accidentally deleted the vex.py resource. This will not affect creating or uploading projects, but will throw an error with running <code>dishpy init</code> or <code>dishpy create</code>. Fixed by adding back the file.</li>
+<li>Made docs look more modern! Plus, updated the home page with all of the new tidbits we have here.</li>
+</ul>
+<p><strong>v0.2.2</strong></p>
+<ul>
+<li>Created a changelog!</li>
+<li>Instead of bundling the VEXcom executable with the repository, we now extract it from the VSCode extension. This better accomodates VEX licensing, although it does slightly worsen the UX as the CLI takes a few minutes to install on first VEXcom call.</li>
+<li>Vastly improved <a href="https://aadishv.github.io/dishpy">documentation</a>! Hopefully I'll start writing topical tutorials as well soon.</li>
+</ul>
 <h2 id="credits">Credits</h2>
 <ul>
 <li>Lewis | vexide (reverse-engineering vexcom calls)</li>
@@ -593,6 +636,11 @@ def drive():
                         
                         <li class="mt-0 pt-2">
                             <a class="inline-block no-underline transition-colors hover:text-foreground text-muted-foreground"
+                                href="#dishpy-create">dishpy create</a>
+                        </li>
+                        
+                        <li class="mt-0 pt-2">
+                            <a class="inline-block no-underline transition-colors hover:text-foreground text-muted-foreground"
                                 href="#dishpy-mu">dishpy mu</a>
                         </li>
                         
@@ -653,6 +701,12 @@ def drive():
                 <li class="mt-0 pt-2">
                     <a class="inline-block no-underline transition-colors hover:text-foreground text-muted-foreground"
                         href="#license">License</a>
+                    
+                </li>
+                
+                <li class="mt-0 pt-2">
+                    <a class="inline-block no-underline transition-colors hover:text-foreground text-muted-foreground"
+                        href="#changelog">Changelog</a>
                     
                 </li>
                 
