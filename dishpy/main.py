@@ -18,6 +18,7 @@ console = Console()
 
 class Project:
     def __init__(self, path: Path, name: str, slot: int):
+        self.path = path
         self.src = path / "src"
         self.main_file = path / "src" / "main.py"
         self.vex_dir = path / "src" / "vex"
@@ -66,6 +67,26 @@ class Project:
         combine_project(self.main_file, self.out_dir / "main.py", verbose)
         run_vexcom("--name", self.name, "--slot", str(self.slot), "--write", "./.out/main.py")
 
+    def add(self, package: str):
+        package_path = get_vexcom_cache_dir() / "packages" / f"{package}.zip"
+        # this *will* panic if the package is not found, but we try `list` first so it's not a huge deal
+        name, version = package.split(":")
+        subprocess.run([
+            "unzip", "-o", # overwrite existing files without prompting
+            str(package_path),
+            "-d", str(self.src / name),
+        ], check=True, capture_output=True, text=True)
+        with open(self.path / "dishpy.toml", "rb") as f:
+            config = tomllib.load(f)
+        if 'dependencies' not in config:
+            config['dependencies'] = {}
+        config['dependencies'][name] = version
+        with open(self.path / "dishpy.toml", "wb") as f:
+            tomli_w.dump(config, f)
+        console.print(
+            f"✨ [green]Added package [bold cyan]{package}[/bold cyan][/green]"
+        )
+
 class Package(Project):
     def __init__(self, path: Path, name: str, slot: int, package_name: str, version: str):
         Project.__init__(self, path, name, slot)
@@ -101,7 +122,10 @@ class Package(Project):
         shutil.copy2(pkg_template, pkg_init)
 
     def register(self):
-        zip_path = get_vexcom_cache_dir() / "packages" / f"{self.package_name + ":" + self.version}.zip"
+        packages_path = get_vexcom_cache_dir() / "packages"
+        if not packages_path.exists():
+            packages_path.mkdir()
+        zip_path = packages_path / f"{self.package_name + ":" + self.version}.zip"
         if zip_path.exists():
             zip_path.unlink()
         package_path = self.src / self.package_name
@@ -109,20 +133,23 @@ class Package(Project):
             raise Exception(f"Package '{self.package_name}' in {package_path} not found")
         subprocess.run([
             "zip", "-r", str(zip_path),
-            str(self.src / self.package_name)
-        ], check=True, capture_output=True, text=True)
+            '.',
+        ], cwd = self.src / self.package_name, check=True, capture_output=True, text=True)
         console.print(
             f"✨ [green]Registered package [bold cyan]{self.package_name + ":" + self.version}[/bold cyan][/green]"
         )
 
     @staticmethod
     def list() -> list[str]:
-        zip_path = get_vexcom_cache_dir() / "packages"
+        packages_path = get_vexcom_cache_dir() / "packages"
+        if not packages_path.exists():
+            packages_path.mkdir()
         l = []
-        for i in zip_path.iterdir():
+        for i in packages_path.iterdir():
             if i.suffix == ".zip":
                 l.append(i.name[:-4])
         return l
+
 
 class DishPy:
     def __init__(self, path: Path):
@@ -154,6 +181,12 @@ class Cli:
                  "help": "Create as a package (optionally specify package name)"}
             ]
         },
+        "add": {
+            "help": "Add a previously registered package to a project",
+            "arguments": [
+                {"name": "package", "help": "Package name in name:version format (required)"},
+            ]
+        },
         "mu": {
             "help": "Build and upload project to VEX V5 brain",
             "arguments": [
@@ -176,7 +209,7 @@ class Cli:
             "arguments": []
         },
         "register": {
-            "help": "Register a package with VexCom",
+            "help": "Register a package with DishPy",
             "arguments": [
                 {"name": "package_path", "type": "dir_path",
                  "help": "Path to package directory"}
@@ -202,7 +235,7 @@ class Cli:
                 for arg in cmd_info['arguments']:
                     if arg['name']:
                         if arg.get('required'):
-                            options.append(f"{arg['name']} <{arg['name'][2:]}> (required)")
+                            options.append(f"{arg['name']} <{arg['name'].removeprefix('--')}> (required)")
                         elif arg.get('action') == 'store_true':
                             options.append(arg['name'])
                         else:
@@ -257,9 +290,6 @@ class Cli:
         elif args.command == "register":
             try:
                 p = Path(args.package_path)
-                packages_path = get_vexcom_cache_dir() / "packages"
-                if not packages_path.exists():
-                    packages_path.mkdir()
                 dishpy = DishPy(p)
                 # cannot do isinstance(dishpy.instance, Project) because inheritance :P
                 if not isinstance(dishpy.instance, Package):
@@ -295,21 +325,37 @@ class Cli:
             run_vexcom(*args.args)
         elif args.command == "list-pkgs":
             try:
-                console.print(
-                    "✨ [green]Found the following packages registered with DishPy: "
-                    + f"{' ,'.join(Package.list())} [/green]"
-                )
+                l = Package.list()
+                if l:
+                    console.print(
+                        "✨ [green]Found the following packages registered with DishPy: "
+                        + f"{', '.join(Package.list())} [/green]"
+                    )
+                else:
+                    console.print("❌ [red]No packages registered with DishPy[/red]")
+            except Exception as e:
+                self.console.print(f"❌ [red]Error: {e}[/red]")
+        elif args.command == "add":
+            try:
+                assert(args.package in Package.list())
+            except Exception:
+                self.console.print(f"❌ [red]Error: {args.package} is not a registered package[/red]")
+                self.console.print("[red]Run `dishpy list-pkgs` to see a list of registered packages[/red]")
+                return
+            instance = DishPy(Path())
+            if isinstance(instance.instance, Package):
+                self.console.print("❌ [red]Error: Cannot add dependencies to packages[/red]")
+                return
+            try:
+                instance.instance.add(args.package)
             except Exception as e:
                 self.console.print(f"❌ [red]Error: {e}[/red]")
         else:
             self.show_help()
 
+
 def main():
-    # Package.scaffold(Path(), "My Fun Package", 3)
-    # return
-    """Main entry point"""
-    cli = Cli()
-    cli.route()
+    Cli().route()
 
 
 if __name__ == "__main__":

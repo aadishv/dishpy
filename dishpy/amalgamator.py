@@ -247,9 +247,32 @@ def _analyze_project(entry_file, local_module_map, verbose=False):
                     external_imports.add(ast.unparse(node))
                 else:
                     is_local = module_name in local_module_map
-
+                    origin_file = None
+                    
                     if is_local:
                         origin_file = local_module_map[module_name]
+                    else:
+                        # Check if this is a package-relative import
+                        # Find the package context of the current file
+                        current_rel_path = os.path.relpath(current_file, os.path.dirname(os.path.dirname(current_file)))
+                        current_module_path = current_rel_path.replace(os.sep, '.').replace('.py', '')
+                        if current_module_path.endswith('.__init__'):
+                            current_module_path = current_module_path[:-9]  # Remove .__init__
+                        
+                        # Try to resolve as package-relative import
+                        package_parts = current_module_path.split('.')
+                        for i in range(len(package_parts)):
+                            package_prefix = '.'.join(package_parts[:len(package_parts)-i])
+                            if package_prefix:
+                                potential_module = f"{package_prefix}.{module_name}"
+                                if potential_module in local_module_map:
+                                    origin_file = local_module_map[potential_module]
+                                    is_local = True
+                                    if verbose:
+                                        print(f"DEBUG: Resolved '{module_name}' as package-relative import to '{potential_module}'")
+                                    break
+
+                    if is_local and origin_file:
                         dep_graph[current_file].append(origin_file)
                         if verbose:
                             print(f"DEBUG: '{module_name}' is local module at {origin_file}")
