@@ -39,7 +39,7 @@ def get_vexcom_executable() -> Path:
     """Get the path to the vexcom executable for this platform"""
     cache_dir = get_vexcom_cache_dir()
     platform_name = get_platform()
-    
+
     if platform_name == "win32":
         return cache_dir / "vexcom" / platform_name / "vexcom.exe"
     else:
@@ -52,33 +52,33 @@ def is_vexcom_installed() -> bool:
 
 def install_vexcom():
     """Install vexcom tools using the bundled download script"""
-    console.print("🔧 [yellow]VEXcom tools not found. Installing...[/yellow]")
-    
+    console.print("🔧 [yellow]VEXcom tools not found. Installing (this might take a few minutes)...[/yellow]")
+
     # Get the script path from the package
     script_dir = Path(__file__).parent
     download_script = script_dir / "download_vexcom.sh"
-    
+
     if not download_script.exists():
         console.print("❌ [red]Download script not found in package[/red]")
         raise FileNotFoundError(f"Download script not found: {download_script}")
-    
+
     # Get target directory
     cache_dir = get_vexcom_cache_dir()
     cache_dir.mkdir(parents=True, exist_ok=True)
-    
+
     try:
         # Run the download script with the cache directory
         subprocess.run([
             "bash", str(download_script), str(cache_dir)
         ], check=True, capture_output=True, text=True)
-        
+
         # Make the executable actually executable on Unix-like systems
         vexcom_exe = get_vexcom_executable()
         if vexcom_exe.exists() and platform.system() != "Windows":
             os.chmod(vexcom_exe, 0o755)
-        
+
         console.print("✅ [green]VEXcom tools installed successfully[/green]")
-        
+
     except subprocess.CalledProcessError as e:
         console.print(f"❌ [red]Failed to install VEXcom tools: {e.stderr}[/red]")
         raise
@@ -91,11 +91,11 @@ def run_vexcom(*args):
     # Check if vexcom is installed, install if not
     if not is_vexcom_installed():
         install_vexcom()
-    
+
     # Verify installation was successful
     if not is_vexcom_installed():
         console.print("❌ [red]VEXcom installation failed[/red]")
         return subprocess.CompletedProcess(args=[], returncode=1)
-    
+
     vexcom_exe = get_vexcom_executable()
     return subprocess.run([str(vexcom_exe)] + list(args))

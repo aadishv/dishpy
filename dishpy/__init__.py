@@ -6,18 +6,16 @@ in Python, including project initialization, code amalgamation, and upload
 to VEX V5 brains.
 """
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 __author__ = "Aadish V"
 __email__ = "aadish@ohs.stanford.edu"
 
-# Make main functions available at package level
-from .main import main, init_project, create_project, mu_command, show_help
+# Make main functions and classes available at package level
+from .main import main, Cli, Project
 
 __all__ = [
     "main",
-    "init_project",
-    "create_project",
-    "mu_command",
-    "show_help",
+    "Cli",
+    "Project",
     "__version__",
 ]

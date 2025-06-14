@@ -2,7 +2,6 @@ import sys
 import os
 import ast
 from collections import defaultdict
-import re
 import argparse
 import hashlib
 from rich.console import Console
@@ -155,7 +154,8 @@ def _topological_sort(dep_graph):
         all_nodes.update(deps)
 
     def visit(node):
-        if node in visited: return
+        if node in visited:
+            return
         visited.add(node)
         for dep in dep_graph.get(node, []):
             visit(dep)
