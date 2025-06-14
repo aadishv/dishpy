@@ -1,6 +1,5 @@
 """
-This is a template file for a Python project.
+Template for the main.py file.
 
-To use it, rename it to 'main.py' and open it in a text editor.
-Then, fill in the contents of the 'main'
+Eventually, DishPy will add better templates to achieve feature parity with VEXcode, but for now you're stuck with this empty file!
 """

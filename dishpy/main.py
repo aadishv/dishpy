@@ -66,6 +66,44 @@ class Project:
         combine_project(self.main_file, self.out_dir / "main.py", verbose)
         run_vexcom("--name", self.name, "--slot", str(self.slot), "--write", "./.out/main.py")
 
+class Package(Project):
+    def __init__(self, path: Path, name: str, slot: int, package_name: str, version: str):
+        super.__init__(path, name, slot)
+        self.package_name = package_name
+        self.version = version
+
+    @staticmethod
+    def scaffold(path: Path | None = None, name: str | None = None, slot: int | None = None, package_name: int | None = None):
+        if not path:
+            path = Path.cwd()
+        if not name:
+            name = "My DishPy Project"
+        if not slot:
+            slot = 1
+        if not package_name:
+            package_name = textcase.snake(name)
+        Project.scaffold(path, name, slot)
+        with open(path / "dishpy.toml", "rb") as f:
+            project_config = tomllib.load(f)
+        project_config["package"] = {}
+        project_config["package"]["package_name"] = textcase.snake(package_name)
+        project_config["package"]["version"] = "0.1.0"
+        with open(path / "dishpy.toml", "wb") as f:
+            tomli_w.dump(project_config, f)
+
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        pkg_template = os.path.join(script_dir, "resources", "pkg_template.py")
+        pkg_init = path / "src" / package_name / "__init__.py"
+        pkg_path = path / "src" / package_name
+        if not pkg_path.exists():
+            pkg_path.mkdir()
+
+        shutil.copy2(pkg_template, pkg_init)
+
+
+    def mu(self, verbose=False):
+        super.mu(verbose)
+
 class DishPy:
     """Contains metadata about the current project"""
 
@@ -130,6 +168,13 @@ class Cli:
         )
         create_parser.add_argument("--name", required=True, help="Project name (required)")
         create_parser.add_argument("--slot", type=int, help="Project slot number")
+        create_parser.add_argument(
+            "--package",
+            nargs="?",
+            const=True,
+            default=False,
+            help="Create as a package (optionally specify package name)"
+        )
 
         # Mu command
         mu_parser = subparsers.add_parser(
@@ -143,7 +188,11 @@ class Cli:
         vexcom_parser = subparsers.add_parser(
             "vexcom", help="Run vexcom with specified arguments"
         )
-        vexcom_parser.add_argument("args", nargs="*", help="Arguments to pass to vexcom")
+        vexcom_parser.add_argument(
+            "args",
+            nargs=argparse.REMAINDER,
+            help="Arguments to pass to vexcom (accepts anything after 'vexcom')"
+        )
 
         return parser
 
@@ -162,12 +211,23 @@ class Cli:
             self.show_help()
             return
         if args.command == "create":
+            # print(args.__dict__)
+            # return
             path = (Path() / args.name)
             path.mkdir()
-            console.print(
-                f"✨ [green]Created and initialized project in[/green] [bold cyan]{path}/[/bold cyan]"
-            )
-            Project.scaffold(path, args.name, args.slot)
+            if not args.package:
+                Project.scaffold(path, args.name, args.slot)
+                console.print(
+                    f"✨ [green]Created and initialized project in[/green] [bold cyan]{path}/[/bold cyan]"
+                )
+            else:
+                Package.scaffold(path, args.name, args.slot, args.package if args.package is str else None)
+                pkg = args.package if args.package is str else textcase.snake(args.name)
+                package_path = path / "src" / pkg
+                console.print(
+                    f"✨ [green]Created and initialized project in [bold cyan]{path}/[/bold cyan]"
+                    + f" with package[/green] [bold cyan]{str(package_path) + "/"}[/bold cyan]"
+                )
         elif args.command == "mu":
             try:
                 instance = DishPy(Path())
@@ -180,6 +240,8 @@ class Cli:
             self.show_help()
 
 def main():
+    # Package.scaffold(Path(), "My Fun Package", 3)
+    # return
     """Main entry point"""
     cli = Cli()
     cli.route()
