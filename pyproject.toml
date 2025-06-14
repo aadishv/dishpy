@@ -37,6 +37,7 @@ dependencies = [
     "mkdocstrings[python]>=0.29.1",
     "rich>=14.0.0",
     "platformdirs>=4.0.0",
+    "tomli-w>=1.2.0",
 ]
 
 [project.urls]
