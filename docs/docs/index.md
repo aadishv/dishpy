@@ -4,11 +4,21 @@ A Python development tool for VEX Competition robotics that combines multi-file 
 
 ## Roadmap
 
+
+**Feature parity w/ VEX VSC extension**
  - [x] Bindings to vexcom
  - [x] Project initialization CLI
- - [x] Script amalgamation through AST parsing
- - [ ] Custom libraries for projects
  - [x] Better documentation for using vexcom's common functions
+ - [ ] VEXcom wrappers for ease-of-use
+ - [ ] templates
+
+**Core premise**
+ - [x] Script amalgamation through AST parsing
+ - [ ] Library creation functionality
+ - [ ] Library installation functionality
+
+**Future-leaning**
+ - [ ] Simulation API
 
 ## Why/when should I use DishPy over X?
 
@@ -60,13 +70,7 @@ uvx dishpy
 ### 1. Initialize a New Project
 
 ```bash
-# Initialize in current directory with defaults
-uvx dishpy init
-
-# Initialize with custom name and slot
-uvx dishpy init --name "My Competition Robot" --slot 3
-
-# Create new directory and initialize project
+# Create new directory and initialize project (required: --name)
 uvx dishpy create --name "awesome-robot"
 
 # Create with custom slot
@@ -76,7 +80,7 @@ uvx dishpy create --name "competition-bot" --slot 2
 This creates:
 - `src/main.py` - Main robot code from template
 - `src/vex/__init__.py` - VEX library for robot control. Do not touch this; it stubs the VEX API for better autocomplete and LSP support in code editors.
-- `dishpy.json` - Project configuration
+- `dishpy.toml` - Project configuration
 - `.out/` - Output directory for combined code
 
 ### 2. Develop Your Robot Code
@@ -92,7 +96,7 @@ my-robot/
 │   ├── driver.py        # Driver control functions
 │   └── vex/            # VEX library
 │       └── __init__.py
-├── dishpy.json         # Project configuration
+├── dishpy.toml         # Project configuration
 └── .out/              # Combined output
 ```
 
@@ -112,21 +116,9 @@ This command:
 
 ## Commands
 
-### `dishpy init`
-Initialize a new VEX robotics project in the current directory with template files and project structure.
+### Commands
 
-**Options:**
-- `--name <name>` - Set project name (optional, defaults to "My DishPy Project")
-- `--slot <slot>` - Set program slot number (optional, defaults to 1)
-
-**Examples:**
-```bash
-dishpy init                                    # Use defaults
-dishpy init --name "Competition Bot"           # Custom name
-dishpy init --name "Test Robot" --slot 3      # Custom name and slot
-```
-
-### `dishpy create`
+#### `dishpy create`
 Create a new project directory and initialize it with template files.
 
 **Options:**
@@ -135,11 +127,11 @@ Create a new project directory and initialize it with template files.
 
 **Examples:**
 ```bash
-dishpy create --name "my-robot"                # Creates my-robot/ directory
-dishpy create --name "competition-bot" --slot 2 # Custom slot
+uvx dishpy create --name "my-robot"                # Creates my-robot/ directory
+uvx dishpy create --name "competition-bot" --slot 2 # Custom slot
 ```
 
-### `dishpy mu`
+#### `dishpy mu`
 Build and upload your project to a VEX V5 brain:
 - Combines multi-file project into single script
 - Uploads to VEX V5 brain using project configuration
@@ -149,36 +141,26 @@ Build and upload your project to a VEX V5 brain:
 
 **Examples:**
 ```bash
-dishpy mu              # Standard build and upload
-dishpy mu --verbose    # Detailed output
+uvx dishpy mu              # Standard build and upload
+uvx dishpy mu --verbose    # Detailed output
 ```
 
-### `dishpy vexcom [args...]`
+#### `dishpy vexcom [args...]`
 Direct access to the underlying vexcom tool for advanced usage. Pass any vexcom arguments directly.
 
-## Using VEXcom Directly
-
-DishPy includes the vexcom binary which can be called directly for advanced usage or troubleshooting. The `dishpy vexcom` command is a convenience wrapper that passes all arguments to the underlying vexcom binary.
-
-examples
-
+**Examples:**
 ```bash
 uvx dishpy vexcom --flag1 arg1 --etc
 ```
 
-```bash
---python=my_python_vm.bin --json --progress
-```
-
 ## Project Configuration
 
-The `dishpy.json` file contains project settings:
+The `dishpy.toml` file contains project settings:
 
-```json
-{
-  "name": "My Robot Project",
-  "slot": 1
-}
+```toml
+[project]
+name = "test"
+slot = 1
 ```
 
 - `name`: Display name for your robot program
@@ -237,6 +219,13 @@ This project is licensed under the MIT License.
 
 ## Changelog
 
+**v0.4**
+
+* This is a **ground-up** rewrite of the entire DishPy CLI to now be significantly smaller and simpler. (It isn't vibe-coded anymore!)
+* There are now slightly less debug messages which will hopefully be less annoying.
+* We have removed `dishpy init` in favor of the more commonly used `dishpy create`.
+* All of these changes go a long way towards having ✨libraries✨ in the near future!
+
 **v0.3**
 
 * Added a breaking bug that affected all users on v0.2.2. In the port to vexcom downloading, I accidentally deleted the vex.py resource. This will not affect creating or uploading projects, but will throw an error with running `dishpy init` or `dishpy create`. Fixed by adding back the file.
@@ -258,4 +247,4 @@ This project is licensed under the MIT License.
 * Gemini 2.5 Pro (LLM -- first run)
 * Claude 4 Sonnet (LLM -- agentic tasks)
 
-[This page was copied from the README of our GitHub repository.]
+[This page was copied from the README of our GitHub repository. Update: 6/13/25]

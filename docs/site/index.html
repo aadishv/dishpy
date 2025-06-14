@@ -361,13 +361,18 @@
     <h1 id="dishpy">DishPy</h1>
 <p>A Python development tool for VEX Competition robotics that combines multi-file Python projects into single scripts and uploads them to VEX V5 brains.</p>
 <h2 id="roadmap">Roadmap</h2>
-<ul>
-<li>[x] Bindings to vexcom</li>
-<li>[x] Project initialization CLI</li>
-<li>[x] Script amalgamation through AST parsing</li>
-<li>[ ] Custom libraries for projects</li>
-<li>[x] Better documentation for using vexcom's common functions</li>
-</ul>
+<p><strong>Feature parity w/ VEX VSC extension</strong>
+ - [x] Bindings to vexcom
+ - [x] Project initialization CLI
+ - [x] Better documentation for using vexcom's common functions
+ - [ ] VEXcom wrappers for ease-of-use
+ - [ ] templates</p>
+<p><strong>Core premise</strong>
+ - [x] Script amalgamation through AST parsing
+ - [ ] Library creation functionality
+ - [ ] Library installation functionality</p>
+<p><strong>Future-leaning</strong>
+ - [ ] Simulation API</p>
 <h2 id="whywhen-should-i-use-dishpy-over-x">Why/when should I use DishPy over X?</h2>
 <ul>
 <li>PROS/VEXcode text -&gt; you don't like C++</li>
@@ -405,13 +410,7 @@ uvx dishpy
 </code></pre>
 <h2 id="quick-start">Quick Start</h2>
 <h3 id="1-initialize-a-new-project">1. Initialize a New Project</h3>
-<pre><code class="language-bash"># Initialize in current directory with defaults
-uvx dishpy init
-
-# Initialize with custom name and slot
-uvx dishpy init --name &quot;My Competition Robot&quot; --slot 3
-
-# Create new directory and initialize project
+<pre><code class="language-bash"># Create new directory and initialize project (required: --name)
 uvx dishpy create --name &quot;awesome-robot&quot;
 
 # Create with custom slot
@@ -420,7 +419,7 @@ uvx dishpy create --name &quot;competition-bot&quot; --slot 2
 <p>This creates:
 - <code>src/main.py</code> - Main robot code from template
 - <code>src/vex/__init__.py</code> - VEX library for robot control. Do not touch this; it stubs the VEX API for better autocomplete and LSP support in code editors.
-- <code>dishpy.json</code> - Project configuration
+- <code>dishpy.toml</code> - Project configuration
 - <code>.out/</code> - Output directory for combined code</p>
 <h3 id="2-develop-your-robot-code">2. Develop Your Robot Code</h3>
 <p>Edit <code>src/main.py</code> and create additional modules in the <code>src/</code> directory. You can import and use modules freely - dishpy will handle combining them into a single file.</p>
@@ -432,7 +431,7 @@ uvx dishpy create --name &quot;competition-bot&quot; --slot 2
 │   ├── driver.py        # Driver control functions
 │   └── vex/            # VEX library
 │       └── __init__.py
-├── dishpy.json         # Project configuration
+├── dishpy.toml         # Project configuration
 └── .out/              # Combined output
 </code></pre>
 <p><strong>Note that all competition functions, such as <code>autonomous</code> and <code>driver</code>, have to be in <code>main.py</code>.</strong></p>
@@ -444,50 +443,36 @@ uvx dishpy create --name &quot;competition-bot&quot; --slot 2
 2. Resolves imports and prevents naming conflicts with intelligent prefixing
 3. Uploads the combined code to your VEX V5 brain</p>
 <h2 id="commands">Commands</h2>
-<h3 id="dishpy-init"><code>dishpy init</code></h3>
-<p>Initialize a new VEX robotics project in the current directory with template files and project structure.</p>
-<p><strong>Options:</strong>
-- <code>--name &lt;name&gt;</code> - Set project name (optional, defaults to "My DishPy Project")
-- <code>--slot &lt;slot&gt;</code> - Set program slot number (optional, defaults to 1)</p>
-<p><strong>Examples:</strong></p>
-<pre><code class="language-bash">dishpy init                                    # Use defaults
-dishpy init --name &quot;Competition Bot&quot;           # Custom name
-dishpy init --name &quot;Test Robot&quot; --slot 3      # Custom name and slot
-</code></pre>
-<h3 id="dishpy-create"><code>dishpy create</code></h3>
+<h3 id="commands_1">Commands</h3>
+<h4 id="dishpy-create"><code>dishpy create</code></h4>
 <p>Create a new project directory and initialize it with template files.</p>
 <p><strong>Options:</strong>
 - <code>--name &lt;name&gt;</code> - Project name and directory name (<strong>required</strong>)
 - <code>--slot &lt;slot&gt;</code> - Set program slot number (optional, defaults to 1)</p>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-bash">dishpy create --name &quot;my-robot&quot;                # Creates my-robot/ directory
-dishpy create --name &quot;competition-bot&quot; --slot 2 # Custom slot
+<pre><code class="language-bash">uvx dishpy create --name &quot;my-robot&quot;                # Creates my-robot/ directory
+uvx dishpy create --name &quot;competition-bot&quot; --slot 2 # Custom slot
 </code></pre>
-<h3 id="dishpy-mu"><code>dishpy mu</code></h3>
+<h4 id="dishpy-mu"><code>dishpy mu</code></h4>
 <p>Build and upload your project to a VEX V5 brain:
 - Combines multi-file project into single script
 - Uploads to VEX V5 brain using project configuration</p>
 <p><strong>Options:</strong>
 - <code>--verbose</code> - Enable detailed output during build and upload</p>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-bash">dishpy mu              # Standard build and upload
-dishpy mu --verbose    # Detailed output
+<pre><code class="language-bash">uvx dishpy mu              # Standard build and upload
+uvx dishpy mu --verbose    # Detailed output
 </code></pre>
-<h3 id="dishpy-vexcom-args"><code>dishpy vexcom [args...]</code></h3>
+<h4 id="dishpy-vexcom-args"><code>dishpy vexcom [args...]</code></h4>
 <p>Direct access to the underlying vexcom tool for advanced usage. Pass any vexcom arguments directly.</p>
-<h2 id="using-vexcom-directly">Using VEXcom Directly</h2>
-<p>DishPy includes the vexcom binary which can be called directly for advanced usage or troubleshooting. The <code>dishpy vexcom</code> command is a convenience wrapper that passes all arguments to the underlying vexcom binary.</p>
-<p>examples</p>
+<p><strong>Examples:</strong></p>
 <pre><code class="language-bash">uvx dishpy vexcom --flag1 arg1 --etc
 </code></pre>
-<pre><code class="language-bash">--python=my_python_vm.bin --json --progress
-</code></pre>
 <h2 id="project-configuration">Project Configuration</h2>
-<p>The <code>dishpy.json</code> file contains project settings:</p>
-<pre><code class="language-json">{
-  &quot;name&quot;: &quot;My Robot Project&quot;,
-  &quot;slot&quot;: 1
-}
+<p>The <code>dishpy.toml</code> file contains project settings:</p>
+<pre><code class="language-toml">[project]
+name = &quot;test&quot;
+slot = 1
 </code></pre>
 <ul>
 <li><code>name</code>: Display name for your robot program</li>
@@ -535,6 +520,13 @@ def drive():
 <h2 id="license">License</h2>
 <p>This project is licensed under the MIT License.</p>
 <h2 id="changelog">Changelog</h2>
+<p><strong>v0.4</strong></p>
+<ul>
+<li>This is a <strong>ground-up</strong> rewrite of the entire DishPy CLI to now be significantly smaller and simpler. (It isn't vibe-coded anymore!)</li>
+<li>There are now slightly less debug messages which will hopefully be less annoying.</li>
+<li>We have removed <code>dishpy init</code> in favor of the more commonly used <code>dishpy create</code>.</li>
+<li>All of these changes go a long way towards having ✨libraries✨ in the near future!</li>
+</ul>
 <p><strong>v0.3</strong></p>
 <ul>
 <li>Added a breaking bug that affected all users on v0.2.2. In the port to vexcom downloading, I accidentally deleted the vex.py resource. This will not affect creating or uploading projects, but will throw an error with running <code>dishpy init</code> or <code>dishpy create</code>. Fixed by adding back the file.</li>
@@ -555,7 +547,7 @@ def drive():
 <li>Gemini 2.5 Pro (LLM -- first run)</li>
 <li>Claude 4 Sonnet (LLM -- agentic tasks)</li>
 </ul>
-<p>[This page was copied from the README of our GitHub repository.]</p>
+<p>[This page was copied from the README of our GitHub repository. Update: 6/13/25]</p>
 </article>
                         </div>
                         <div class="hidden text-sm xl:block">
@@ -631,31 +623,10 @@ def drive():
                         
                         <li class="mt-0 pt-2">
                             <a class="inline-block no-underline transition-colors hover:text-foreground text-muted-foreground"
-                                href="#dishpy-init">dishpy init</a>
-                        </li>
-                        
-                        <li class="mt-0 pt-2">
-                            <a class="inline-block no-underline transition-colors hover:text-foreground text-muted-foreground"
-                                href="#dishpy-create">dishpy create</a>
-                        </li>
-                        
-                        <li class="mt-0 pt-2">
-                            <a class="inline-block no-underline transition-colors hover:text-foreground text-muted-foreground"
-                                href="#dishpy-mu">dishpy mu</a>
-                        </li>
-                        
-                        <li class="mt-0 pt-2">
-                            <a class="inline-block no-underline transition-colors hover:text-foreground text-muted-foreground"
-                                href="#dishpy-vexcom-args">dishpy vexcom [args...]</a>
+                                href="#commands_1">Commands</a>
                         </li>
                         
                     </ul>
-                    
-                </li>
-                
-                <li class="mt-0 pt-2">
-                    <a class="inline-block no-underline transition-colors hover:text-foreground text-muted-foreground"
-                        href="#using-vexcom-directly">Using VEXcom Directly</a>
                     
                 </li>
                 
