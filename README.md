@@ -4,11 +4,21 @@ A Python development tool for VEX Competition robotics that combines multi-file 
 
 ## Roadmap
 
+
+**Feature parity w/ VEX VSC extension**
  - [x] Bindings to vexcom
  - [x] Project initialization CLI
- - [x] Script amalgamation through AST parsing
- - [ ] Custom libraries for projects
  - [x] Better documentation for using vexcom's common functions
+ - [ ] VEXcom wrappers for ease-of-use
+ - [ ] templates
+
+ **Core premise**
+ - [x] Script amalgamation through AST parsing
+ - [ ] Library creation functionality
+ - [ ] Library installation functionality
+
+**Future-leaning**
+ - [ ] Simulation API
 
 ## Why/when should I use DishPy over X?
 
