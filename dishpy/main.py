@@ -144,11 +144,11 @@ class Package(Project):
         packages_path = get_vexcom_cache_dir() / "packages"
         if not packages_path.exists():
             packages_path.mkdir()
-        l = []
+        pkgs = []
         for i in packages_path.iterdir():
             if i.suffix == ".zip":
-                l.append(i.name[:-4])
-        return l
+                pkgs.append(i.name[:-4])
+        return pkgs
 
 
 class DishPy:
@@ -307,7 +307,7 @@ class Cli:
                     f"✨ [green]Created and initialized project in[/green] [bold cyan]{path}/[/bold cyan]"
                 )
             else:
-                pkg_name = args.package if type(args.package) == str else args.name
+                pkg_name = args.package if args.package is str else args.name
                 pkg_name = textcase.snake(pkg_name)
                 Package.scaffold(path, args.name, args.slot, pkg_name)
                 package_path = path / "src" / pkg_name
@@ -325,8 +325,8 @@ class Cli:
             run_vexcom(*args.args)
         elif args.command == "list-pkgs":
             try:
-                l = Package.list()
-                if l:
+                packages = Package.list()
+                if packages:
                     console.print(
                         "✨ [green]Found the following packages registered with DishPy: "
                         + f"{', '.join(Package.list())} [/green]"
