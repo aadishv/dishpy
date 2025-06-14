@@ -115,6 +115,15 @@ class Package(Project):
             f"✨ [green]Registered package [bold cyan]{self.package_name + ":" + self.version}[/bold cyan][/green]"
         )
 
+    @staticmethod
+    def list() -> list[str]:
+        zip_path = get_vexcom_cache_dir() / "packages"
+        l = []
+        for i in zip_path.iterdir():
+            if i.suffix == ".zip":
+                l.append(i.name[:-4])
+        return l
+
 class DishPy:
     def __init__(self, path: Path):
         self.path = path
@@ -135,6 +144,46 @@ class DishPy:
             raise FileNotFoundError("Malformed 'dishpy.toml' file")
 
 class Cli:
+    COMMANDS = {
+        "create": {
+            "help": "Create new directory and initialize project",
+            "arguments": [
+                {"name": "--name", "required": True, "help": "Project name (required)"},
+                {"name": "--slot", "type": int, "help": "Project slot number"},
+                {"name": "--package", "nargs": "?", "const": True, "default": False,
+                 "help": "Create as a package (optionally specify package name)"}
+            ]
+        },
+        "mu": {
+            "help": "Build and upload project to VEX V5 brain",
+            "arguments": [
+                {"name": "--verbose", "action": "store_true", "help": "Enable verbose output"}
+            ]
+        },
+        "vexcom": {
+            "help": "Run vexcom with specified arguments (auto-installs if needed)",
+            "arguments": [
+                {"name": "args", "nargs": argparse.REMAINDER,
+                 "help": "Arguments to pass to vexcom (accepts anything after 'vexcom')"}
+            ]
+        },
+        "debug": {
+            "help": "debug DishPy CLI internals",
+            "arguments": [],
+        },
+        "list-pkgs": {
+            "help": "List all available packages that have been registered with DishPy",
+            "arguments": []
+        },
+        "register": {
+            "help": "Register a package with VexCom",
+            "arguments": [
+                {"name": "package_path", "type": "dir_path",
+                 "help": "Path to package directory"}
+            ]
+        }
+    }
+
     @staticmethod
     def show_help():
         """Display help information"""
@@ -142,82 +191,50 @@ class Cli:
         help_text.append(f"dishpy {__version__}", style="bold magenta")
         help_text.append(" - VEX Competition Development Tool\n\n", style="white")
         help_text.append("Commands:\n", style="bold white")
-        help_text.append("  create   ", style="bold cyan")
-        help_text.append("Create new directory and initialize project\n", style="white")
-        help_text.append("           ", style="bold cyan")
-        help_text.append(
-            "Options: --name <name> (required) --slot <slot>\n", style="dim white"
-        )
-        help_text.append("  mu       ", style="bold cyan")
-        help_text.append("Build and upload project to VEX V5 brain\n", style="white")
-        help_text.append("           ", style="bold cyan")
-        help_text.append("Options: --verbose\n", style="dim white")
-        help_text.append("  vexcom   ", style="bold cyan")
-        help_text.append(
-            "Run vexcom with specified arguments (auto-installs if needed)", style="white"
-        )
+
+        for cmd_name, cmd_info in Cli.COMMANDS.items():
+            help_text.append(f"{cmd_name:<10}", style="bold cyan")
+            help_text.append(f"{cmd_info['help']}\n", style="white")
+
+            if cmd_info['arguments']:
+                help_text.append("\t\t", style="bold cyan")
+                options = []
+                for arg in cmd_info['arguments']:
+                    if arg['name']:
+                        if arg.get('required'):
+                            options.append(f"{arg['name']} <{arg['name'][2:]}> (required)")
+                        elif arg.get('action') == 'store_true':
+                            options.append(arg['name'])
+                        else:
+                            options.append(f"{arg['name']}")
+                if options:
+                    help_text.append(f"Options: {' '.join(options)}\n", style="dim white")
 
         panel = Panel(help_text, title="[bold blue]Help[/bold blue]", border_style="blue")
         console.print(panel)
+
     @staticmethod
     def parse_args():
         """Parse command line arguments"""
-        parser = argparse.ArgumentParser(
-            description="DishPy - VEX Competition Development Tool", add_help=False
-        )
-        subparsers = parser.add_subparsers(dest="command", help="Available commands")
-
-        # Create command
-        create_parser = subparsers.add_parser(
-            "create", help="Create new directory and initialize project"
-        )
-        create_parser.add_argument("--name", required=True, help="Project name (required)")
-        create_parser.add_argument("--slot", type=int, help="Project slot number")
-        create_parser.add_argument(
-            "--package",
-            nargs="?",
-            const=True,
-            default=False,
-            help="Create as a package (optionally specify package name)"
-        )
-
-        # Mu command
-        mu_parser = subparsers.add_parser(
-            "mu", help="Build and upload project to VEX V5 brain"
-        )
-        mu_parser.add_argument(
-            "--verbose", action="store_true", help="Enable verbose output"
-        )
-
-        # Vexcom command
-        vexcom_parser = subparsers.add_parser(
-            "vexcom", help="Run vexcom with specified arguments"
-        )
-        vexcom_parser.add_argument(
-            "args",
-            nargs=argparse.REMAINDER,
-            help="Arguments to pass to vexcom (accepts anything after 'vexcom')"
-        )
-
-        # debug command
-        debug_parser = subparsers.add_parser(
-            "debug", help="debug DishPy CLI internals"
-        )
-
         def dir_path(string):
             if os.path.isdir(string):
                 return string
             else:
                 raise NotADirectoryError(string)
-        # register command
-        register_parser = subparsers.add_parser(
-            "register", help="Register a package with VexCom"
+
+        parser = argparse.ArgumentParser(
+            description="DishPy - VEX Competition Development Tool", add_help=False
         )
-        register_parser.add_argument(
-            "package_path",
-            type=dir_path,
-            help="Path to package directory"
-        )
+        subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
+        for cmd_name, cmd_info in Cli.COMMANDS.items():
+            cmd_parser = subparsers.add_parser(cmd_name, help=cmd_info["help"])
+
+            for arg in cmd_info["arguments"]:
+                arg_kwargs = {k: v for k, v in arg.items() if k != "name"}
+                if arg_kwargs.get("type") == "dir_path":
+                    arg_kwargs["type"] = dir_path
+                cmd_parser.add_argument(arg["name"], **arg_kwargs)
 
         return parser
 
@@ -276,6 +293,14 @@ class Cli:
                 self.console.print(f"❌ [red]Error: {e}[/red]")
         elif args.command == "vexcom":
             run_vexcom(*args.args)
+        elif args.command == "list-pkgs":
+            try:
+                console.print(
+                    "✨ [green]Found the following packages registered with DishPy: "
+                    + f"{' ,'.join(Package.list())} [/green]"
+                )
+            except Exception as e:
+                self.console.print(f"❌ [red]Error: {e}[/red]")
         else:
             self.show_help()
 
