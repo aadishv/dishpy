@@ -11,8 +11,11 @@
 *dishpy.toml*
 
 ```toml
-[package]
+[project]
 name = "Add Two Numbers"
+slot = 1
+
+[package]
 package_name = "add_two_nums"
 version = "0.1.0"
 ```
@@ -23,3 +26,11 @@ version = "0.1.0"
 def add_two_numbers(a, b):
     return a + b
 ```
+
+
+**TODOS**
+
+ - [ ] Allow register command to work with GH repositories
+ - [ ] Add install command
+ - [ ] Add registry-list command
+ - [ ] Handle dependency trees?! (for now restrict packages to not have any dependencies)

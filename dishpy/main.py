@@ -7,14 +7,14 @@ from . import __version__
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
-from .vexcom import run_vexcom
+from .vexcom import run_vexcom, get_vexcom_cache_dir
 from .amalgamator import combine_project
 import tomllib
 import tomli_w
 import textcase
+import subprocess
 
 console = Console()
-
 
 class Project:
     def __init__(self, path: Path, name: str, slot: int):
@@ -68,7 +68,7 @@ class Project:
 
 class Package(Project):
     def __init__(self, path: Path, name: str, slot: int, package_name: str, version: str):
-        super.__init__(path, name, slot)
+        Project.__init__(self, path, name, slot)
         self.package_name = package_name
         self.version = version
 
@@ -100,13 +100,22 @@ class Package(Project):
 
         shutil.copy2(pkg_template, pkg_init)
 
-
-    def mu(self, verbose=False):
-        super.mu(verbose)
+    def register(self):
+        zip_path = get_vexcom_cache_dir() / "packages" / f"{self.package_name + ":" + self.version}.zip"
+        if zip_path.exists():
+            zip_path.unlink()
+        package_path = self.src / self.package_name
+        if not package_path.exists():
+            raise Exception(f"Package '{self.package_name}' in {package_path} not found")
+        subprocess.run([
+            "zip", "-r", str(zip_path),
+            str(self.src / self.package_name)
+        ], check=True, capture_output=True, text=True)
+        console.print(
+            f"✨ [green]Registered package [bold cyan]{self.package_name + ":" + self.version}[/bold cyan][/green]"
+        )
 
 class DishPy:
-    """Contains metadata about the current project"""
-
     def __init__(self, path: Path):
         self.path = path
         config_path = self.path / "dishpy.toml"
@@ -114,9 +123,12 @@ class DishPy:
             raise FileNotFoundError("Cannot find 'dishpy.toml' in current directory")
         with open(config_path, "rb") as f:
             self.config = tomllib.load(f)
-        if "project" in self.config and "name" in self.config["project"] and "slot" in self.config["project"]:
+        if (project := self.config.get("project")) and (name := project.get("name")) and (slot := project.get("slot")):
             try:
-                self.instance = Project(self.path, self.config["project"]["name"], self.config["project"]["slot"])
+                if (package := self.config.get("package")) and (package_name := package.get("package_name")) and (version := package.get("version")):
+                    self.instance = Package(self.path, name, slot, package_name, version)
+                else:
+                    self.instance = Project(self.path, name, slot)
             except FileNotFoundError:
                 raise FileNotFoundError(f"Project '{self.config['project']['name']}' not found")
         else:
@@ -155,13 +167,6 @@ class Cli:
         )
         subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
-        # Init command
-        init_parser = subparsers.add_parser(
-            "init", help="Initialize a new project in current directory"
-        )
-        init_parser.add_argument("--name", help="Project name")
-        init_parser.add_argument("--slot", type=int, help="Project slot number")
-
         # Create command
         create_parser = subparsers.add_parser(
             "create", help="Create new directory and initialize project"
@@ -194,6 +199,26 @@ class Cli:
             help="Arguments to pass to vexcom (accepts anything after 'vexcom')"
         )
 
+        # debug command
+        debug_parser = subparsers.add_parser(
+            "debug", help="debug DishPy CLI internals"
+        )
+
+        def dir_path(string):
+            if os.path.isdir(string):
+                return string
+            else:
+                raise NotADirectoryError(string)
+        # register command
+        register_parser = subparsers.add_parser(
+            "register", help="Register a package with VexCom"
+        )
+        register_parser.add_argument(
+            "package_path",
+            type=dir_path,
+            help="Path to package directory"
+        )
+
         return parser
 
     def __init__(self):
@@ -210,9 +235,23 @@ class Cli:
         except SystemExit:
             self.show_help()
             return
-        if args.command == "create":
-            # print(args.__dict__)
-            # return
+        if args.command == "debug":
+            print("cache dir:", get_vexcom_cache_dir())
+        elif args.command == "register":
+            try:
+                p = Path(args.package_path)
+                packages_path = get_vexcom_cache_dir() / "packages"
+                if not packages_path.exists():
+                    packages_path.mkdir()
+                dishpy = DishPy(p)
+                # cannot do isinstance(dishpy.instance, Project) because inheritance :P
+                if not isinstance(dishpy.instance, Package):
+                    raise Exception(f"{p} is a DishPy project, not a package")
+                dishpy.instance.register()
+            except Exception as e:
+                console.print(f"❌ [red]Error: {e}[/red]")
+                return
+        elif args.command == "create":
             path = (Path() / args.name)
             path.mkdir()
             if not args.package:
@@ -221,9 +260,10 @@ class Cli:
                     f"✨ [green]Created and initialized project in[/green] [bold cyan]{path}/[/bold cyan]"
                 )
             else:
-                Package.scaffold(path, args.name, args.slot, args.package if args.package is str else None)
-                pkg = args.package if args.package is str else textcase.snake(args.name)
-                package_path = path / "src" / pkg
+                pkg_name = args.package if type(args.package) == str else args.name
+                pkg_name = textcase.snake(pkg_name)
+                Package.scaffold(path, args.name, args.slot, pkg_name)
+                package_path = path / "src" / pkg_name
                 console.print(
                     f"✨ [green]Created and initialized project in [bold cyan]{path}/[/bold cyan]"
                     + f" with package[/green] [bold cyan]{str(package_path) + "/"}[/bold cyan]"
