@@ -12,6 +12,8 @@ from .amalgamator import combine_project
 import tomllib
 import tomli_w
 import textcase
+import validators
+import hashlib
 import subprocess
 
 console = Console()
@@ -150,7 +152,6 @@ class Package(Project):
                 pkgs.append(i.name[:-4])
         return pkgs
 
-
 class DishPy:
     def __init__(self, path: Path):
         self.path = path
@@ -250,7 +251,7 @@ class Cli:
     def parse_args():
         """Parse command line arguments"""
         def dir_path(string):
-            if os.path.isdir(string):
+            if os.path.isdir(string) or validators.url(string):
                 return string
             else:
                 raise NotADirectoryError(string)
@@ -289,12 +290,29 @@ class Cli:
             print("cache dir:", get_vexcom_cache_dir())
         elif args.command == "register":
             try:
-                p = Path(args.package_path)
-                dishpy = DishPy(p)
+                is_url = False
+                package = args.package_path
+                # package will soon become a Path
+                if validators.url(package):
+                    is_url = True
+                    package_old = package
+                    package_new = Path(hashlib.md5(package.encode()).hexdigest()[:8])
+                    while package_new.exists():
+                        package += hashlib.md5(package.encode()).hexdigest()[:8]
+                        package_new = Path(hashlib.md5(package.encode()).hexdigest()[:8])
+                    subprocess.run([
+                        "git", "clone", str(package_old), str(package_new)
+                    ], check=True, text=True)
+                    package = package_new
+                else:
+                    package = Path(args.package_path)
+                dishpy = DishPy(package)
                 # cannot do isinstance(dishpy.instance, Project) because inheritance :P
                 if not isinstance(dishpy.instance, Package):
-                    raise Exception(f"{p} is a DishPy project, not a package")
+                    raise Exception(f"{package} is a DishPy project, not a package")
                 dishpy.instance.register()
+                if is_url:
+                    shutil.rmtree(package_new)
             except Exception as e:
                 console.print(f"❌ [red]Error: {e}[/red]")
                 return

@@ -41,6 +41,7 @@ dependencies = [
     "tomli>=1.2.0; python_version<'3.11'",
     "testcase>=0.1.0",
     "textcase>=0.4.3",
+    "validators>=0.35.0",
 ]
 
 [project.urls]
