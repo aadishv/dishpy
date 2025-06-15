@@ -10,14 +10,14 @@ from rich.panel import Panel
 from rich.text import Text
 from .vexcom import run_vexcom, get_vexcom_cache_dir
 from .amalgamator import combine_project
-from utils import get_url_file_type, dir_path
+from .utils import get_url_file_type, dir_path
 import tomllib
 import tomli_w
 import textcase
 import validators
 import hashlib
 import subprocess
-import copy
+from copy import copy
 
 console = Console()
 
