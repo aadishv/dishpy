@@ -2,6 +2,8 @@
 
 A Python development tool for VEX Competition robotics that combines multi-file Python projects into single scripts and uploads them to VEX V5 brains.
 
+**Looking for tutorials? See [here](https://aadishv.github.io/dishpy/Tutorial/1_installation/)**
+
 ## Roadmap
 
 
@@ -52,151 +54,10 @@ If you want to make this better, feel free to
 - **VEX Integration**: Built-in VEX library support and seamless upload to V5 brains
 - **Cross-Platform**: Works on Linux (x64, ARM32, ARM64), macOS, and Windows
 
-## Installation
-
-Make sure you have [uv](https://github.com/astral-sh/uv) installed.
-
-Add the following to your `.zshrc`, `.bashrc`, etc.:
-```bash
-export UV_INDEX_STRATEGY="unsafe-best-match"
-export UV_EXTRA_INDEX_URL="https://test.pypi.org/simple/"
-```
-Open a new terminal to apply changes, and then run dishpy:
-```bash
-uv tool run dishpy
-# or
-uvx dishpy
-```
-
-## Quick Start
-
-### 1. Initialize a New Project
-
-```bash
-# Create new directory and initialize project (required: --name)
-uvx dishpy create --name "awesome-robot"
-
-# Create with custom slot
-uvx dishpy create --name "competition-bot" --slot 2
-```
-
-This creates:
-- `src/main.py` - Main robot code from template
-- `src/vex/__init__.py` - VEX library for robot control. Do not touch this; it stubs the VEX API for better autocomplete and LSP support in code editors.
-- `dishpy.toml` - Project configuration
-- `.out/` - Output directory for combined code
-
-### 2. Develop Your Robot Code
-
-Edit `src/main.py` and create additional modules in the `src/` directory. You can import and use modules freely - dishpy will handle combining them into a single file.
-
-Example project structure:
-```
-my-robot/
-├── src/
-│   ├── main.py          # Main robot code
-│   ├── autonomous.py    # Autonomous routines
-│   ├── driver.py        # Driver control functions
-│   └── vex/            # VEX library
-│       └── __init__.py
-├── dishpy.toml         # Project configuration
-└── .out/              # Combined output
-```
-
-**Note that all competition functions, such as `autonomous` and `driver`, have to be in `main.py`.**
-
-
-### 3. Build and Upload
-
-```bash
-uvx dishpy mu
-```
-
-This command:
-1. Combines all Python files in `src/` into a single script
-2. Resolves imports and prevents naming conflicts with intelligent prefixing
-3. Uploads the combined code to your VEX V5 brain
-
-## Commands
-
-### Commands
-
-#### `dishpy create`
-Create a new project directory and initialize it with template files.
-
-**Options:**
-- `--name <name>` - Project name and directory name (**required**)
-- `--slot <slot>` - Set program slot number (optional, defaults to 1)
-
-**Examples:**
-```bash
-uvx dishpy create --name "my-robot"                # Creates my-robot/ directory
-uvx dishpy create --name "competition-bot" --slot 2 # Custom slot
-```
-
-#### `dishpy mu`
-Build and upload your project to a VEX V5 brain:
-- Combines multi-file project into single script
-- Uploads to VEX V5 brain using project configuration
-
-**Options:**
-- `--verbose` - Enable detailed output during build and upload
-
-**Examples:**
-```bash
-uvx dishpy mu              # Standard build and upload
-uvx dishpy mu --verbose    # Detailed output
-```
-
-#### `dishpy vexcom [args...]`
-Direct access to the underlying vexcom tool for advanced usage. Pass any vexcom arguments directly.
-
-**Examples:**
-```bash
-uvx dishpy vexcom --flag1 arg1 --etc
-```
-
-## Project Configuration
-
-The `dishpy.toml` file contains project settings:
-
-```toml
-[project]
-name = "test"
-slot = 1
-```
-
-- `name`: Display name for your robot program
-- `slot`: Program slot on the V5 brain (1-8)
-
-## Code Amalgamation
-
-DishPy's amalgamator intelligently combines multiple Python files into a single script by:
-
-1. **Dependency Analysis**: Scans your project to understand import relationships
-2. **Symbol Prefixing**: Prevents naming conflicts by prefixing symbols from different files
-3. **Import Resolution**: Resolves local imports and preserves external library imports
-4. **Topological Sorting**: Orders files correctly based on dependencies
-
-### Example Usage
-
-```python
-from vex import *
-
-# Create motor and sensor objects
-left_motor = Motor(Ports.PORT1)
-right_motor = Motor(Ports.PORT2)
-controller = Controller()
-
-# Drive robot
-def drive():
-    left_motor.spin(FORWARD, controller.axis1.position(), PERCENT)
-    right_motor.spin(FORWARD, controller.axis2.position(), PERCENT)
-```
-
 ## Platform Support
 
 DishPy includes pre-compiled vexcom binaries for:
+
 - Linux x64
 - Linux ARM32 (Raspberry Pi)
 - Linux ARM64 (Raspberry Pi 4+)
@@ -205,22 +66,26 @@ DishPy includes pre-compiled vexcom binaries for:
 
 ## Requirements
 
-- Python 3.12+
+- Python 3.12+ with uv (see [1. Installation](Tutorial/1_installation.md))
 - VEX V5 Brain with USB connection
 
 ## Contributing
 
 DishPy is designed to streamline VEX Competition robotics development in Python. Contributions are welcome for:
-- Additional VEX library features
-- Code amalgamation improvements
-- Cross-platform compatibility
-- Documentation and examples
+
+* Literally anything
 
 ## License
 
 This project is licensed under the MIT License.
 
 ## Changelog
+
+**v0.5**
+
+* v0.5 ships with (*an experimental version of*) package management! It uses a PROS-like approach with decentralized packages maintaining their own metadata and users fetching that into a local registry. It is, however, much more limited than PROS. I would **not** recommend using it until it stabilizes (at which point I will also write a tutorial for it).
+* Overhauled our [docs](https://aadishv.github.io/dishpy) to match the styling for the rest of my website, a.k.a. very minimal.
+* Fixed some small bugs in the amalgamator and create CLI.
 
 **v0.4**
 
@@ -249,5 +114,3 @@ This project is licensed under the MIT License.
 * Chroma | 3332A | 3151A (inspiration)
 * Gemini 2.5 Pro (LLM -- first run)
 * Claude 4 Sonnet (LLM -- agentic tasks)
-
-[This page was copied from the README of our GitHub repository. Update: 6/13/25]

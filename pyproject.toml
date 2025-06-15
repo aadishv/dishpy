@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dishpy"
-version = "0.4.0"
+version = "0.5.0"
 description = "A Python development tool for VEX Competition robotics that combines multi-file Python projects into single scripts and uploads them to VEX V5 brains"
 readme = "README.md"
 requires-python = ">=3.12"

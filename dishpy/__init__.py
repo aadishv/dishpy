@@ -6,7 +6,7 @@ in Python, including project initialization, code amalgamation, and upload
 to VEX V5 brains.
 """
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 __author__ = "Aadish V"
 __email__ = "aadish@ohs.stanford.edu"
 
