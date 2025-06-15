@@ -230,6 +230,7 @@ class Package(Project):
         )
         super().add(package, self.src / self.package_name)
 
+
 class DishPy:
     def __init__(self, path: Path):
         self.path = path
@@ -480,6 +481,7 @@ class Cli:
 
 def main():
     Cli().route()
+
 
 if __name__ == "__main__":
     main()
