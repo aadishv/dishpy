@@ -8,6 +8,7 @@ from rich.console import Console
 
 console = Console()
 
+
 def get_platform() -> str:
     system = platform.system().lower()
     machine = platform.machine().lower()
@@ -30,10 +31,12 @@ def get_platform() -> str:
         else:
             return "linux-arm32"
 
+
 def get_vexcom_cache_dir() -> Path:
     """Get the platform-specific cache directory for vexcom tools"""
     cache_dir = Path(user_cache_dir("dishpy", "DishPy"))
     return cache_dir
+
 
 def get_vexcom_executable() -> Path:
     """Get the path to the vexcom executable for this platform"""
@@ -45,14 +48,18 @@ def get_vexcom_executable() -> Path:
     else:
         return cache_dir / "vexcom" / platform_name / "vexcom"
 
+
 def is_vexcom_installed() -> bool:
     """Check if vexcom is installed and executable"""
     vexcom_exe = get_vexcom_executable()
     return vexcom_exe.exists() and os.access(vexcom_exe, os.X_OK)
 
+
 def install_vexcom():
     """Install vexcom tools using the bundled download script"""
-    console.print("🔧 [yellow]VEXcom tools not found. Installing (this might take a few minutes)...[/yellow]")
+    console.print(
+        "🔧 [yellow]VEXcom tools not found. Installing (this might take a few minutes)...[/yellow]"
+    )
 
     # Get the script path from the package
     script_dir = Path(__file__).parent
@@ -68,9 +75,12 @@ def install_vexcom():
 
     try:
         # Run the download script with the cache directory
-        subprocess.run([
-            "bash", str(download_script), str(cache_dir)
-        ], check=True, capture_output=True, text=True)
+        subprocess.run(
+            ["bash", str(download_script), str(cache_dir)],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
 
         # Make the executable actually executable on Unix-like systems
         vexcom_exe = get_vexcom_executable()
@@ -85,6 +95,7 @@ def install_vexcom():
     except Exception as e:
         console.print(f"❌ [red]Error installing VEXcom tools: {e}[/red]")
         raise
+
 
 def run_vexcom(*args):
     """Run vexcom with the given arguments, installing if necessary"""

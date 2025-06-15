@@ -2,7 +2,6 @@ import sys
 import os
 import shutil
 import argparse
-import requests
 from pathlib import Path
 from . import __version__
 from rich.console import Console
@@ -21,6 +20,7 @@ from copy import copy
 
 console = Console()
 
+
 class Project:
     def __init__(self, path: Path, name: str, slot: int):
         self.path = path
@@ -38,7 +38,9 @@ class Project:
                 raise FileNotFoundError()
 
     @staticmethod
-    def scaffold(path: Path | None = None, name: str | None = None, slot: int | None = None):
+    def scaffold(
+        path: Path | None = None, name: str | None = None, slot: int | None = None
+    ):
         if not path:
             path = Path.cwd()
         if not name:
@@ -46,7 +48,7 @@ class Project:
         if not slot:
             slot = 1
         with open(path / "dishpy.toml", "w") as f:
-            f.write(f"[project]\nname = \"{name}\"\nslot = {slot}\n")
+            f.write(f'[project]\nname = "{name}"\nslot = {slot}\n')
         src = path / "src"
         main_file = path / "src" / "main.py"
         vex_dir = path / "src" / "vex"
@@ -70,36 +72,53 @@ class Project:
 
     def mu(self, verbose=False):
         combine_project(self.main_file, self.out_dir / "main.py", verbose)
-        run_vexcom("--name", self.name, "--slot", str(self.slot), "--write", "./.out/main.py")
+        run_vexcom(
+            "--name", self.name, "--slot", str(self.slot), "--write", "./.out/main.py"
+        )
 
     def add(self, package: str):
         package_path = get_vexcom_cache_dir() / "packages" / f"{package}.zip"
         # this *will* panic if the package is not found, but we try `list` first so it's not a huge deal
         name, version = package.split(":")
-        subprocess.run([
-            "unzip", "-o", # overwrite existing files without prompting
-            str(package_path),
-            "-d", str(self.src / name),
-        ], check=True, capture_output=True, text=True)
+        subprocess.run(
+            [
+                "unzip",
+                "-o",  # overwrite existing files without prompting
+                str(package_path),
+                "-d",
+                str(self.src / name),
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
         with open(self.path / "dishpy.toml", "rb") as f:
             config = tomllib.load(f)
-        if 'dependencies' not in config:
-            config['dependencies'] = {}
-        config['dependencies'][name] = version
+        if "dependencies" not in config:
+            config["dependencies"] = {}
+        config["dependencies"][name] = version
         with open(self.path / "dishpy.toml", "wb") as f:
             tomli_w.dump(config, f)
         console.print(
             f"✨ [green]Added package [bold cyan]{package}[/bold cyan][/green]"
         )
 
+
 class Package(Project):
-    def __init__(self, path: Path, name: str, slot: int, package_name: str, version: str):
+    def __init__(
+        self, path: Path, name: str, slot: int, package_name: str, version: str
+    ):
         Project.__init__(self, path, name, slot)
         self.package_name = package_name
         self.version = version
 
     @staticmethod
-    def scaffold(path: Path | None = None, name: str | None = None, slot: int | None = None, package_name: int | None = None):
+    def scaffold(
+        path: Path | None = None,
+        name: str | None = None,
+        slot: int | None = None,
+        package_name: int | None = None,
+    ):
         if not path:
             path = Path.cwd()
         if not name:
@@ -130,18 +149,28 @@ class Package(Project):
         packages_path = get_vexcom_cache_dir() / "packages"
         if not packages_path.exists():
             packages_path.mkdir()
-        zip_path = packages_path / f"{self.package_name + ":" + self.version}.zip"
+        zip_path = packages_path / f"{self.package_name + ':' + self.version}.zip"
         if zip_path.exists():
             zip_path.unlink()
         package_path = self.src / self.package_name
         if not package_path.exists():
-            raise Exception(f"Package '{self.package_name}' in {package_path} not found")
-        subprocess.run([
-            "zip", "-r", str(zip_path),
-            '.',
-        ], cwd = self.src / self.package_name, check=True, capture_output=True, text=True)
+            raise Exception(
+                f"Package '{self.package_name}' in {package_path} not found"
+            )
+        subprocess.run(
+            [
+                "zip",
+                "-r",
+                str(zip_path),
+                ".",
+            ],
+            cwd=self.src / self.package_name,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
         console.print(
-            f"✨ [green]Registered package [bold cyan]{self.package_name + ":" + self.version}[/bold cyan][/green]"
+            f"✨ [green]Registered package [bold cyan]{self.package_name + ':' + self.version}[/bold cyan][/green]"
         )
 
     @staticmethod
@@ -170,19 +199,26 @@ class Package(Project):
             # This is a zip file, download & unzip
             subprocess.run(
                 ["curl", "-s", "-L", package, "-o", str(package_path / "pkg.zip")],
-                check=True
+                check=True,
             )
             subprocess.run(
-                ["bsdtar", "--strip-components=1", "-xvf", str(package_path / "pkg.zip"), "-C", str(package_path)],
+                [
+                    "bsdtar",
+                    "--strip-components=1",
+                    "-xvf",
+                    str(package_path / "pkg.zip"),
+                    "-C",
+                    str(package_path),
+                ],
                 check=True,
                 stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL
+                stderr=subprocess.DEVNULL,
             )
         else:
             # This is a git repo, clone
-            subprocess.run([
-                "git", "clone", str(package), str(package_path)
-            ], check=True, text=True)
+            subprocess.run(
+                ["git", "clone", str(package), str(package_path)], check=True, text=True
+            )
         return package_path, lambda: shutil.rmtree(package_path)
 
 
@@ -194,16 +230,29 @@ class DishPy:
             raise FileNotFoundError("Cannot find 'dishpy.toml' in current directory")
         with open(config_path, "rb") as f:
             self.config = tomllib.load(f)
-        if (project := self.config.get("project")) and (name := project.get("name")) and (slot := project.get("slot")):
+        if (
+            (project := self.config.get("project"))
+            and (name := project.get("name"))
+            and (slot := project.get("slot"))
+        ):
             try:
-                if (package := self.config.get("package")) and (package_name := package.get("package_name")) and (version := package.get("version")):
-                    self.instance = Package(self.path, name, slot, package_name, version)
+                if (
+                    (package := self.config.get("package"))
+                    and (package_name := package.get("package_name"))
+                    and (version := package.get("version"))
+                ):
+                    self.instance = Package(
+                        self.path, name, slot, package_name, version
+                    )
                 else:
                     self.instance = Project(self.path, name, slot)
             except FileNotFoundError:
-                raise FileNotFoundError(f"Project '{self.config['project']['name']}' not found")
+                raise FileNotFoundError(
+                    f"Project '{self.config['project']['name']}' not found"
+                )
         else:
             raise FileNotFoundError("Malformed 'dishpy.toml' file")
+
 
 class Cli:
     COMMANDS = {
@@ -212,28 +261,43 @@ class Cli:
             "arguments": [
                 {"name": "--name", "required": True, "help": "Project name (required)"},
                 {"name": "--slot", "type": int, "help": "Project slot number"},
-                {"name": "--package", "nargs": "?", "const": True, "default": False,
-                 "help": "Create as a package (optionally specify package name)"}
-            ]
+                {
+                    "name": "--package",
+                    "nargs": "?",
+                    "const": True,
+                    "default": False,
+                    "help": "Create as a package (optionally specify package name)",
+                },
+            ],
         },
         "add": {
             "help": "Add a previously registered package to a project",
             "arguments": [
-                {"name": "package", "help": "Package name in name:version format (required)"},
-            ]
+                {
+                    "name": "package",
+                    "help": "Package name in name:version format (required)",
+                },
+            ],
         },
         "mu": {
             "help": "Build and upload project to VEX V5 brain",
             "arguments": [
-                {"name": "--verbose", "action": "store_true", "help": "Enable verbose output"}
-            ]
+                {
+                    "name": "--verbose",
+                    "action": "store_true",
+                    "help": "Enable verbose output",
+                }
+            ],
         },
         "vexcom": {
             "help": "Run vexcom with specified arguments (auto-installs if needed)",
             "arguments": [
-                {"name": "args", "nargs": argparse.REMAINDER,
-                 "help": "Arguments to pass to vexcom (accepts anything after 'vexcom')"}
-            ]
+                {
+                    "name": "args",
+                    "nargs": argparse.REMAINDER,
+                    "help": "Arguments to pass to vexcom (accepts anything after 'vexcom')",
+                }
+            ],
         },
         "debug": {
             "help": "debug DishPy CLI internals",
@@ -241,15 +305,18 @@ class Cli:
         },
         "list-pkgs": {
             "help": "List all available packages that have been registered with DishPy",
-            "arguments": []
+            "arguments": [],
         },
         "register": {
             "help": "Register a package with DishPy",
             "arguments": [
-                {"name": "package_path", "type": "dir_path",
-                 "help": "Path to package directory"}
-            ]
-        }
+                {
+                    "name": "package_path",
+                    "type": "dir_path",
+                    "help": "Path to package directory",
+                }
+            ],
+        },
     }
 
     @staticmethod
@@ -264,21 +331,27 @@ class Cli:
             help_text.append(f"{cmd_name:<10}", style="bold cyan")
             help_text.append(f"{cmd_info['help']}\n", style="white")
 
-            if cmd_info['arguments']:
+            if cmd_info["arguments"]:
                 help_text.append("\t\t", style="bold cyan")
                 options = []
-                for arg in cmd_info['arguments']:
-                    if arg['name']:
-                        if arg.get('required'):
-                            options.append(f"{arg['name']} <{arg['name'].removeprefix('--')}> (required)")
-                        elif arg.get('action') == 'store_true':
-                            options.append(arg['name'])
+                for arg in cmd_info["arguments"]:
+                    if arg["name"]:
+                        if arg.get("required"):
+                            options.append(
+                                f"{arg['name']} <{arg['name'].removeprefix('--')}> (required)"
+                            )
+                        elif arg.get("action") == "store_true":
+                            options.append(arg["name"])
                         else:
                             options.append(f"{arg['name']}")
                 if options:
-                    help_text.append(f"Options: {' '.join(options)}\n", style="dim white")
+                    help_text.append(
+                        f"Options: {' '.join(options)}\n", style="dim white"
+                    )
 
-        panel = Panel(help_text, title="[bold blue]Help[/bold blue]", border_style="blue")
+        panel = Panel(
+            help_text, title="[bold blue]Help[/bold blue]", border_style="blue"
+        )
         console.print(panel)
 
     @staticmethod
@@ -315,23 +388,31 @@ class Cli:
                 console.print("❌ [red]No packages registered with DishPy[/red]")
         except Exception as e:
             self.console.print(f"❌ [red]Error: {e}[/red]")
+
     def add(self, args):
         try:
-            assert(args.package in Package.list())
+            assert args.package in Package.list()
         except Exception:
-            self.console.print(f"❌ [red]Error: {args.package} is not a registered package[/red]")
-            self.console.print("[red]Run `dishpy list-pkgs` to see a list of registered packages[/red]")
+            self.console.print(
+                f"❌ [red]Error: {args.package} is not a registered package[/red]"
+            )
+            self.console.print(
+                "[red]Run `dishpy list-pkgs` to see a list of registered packages[/red]"
+            )
             return
         instance = DishPy(Path())
         if isinstance(instance.instance, Package):
-            self.console.print("❌ [red]Error: Cannot add dependencies to packages[/red]")
+            self.console.print(
+                "❌ [red]Error: Cannot add dependencies to packages[/red]"
+            )
             return
         try:
             instance.instance.add(args.package)
         except Exception as e:
             self.console.print(f"❌ [red]Error: {e}[/red]")
+
     def create(self, args):
-        path = (Path() / args.name)
+        path = Path() / args.name
         path.mkdir()
         if not args.package:
             Project.scaffold(path, args.name, args.slot)
@@ -345,8 +426,9 @@ class Cli:
             package_path = path / "src" / pkg_name
             console.print(
                 f"✨ [green]Created and initialized project in [bold cyan]{path}/[/bold cyan]"
-                + f" with package[/green] [bold cyan]{str(package_path) + "/"}[/bold cyan]"
+                + f" with package[/green] [bold cyan]{str(package_path) + '/'}[/bold cyan]"
             )
+
     def register(self, args):
         try:
             path, cleanup = Package.generate_path(args.package_path)
