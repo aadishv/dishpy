@@ -55,7 +55,7 @@ $ uv tool run dishpy
 $ uvx dishpy
 # outputs something like
 ╭─────────────────────────────────────── Help ───────────────────────────────────────╮
-│ dishpy 0.5.0 - VEX Competition Development Tool                                    │
+│ dishpy 0.6.0 - VEX Competition Development Tool                                    │
 │                                                                                    │
 │ Commands:                                                                          │
 │ create    Create new directory and initialize project                              │

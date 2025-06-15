@@ -36,5 +36,5 @@ def add_two_numbers(a, b):
  - [x] Release-based downloads using zip for better version control
  - [x] Add copy-src command for packages
  - [x] Refactor `register` command
- - [ ] update commands, help text, and docs
+ - [x] update commands, help text, and docs
  - [ ] Add tutorial w/ note about adding dependencies to packages

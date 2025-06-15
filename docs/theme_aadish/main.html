@@ -14,8 +14,10 @@
             rel="stylesheet"
         />
         <meta charset="UTF-8" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/xcode.css">
     </head>
     <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <div class="m-5 container">
             {% if nav|length > 1 %}
@@ -153,5 +155,6 @@
                 }
             });
         </script>
+        <script>hljs.highlightAll();</script>
     </body>
 </html>
