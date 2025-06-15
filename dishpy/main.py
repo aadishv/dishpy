@@ -274,7 +274,79 @@ class Cli:
 
     def __init__(self):
         self.console = console
-        self.project = None
+
+    def list(self):
+        try:
+            packages = Package.list()
+            if packages:
+                console.print(
+                    "✨ [green]Found the following packages registered with DishPy: "
+                    + f"{', '.join(Package.list())} [/green]"
+                )
+            else:
+                console.print("❌ [red]No packages registered with DishPy[/red]")
+        except Exception as e:
+            self.console.print(f"❌ [red]Error: {e}[/red]")
+    def add(self, args):
+        try:
+            assert(args.package in Package.list())
+        except Exception:
+            self.console.print(f"❌ [red]Error: {args.package} is not a registered package[/red]")
+            self.console.print("[red]Run `dishpy list-pkgs` to see a list of registered packages[/red]")
+            return
+        instance = DishPy(Path())
+        if isinstance(instance.instance, Package):
+            self.console.print("❌ [red]Error: Cannot add dependencies to packages[/red]")
+            return
+        try:
+            instance.instance.add(args.package)
+        except Exception as e:
+            self.console.print(f"❌ [red]Error: {e}[/red]")
+    def create(self, args):
+        path = (Path() / args.name)
+        path.mkdir()
+        if not args.package:
+            Project.scaffold(path, args.name, args.slot)
+            console.print(
+                f"✨ [green]Created and initialized project in[/green] [bold cyan]{path}/[/bold cyan]"
+            )
+        else:
+            pkg_name = args.package if args.package is str else args.name
+            pkg_name = textcase.snake(pkg_name)
+            Package.scaffold(path, args.name, args.slot, pkg_name)
+            package_path = path / "src" / pkg_name
+            console.print(
+                f"✨ [green]Created and initialized project in [bold cyan]{path}/[/bold cyan]"
+                + f" with package[/green] [bold cyan]{str(package_path) + "/"}[/bold cyan]"
+            )
+    def register(self, args):
+        try:
+            is_url = False
+            package = args.package_path
+            # package will soon become a Path
+            if validators.url(package):
+                is_url = True
+                package_old = package
+                package_new = Path(hashlib.md5(package.encode()).hexdigest()[:8])
+                while package_new.exists():
+                    package += hashlib.md5(package.encode()).hexdigest()[:8]
+                    package_new = Path(hashlib.md5(package.encode()).hexdigest()[:8])
+                subprocess.run([
+                    "git", "clone", str(package_old), str(package_new)
+                ], check=True, text=True)
+                package = package_new
+            else:
+                package = Path(args.package_path)
+            dishpy = DishPy(package)
+            # cannot do isinstance(dishpy.instance, Project) because inheritance :P
+            if not isinstance(dishpy.instance, Package):
+                raise Exception(f"{package} is a DishPy project, not a package")
+            dishpy.instance.register()
+            if is_url:
+                shutil.rmtree(package_new)
+        except Exception as e:
+            console.print(f"❌ [red]Error: {e}[/red]")
+            return
 
     def route(self):
         if len(sys.argv) <= 1 or sys.argv[1] in ["-h", "--help", "help"]:
@@ -289,50 +361,9 @@ class Cli:
         if args.command == "debug":
             print("cache dir:", get_vexcom_cache_dir())
         elif args.command == "register":
-            try:
-                is_url = False
-                package = args.package_path
-                # package will soon become a Path
-                if validators.url(package):
-                    is_url = True
-                    package_old = package
-                    package_new = Path(hashlib.md5(package.encode()).hexdigest()[:8])
-                    while package_new.exists():
-                        package += hashlib.md5(package.encode()).hexdigest()[:8]
-                        package_new = Path(hashlib.md5(package.encode()).hexdigest()[:8])
-                    subprocess.run([
-                        "git", "clone", str(package_old), str(package_new)
-                    ], check=True, text=True)
-                    package = package_new
-                else:
-                    package = Path(args.package_path)
-                dishpy = DishPy(package)
-                # cannot do isinstance(dishpy.instance, Project) because inheritance :P
-                if not isinstance(dishpy.instance, Package):
-                    raise Exception(f"{package} is a DishPy project, not a package")
-                dishpy.instance.register()
-                if is_url:
-                    shutil.rmtree(package_new)
-            except Exception as e:
-                console.print(f"❌ [red]Error: {e}[/red]")
-                return
+            self.register(args)
         elif args.command == "create":
-            path = (Path() / args.name)
-            path.mkdir()
-            if not args.package:
-                Project.scaffold(path, args.name, args.slot)
-                console.print(
-                    f"✨ [green]Created and initialized project in[/green] [bold cyan]{path}/[/bold cyan]"
-                )
-            else:
-                pkg_name = args.package if args.package is str else args.name
-                pkg_name = textcase.snake(pkg_name)
-                Package.scaffold(path, args.name, args.slot, pkg_name)
-                package_path = path / "src" / pkg_name
-                console.print(
-                    f"✨ [green]Created and initialized project in [bold cyan]{path}/[/bold cyan]"
-                    + f" with package[/green] [bold cyan]{str(package_path) + "/"}[/bold cyan]"
-                )
+            self.create(args)
         elif args.command == "mu":
             try:
                 instance = DishPy(Path())
@@ -342,32 +373,9 @@ class Cli:
         elif args.command == "vexcom":
             run_vexcom(*args.args)
         elif args.command == "list-pkgs":
-            try:
-                packages = Package.list()
-                if packages:
-                    console.print(
-                        "✨ [green]Found the following packages registered with DishPy: "
-                        + f"{', '.join(Package.list())} [/green]"
-                    )
-                else:
-                    console.print("❌ [red]No packages registered with DishPy[/red]")
-            except Exception as e:
-                self.console.print(f"❌ [red]Error: {e}[/red]")
+            self.list()
         elif args.command == "add":
-            try:
-                assert(args.package in Package.list())
-            except Exception:
-                self.console.print(f"❌ [red]Error: {args.package} is not a registered package[/red]")
-                self.console.print("[red]Run `dishpy list-pkgs` to see a list of registered packages[/red]")
-                return
-            instance = DishPy(Path())
-            if isinstance(instance.instance, Package):
-                self.console.print("❌ [red]Error: Cannot add dependencies to packages[/red]")
-                return
-            try:
-                instance.instance.add(args.package)
-            except Exception as e:
-                self.console.print(f"❌ [red]Error: {e}[/red]")
+            self.add(args)
         else:
             self.show_help()
 
