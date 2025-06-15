@@ -345,18 +345,18 @@ class Cli:
                 # package_old = the original argument
                 # package = the original argument with a hash appended
                 # package_new = the path to the new directory
-                print("package", package_old, get_url_file_type(package_old).strip())
-                if get_url_file_type(package_old).strip() == "application/zip":
+                if "application/zip" in get_url_file_type(package_old):
                     # This is a zip file, download & unzip
-                    curl_cmd = f"curl -L {package_old} -o {str(package_new / 'pkg.zip')}"
-                    os.system(curl_cmd)
-                    unzip_cmd =
-                    # subprocess.run([
-                    #     "unzip", "-o", # overwrite existing files without prompting
-                    #     str(package),
-                    #     "-d", str(package_new),
-                    # ], check=True, capture_output=True, text=True)
-                    return
+                    subprocess.run(
+                        ["curl", "-s", "-L", package_old, "-o", str(package_new / "pkg.zip")],
+                        check=True
+                    )
+                    subprocess.run(
+                        ["bsdtar", "--strip-components=1", "-xvf", str(package_new / "pkg.zip"), "-C", str(package_new)],
+                        check=True,
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL
+                    )
                 else:
                     # This is a git repo, clone
                     subprocess.run([

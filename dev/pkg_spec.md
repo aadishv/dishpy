@@ -33,5 +33,7 @@ def add_two_numbers(a, b):
  - [x] Allow register command to work with GH repositories
  - [x] Add install command
  - [x] Add registry-list command
+ - [x] Release-based downloads using zip for better version control
  - [ ] Add copy-src command for packages
+ - [ ] Refactor `register` command
  - [ ] Add tutorial w/ note about adding dependencies to packages
