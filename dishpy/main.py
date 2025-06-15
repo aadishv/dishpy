@@ -358,26 +358,27 @@ class Cli:
         except SystemExit:
             self.show_help()
             return
-        if args.command == "debug":
-            print("cache dir:", get_vexcom_cache_dir())
-        elif args.command == "register":
-            self.register(args)
-        elif args.command == "create":
-            self.create(args)
-        elif args.command == "mu":
-            try:
-                instance = DishPy(Path())
-                instance.instance.mu()
-            except Exception as e:
-                self.console.print(f"❌ [red]Error: {e}[/red]")
-        elif args.command == "vexcom":
-            run_vexcom(*args.args)
-        elif args.command == "list-pkgs":
-            self.list()
-        elif args.command == "add":
-            self.add(args)
-        else:
-            self.show_help()
+        match args.command:
+            case "debug":
+                print("cache dir:", get_vexcom_cache_dir())
+            case "register":
+                self.register(args)
+            case "create":
+                self.create(args)
+            case "mu":
+                try:
+                    instance = DishPy(Path())
+                    instance.instance.mu()
+                except Exception as e:
+                    self.console.print(f"❌ [red]Error: {e}[/red]")
+            case "vexcom":
+                run_vexcom(*args.args)
+            case "list-pkgs":
+                self.list()
+            case "add":
+                self.add(args)
+            case _:
+                self.show_help()
 
 
 def main():
