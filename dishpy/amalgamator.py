@@ -248,7 +248,7 @@ def _analyze_project(entry_file, local_module_map, verbose=False):
                 else:
                     is_local = module_name in local_module_map
                     origin_file = None
-                    
+
                     if is_local:
                         origin_file = local_module_map[module_name]
                     else:
@@ -258,7 +258,7 @@ def _analyze_project(entry_file, local_module_map, verbose=False):
                         current_module_path = current_rel_path.replace(os.sep, '.').replace('.py', '')
                         if current_module_path.endswith('.__init__'):
                             current_module_path = current_module_path[:-9]  # Remove .__init__
-                        
+
                         # Try to resolve as package-relative import
                         package_parts = current_module_path.split('.')
                         for i in range(len(package_parts)):
@@ -410,7 +410,7 @@ def combine_project(main_file, output_file, verbose=False):
             f.write("# No external imports found.\n")
 
         f.write("".join(all_code_blocks))
-        f.write(f"\n\n# --- End of combined script ---")
+        f.write("\n\n# --- End of combined script ---")
 
     console.print(f"✅ [green]Project combined successfully into[/green] [bold cyan]{output_file}[/bold cyan]")
 

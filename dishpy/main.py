@@ -10,6 +10,7 @@ from rich.panel import Panel
 from rich.text import Text
 from .vexcom import run_vexcom, get_vexcom_cache_dir
 from .amalgamator import combine_project
+from utils import get_url_file_type, dir_path
 import tomllib
 import tomli_w
 import textcase
@@ -154,6 +155,37 @@ class Package(Project):
                 pkgs.append(i.name[:-4])
         return pkgs
 
+    @staticmethod
+    def generate_path(package: str) -> tuple[Path, callable]:
+        package_hashed = copy(package)
+        # package will soon become a Path
+        if Path(package).exists():
+            return Path(package), lambda: None
+        package_path = Path(hashlib.md5(package.encode()).hexdigest()[:8])
+        while package_path.exists():
+            package_hashed += hashlib.md5(package.encode()).hexdigest()[:8]
+            package_path = Path(hashlib.md5(package_hashed.encode()).hexdigest()[:8])
+        package_path.mkdir()
+        if validators.url(package) and "application/zip" in get_url_file_type(package):
+            # This is a zip file, download & unzip
+            subprocess.run(
+                ["curl", "-s", "-L", package, "-o", str(package_path / "pkg.zip")],
+                check=True
+            )
+            subprocess.run(
+                ["bsdtar", "--strip-components=1", "-xvf", str(package_path / "pkg.zip"), "-C", str(package_path)],
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+        else:
+            # This is a git repo, clone
+            subprocess.run([
+                "git", "clone", str(package), str(package_path)
+            ], check=True, text=True)
+        return package_path, lambda: shutil.rmtree(package_path)
+
+
 class DishPy:
     def __init__(self, path: Path):
         self.path = path
@@ -252,12 +284,6 @@ class Cli:
     @staticmethod
     def parse_args():
         """Parse command line arguments"""
-        def dir_path(string):
-            if os.path.isdir(string) or validators.url(string):
-                return string
-            else:
-                raise NotADirectoryError(string)
-
         parser = argparse.ArgumentParser(
             description="DishPy - VEX Competition Development Tool", add_help=False
         )
@@ -323,55 +349,13 @@ class Cli:
             )
     def register(self, args):
         try:
-            is_url = False
-            package = args.package_path
-            # package will soon become a Path
-            if validators.url(package):
-                def get_url_file_type(url):
-                    try:
-                        response = requests.head(url, allow_redirects=True)
-                        content_type = response.headers.get('content-type')
-                        return content_type
-                    except requests.RequestException as e:
-                        print(f"An error occurred: {e}")
-                        return None
-                is_url = True
-                package_old = package
-                package_new = Path(hashlib.md5(package.encode()).hexdigest()[:8])
-                while package_new.exists():
-                    package += hashlib.md5(package.encode()).hexdigest()[:8]
-                    package_new = Path(hashlib.md5(package.encode()).hexdigest()[:8])
-                package_new.mkdir()
-                # package_old = the original argument
-                # package = the original argument with a hash appended
-                # package_new = the path to the new directory
-                if "application/zip" in get_url_file_type(package_old):
-                    # This is a zip file, download & unzip
-                    subprocess.run(
-                        ["curl", "-s", "-L", package_old, "-o", str(package_new / "pkg.zip")],
-                        check=True
-                    )
-                    subprocess.run(
-                        ["bsdtar", "--strip-components=1", "-xvf", str(package_new / "pkg.zip"), "-C", str(package_new)],
-                        check=True,
-                        stdout=subprocess.DEVNULL,
-                        stderr=subprocess.DEVNULL
-                    )
-                else:
-                    # This is a git repo, clone
-                    subprocess.run([
-                        "git", "clone", str(package_old), str(package_new)
-                    ], check=True, text=True)
-                package = package_new
-            else:
-                package = Path(args.package_path)
-            dishpy = DishPy(package)
+            path, cleanup = Package.generate_path(args.package_path)
+            dishpy = DishPy(path)
             # cannot do isinstance(dishpy.instance, Project) because inheritance :P
             if not isinstance(dishpy.instance, Package):
-                raise Exception(f"{package} is a DishPy project, not a package")
+                raise Exception(f"{path} is a DishPy project, not a package")
             dishpy.instance.register()
-            if is_url:
-                shutil.rmtree(package_new)
+            cleanup()
         except Exception as e:
             console.print(f"❌ [red]Error: {e}[/red]")
             return
