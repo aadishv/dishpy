@@ -1,7 +1,7 @@
 site_name: DishPy Docs
 theme:
-  name: shadcn
-  icon: none
+  name: null
+  custom_dir: './theme_aadish/'
 plugins:
   - mkdocstrings:
       handlers:

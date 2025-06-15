@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+    <head>
+        <title>
+            {% if page.title %}{{ page.title }} - {% endif %}{{ config.site_name
+            }}
+        </title>
+        {%- for path in config.extra_css %}
+        <link href="{{ path | url }}" rel="stylesheet" />
+        {%- endfor %}
+        <link rel="stylesheet" href="/index.css" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
+            rel="stylesheet"
+        />
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        {% if nav|length > 1 %}
+            <ul>
+            {% for nav_item in nav %}
+                {% if nav_item.children %}
+                    <li>{{ nav_item.title }}
+                        <ul>
+                        {% for nav_item in nav_item.children %}
+                            <li class="{% if nav_item.active %}current{% endif %}">
+                                <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="{% if nav_item.active %}current{% endif %}">
+                        <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <div class="m-5 container">{{ page.content }}</div>
+
+        {%- for script in config.extra_javascript %} {{ script | script_tag }}
+        {%- endfor %}
+    </body>
+</html>
