@@ -16,30 +16,44 @@
         <meta charset="UTF-8" />
     </head>
     <body>
-        {% if nav|length > 1 %}
-            <ul>
-            {% for nav_item in nav %}
-                {% if nav_item.children %}
-                    <li>{{ nav_item.title }}
-                        <ul>
-                        {% for nav_item in nav_item.children %}
-                            <li class="{% if nav_item.active %}current{% endif %}">
-                                <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
-                            </li>
-                        {% endfor %}
-                        </ul>
-                    </li>
-                {% else %}
-                    <li class="{% if nav_item.active %}current{% endif %}">
-                        <a href="{{ nav_item.url|url }}">{{ nav_item.title }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-            </ul>
-        {% endif %}
-
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <div class="m-5 container">{{ page.content }}</div>
+        <div class="m-5 container">
+            {% if nav|length > 1 %}
+                <div class="mt-3">
+                    <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
+                        <div class="-m-3 flex flex-col">
+                            <div class="p-6 pb-0">
+                                <h6 class="-mb-5 -mt-1 font-serif">
+                                    In this documentation
+                                </h6>
+                            </div>
+                            <div class="p-6">
+                                {% for nav_item in nav %}
+                                    {% if nav_item.children %}
+                                        <div>{{ nav_item.title }}</div>
+                                        {% for nav_item in nav_item.children %}
+                                            <div style="margin-left: 2rem">
+                                                <a href="{{ nav_item.url|url }}" class="text-sm {% if nav_item.active %}font-semibold{% endif %}">
+                                                    {{ nav_item.title }}
+                                                </a>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div>
+                                            <a href="{{ nav_item.url|url }}" class="text-sm {% if nav_item.active %}font-semibold{% endif %}">
+                                                {{ nav_item.title }}
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {{ page.content }}
+        </div>
 
         {%- for script in config.extra_javascript %} {{ script | script_tag }}
         {%- endfor %}
