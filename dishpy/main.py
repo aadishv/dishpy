@@ -2,6 +2,7 @@ import sys
 import os
 import shutil
 import argparse
+import requests
 from pathlib import Path
 from . import __version__
 from rich.console import Console
@@ -15,6 +16,7 @@ import textcase
 import validators
 import hashlib
 import subprocess
+import copy
 
 console = Console()
 
@@ -325,15 +327,41 @@ class Cli:
             package = args.package_path
             # package will soon become a Path
             if validators.url(package):
+                def get_url_file_type(url):
+                    try:
+                        response = requests.head(url, allow_redirects=True)
+                        content_type = response.headers.get('content-type')
+                        return content_type
+                    except requests.RequestException as e:
+                        print(f"An error occurred: {e}")
+                        return None
                 is_url = True
                 package_old = package
                 package_new = Path(hashlib.md5(package.encode()).hexdigest()[:8])
                 while package_new.exists():
                     package += hashlib.md5(package.encode()).hexdigest()[:8]
                     package_new = Path(hashlib.md5(package.encode()).hexdigest()[:8])
-                subprocess.run([
-                    "git", "clone", str(package_old), str(package_new)
-                ], check=True, text=True)
+                package_new.mkdir()
+                # package_old = the original argument
+                # package = the original argument with a hash appended
+                # package_new = the path to the new directory
+                print("package", package_old, get_url_file_type(package_old).strip())
+                if get_url_file_type(package_old).strip() == "application/zip":
+                    # This is a zip file, download & unzip
+                    curl_cmd = f"curl -L {package_old} -o {str(package_new / 'pkg.zip')}"
+                    os.system(curl_cmd)
+                    unzip_cmd =
+                    # subprocess.run([
+                    #     "unzip", "-o", # overwrite existing files without prompting
+                    #     str(package),
+                    #     "-d", str(package_new),
+                    # ], check=True, capture_output=True, text=True)
+                    return
+                else:
+                    # This is a git repo, clone
+                    subprocess.run([
+                        "git", "clone", str(package_old), str(package_new)
+                    ], check=True, text=True)
                 package = package_new
             else:
                 package = Path(args.package_path)
