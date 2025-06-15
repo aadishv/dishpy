@@ -348,7 +348,7 @@ class Cli:
             # Handle subcommands
             if "subcommands" in cmd_info:
                 for sub_name, sub_info in cmd_info["subcommands"].items():
-                    help_text.append(f"  {sub_name:<8}", style="cyan")
+                    help_text.append(f"  {sub_name:<13}", style="cyan")
                     help_text.append(f"{sub_info['help']}\n", style="white")
                     if sub_info["arguments"]:
                         help_text.append("\t\t", style="cyan")
@@ -462,7 +462,7 @@ class Cli:
                 f"✨ [green]Created and initialized project in[/green] [bold cyan]{path}/[/bold cyan]"
             )
         else:
-            pkg_name = args.package if args.package is str else args.name
+            pkg_name = args.package if isinstance(args.package, str) else args.name
             pkg_name = textcase.snake(pkg_name)
             Package.scaffold(path, args.name, args.slot, pkg_name)
             package_path = path / "src" / pkg_name
