@@ -312,19 +312,24 @@ class Cli:
             "help": "debug DishPy CLI internals",
             "arguments": [],
         },
-        "list-pkgs": {
-            "help": "List all available packages that have been registered with DishPy",
-            "arguments": [],
-        },
-        "register": {
-            "help": "Register a package with DishPy",
-            "arguments": [
-                {
-                    "name": "package_path",
-                    "type": "dir_path",
-                    "help": "Path to package directory",
-                }
-            ],
+        "package": {
+            "help": "Package management commands",
+            "subcommands": {
+                "list": {
+                    "help": "List all available packages that have been registered with DishPy",
+                    "arguments": [],
+                },
+                "register": {
+                    "help": "Register a package with DishPy",
+                    "arguments": [
+                        {
+                            "name": "package_path",
+                            "type": "dir_path",
+                            "help": "Path to package directory. Can also be a git repo or link to azip file",
+                        }
+                    ],
+                },
+            },
         },
     }
 
@@ -340,7 +345,29 @@ class Cli:
             help_text.append(f"{cmd_name:<10}", style="bold cyan")
             help_text.append(f"{cmd_info['help']}\n", style="white")
 
-            if cmd_info["arguments"]:
+            # Handle subcommands
+            if "subcommands" in cmd_info:
+                for sub_name, sub_info in cmd_info["subcommands"].items():
+                    help_text.append(f"  {sub_name:<8}", style="cyan")
+                    help_text.append(f"{sub_info['help']}\n", style="white")
+                    if sub_info["arguments"]:
+                        help_text.append("\t\t", style="cyan")
+                        options = []
+                        for arg in sub_info["arguments"]:
+                            if arg["name"]:
+                                if arg.get("required"):
+                                    options.append(
+                                        f"{arg['name']} <{arg['name'].removeprefix('--')}> (required)"
+                                    )
+                                elif arg.get("action") == "store_true":
+                                    options.append(arg["name"])
+                                else:
+                                    options.append(f"{arg['name']}")
+                        if options:
+                            help_text.append(
+                                f"Options: {' '.join(options)}\n", style="dim white"
+                            )
+            elif cmd_info["arguments"]:
                 help_text.append("\t\t", style="bold cyan")
                 options = []
                 for arg in cmd_info["arguments"]:
@@ -374,11 +401,22 @@ class Cli:
         for cmd_name, cmd_info in Cli.COMMANDS.items():
             cmd_parser = subparsers.add_parser(cmd_name, help=cmd_info["help"])
 
-            for arg in cmd_info["arguments"]:
-                arg_kwargs = {k: v for k, v in arg.items() if k != "name"}
-                if arg_kwargs.get("type") == "dir_path":
-                    arg_kwargs["type"] = dir_path
-                cmd_parser.add_argument(arg["name"], **arg_kwargs)
+            # Handle subcommands
+            if "subcommands" in cmd_info:
+                sub_subparsers = cmd_parser.add_subparsers(dest="subcommand", help="Available subcommands")
+                for sub_name, sub_info in cmd_info["subcommands"].items():
+                    sub_parser = sub_subparsers.add_parser(sub_name, help=sub_info["help"])
+                    for arg in sub_info["arguments"]:
+                        arg_kwargs = {k: v for k, v in arg.items() if k != "name"}
+                        if arg_kwargs.get("type") == "dir_path":
+                            arg_kwargs["type"] = dir_path
+                        sub_parser.add_argument(arg["name"], **arg_kwargs)
+            else:
+                for arg in cmd_info["arguments"]:
+                    arg_kwargs = {k: v for k, v in arg.items() if k != "name"}
+                    if arg_kwargs.get("type") == "dir_path":
+                        arg_kwargs["type"] = dir_path
+                    cmd_parser.add_argument(arg["name"], **arg_kwargs)
 
         return parser
 
@@ -406,7 +444,7 @@ class Cli:
                 f"❌ [red]Error: {args.package} is not a registered package[/red]"
             )
             self.console.print(
-                "[red]Run `dishpy list-pkgs` to see a list of registered packages[/red]"
+                "[red]Run `dishpy package list` to see a list of registered packages[/red]"
             )
             return
         instance = DishPy(Path())
@@ -459,8 +497,14 @@ class Cli:
         match args.command:
             case "debug":
                 print("cache dir:", get_vexcom_cache_dir())
-            case "register":
-                self.register(args)
+            case "package":
+                match args.subcommand:
+                    case "register":
+                        self.register(args)
+                    case "list":
+                        self.list()
+                    case _:
+                        self.show_help()
             case "create":
                 self.create(args)
             case "mu":
@@ -471,8 +515,6 @@ class Cli:
                     self.console.print(f"❌ [red]Error: {e}[/red]")
             case "vexcom":
                 run_vexcom(*args.args)
-            case "list-pkgs":
-                self.list()
             case "add":
                 self.add(args)
             case _:
