@@ -30,8 +30,8 @@ def add_two_numbers(a, b):
 
 **TODOS**
 
- - [ ] Allow register command to work with GH repositories
+ - [x] Allow register command to work with GH repositories
  - [x] Add install command
  - [x] Add registry-list command
- - [ ] Handle dependency trees?! (for now restrict packages to not have any dependencies)
- - [ ] Update docs
+ - [ ] Add copy-src command for packages
+ - [ ] Add tutorial w/ note about adding dependencies to packages
