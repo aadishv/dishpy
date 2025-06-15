@@ -76,17 +76,20 @@ class Project:
             "--name", self.name, "--slot", str(self.slot), "--write", "./.out/main.py"
         )
 
-    def add(self, package: str):
+    def add(self, package: str, path_to_go: Path | None = None):
         package_path = get_vexcom_cache_dir() / "packages" / f"{package}.zip"
         # this *will* panic if the package is not found, but we try `list` first so it's not a huge deal
         name, version = package.split(":")
+        if not path_to_go:
+            path_to_go = self.src
+        path_to_go = path_to_go / name
         subprocess.run(
             [
                 "unzip",
                 "-o",  # overwrite existing files without prompting
                 str(package_path),
                 "-d",
-                str(self.src / name),
+                str(path_to_go),
             ],
             check=True,
             capture_output=True,
@@ -221,6 +224,11 @@ class Package(Project):
             )
         return package_path, lambda: shutil.rmtree(package_path)
 
+    def add(self, package: str):
+        console.print(
+            f"✨ [yellow]This project is a package, adding package [bold cyan]{package}[/bold cyan] [i]into the package directory[/i] to avoid conflicts when importing package {self.package_name} into other projects[/yellow]"
+        )
+        super().add(package, self.src / self.package_name)
 
 class DishPy:
     def __init__(self, path: Path):
@@ -401,11 +409,6 @@ class Cli:
             )
             return
         instance = DishPy(Path())
-        if isinstance(instance.instance, Package):
-            self.console.print(
-                "❌ [red]Error: Cannot add dependencies to packages[/red]"
-            )
-            return
         try:
             instance.instance.add(args.package)
         except Exception as e:
@@ -477,7 +480,6 @@ class Cli:
 
 def main():
     Cli().route()
-
 
 if __name__ == "__main__":
     main()

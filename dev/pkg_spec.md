@@ -34,7 +34,7 @@ def add_two_numbers(a, b):
  - [x] Add install command
  - [x] Add registry-list command
  - [x] Release-based downloads using zip for better version control
- - [ ] Add copy-src command for packages
+ - [x] Add copy-src command for packages
  - [x] Refactor `register` command
  - [ ] update commands, help text, and docs
  - [ ] Add tutorial w/ note about adding dependencies to packages
