@@ -10,3 +10,4 @@ wheels/
 # Virtual environments
 .venv
 *testing*
+**/vex/__init__.py
