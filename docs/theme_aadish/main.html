@@ -30,7 +30,19 @@
                             <div class="px-6 pb-6 ml-5">
                                 {% for nav_item in nav %}
                                     {% if nav_item.children %}
-                                        <div>{{ nav_item.title }}</div>
+                                    <div>
+                                        <span class="text-sm {% if nav_item.active %}font-semibold{% endif %}">
+                                            {{ nav_item.title }}
+                                        </>
+                                    </div>
+                                    {% else %}
+                                    <div>
+                                        <a href="{{ nav_item.url|url }}" class="text-sm {% if nav_item.active %}font-semibold{% endif %}">
+                                            {{ nav_item.title }}
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                    {% if nav_item.children %}
                                         {% for nav_item in nav_item.children %}
                                             <div style="margin-left: 2rem">
                                                 <a href="{{ nav_item.url|url }}" class="text-sm {% if nav_item.active %}font-semibold{% endif %}">
@@ -38,12 +50,6 @@
                                                 </a>
                                             </div>
                                         {% endfor %}
-                                    {% else %}
-                                        <div>
-                                            <a href="{{ nav_item.url|url }}" class="text-sm {% if nav_item.active %}font-semibold{% endif %}">
-                                                {{ nav_item.title }}
-                                            </a>
-                                        </div>
                                     {% endif %}
                                 {% endfor %}
                             </div>
