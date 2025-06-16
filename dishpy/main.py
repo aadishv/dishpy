@@ -520,6 +520,11 @@ class Cli:
         match args.command:
             case "debug":
                 print("cache dir:", get_vexcom_cache_dir())
+                print("available templates")
+                script_dir = os.path.dirname(os.path.abspath(__file__))
+                templates_path = Path(os.path.join(script_dir, "resources", "templates"))
+                for i in templates_path.iterdir():
+                    print('*', str(i).split('/')[-1][:-3])
             case "package":
                 match args.subcommand:
                     case "register":
