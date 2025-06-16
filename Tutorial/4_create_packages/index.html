@@ -169,8 +169,8 @@
                                             
                                         
                                             <div style="margin-left: 2rem">
-                                                <a href="#creating-your-first-pacakge" class="text-sm">
-                                                    Creating your first pacakge
+                                                <a href="#creating-your-first-package" class="text-sm">
+                                                    Creating your first package
                                                 </a>
                                             </div>
                                             
@@ -201,7 +201,7 @@
 
             <h1 id="4-creating-packages">4. Creating packages</h1>
 <p>DishPy 0.5.0 shipped with a beta (extremely experimental) version of package management through a registry-based system (somewhat similar to PROS' approach, but much simpler and more limited in scope).</p>
-<p>v0.6.0 finally stabilizes the API for those commands, so we can begin writing tutorials!</p>
+<p>v1.0 finally stabilizes the API for those commands, so we can begin writing tutorials!</p>
 <h2 id="philosophy">Philosophy</h2>
 <p>DishPy has a somewhat simple but possibly unfamiliar methodology for its package management. There are a few key things to understand:</p>
 <ul>
@@ -211,7 +211,7 @@
 <li><strong>DishPy also maintains a local registry.</strong> Think of this as a PyPI that lives on your computer. You can use DishPy to "fetch" packages, whether from a Git repository, local project, or ZIP file, and Dishpy will then index the project based on the aforementioned metadata and cache it on your hard drive (or SSD, whatever floats your boat). Then, when you ask to add a package to a project, DishPy finds that package in your local cache/registry and installs it into the current project.</li>
 </ul>
 <p>This may seem more complex than the centralized PyPI solution, but it actually isn't much harder. Even <code>uv add</code> (think <code>pip</code> alternative) maintains a "warm cache" of recently fetched packages from PyPI. It also saves me (Aadish) from all of the costs and investment of running my own centralized registry.</p>
-<h2 id="creating-your-first-pacakge">Creating your first pacakge</h2>
+<h2 id="creating-your-first-package">Creating your first package</h2>
 <p>Let's actually start working. As we go, keep these points from the philosophy in mind:</p>
 <ul>
 <li>Packages in DishPy are also regular projects</li>
