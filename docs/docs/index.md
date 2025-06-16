@@ -23,7 +23,7 @@ A Python development tool for VEX Competition robotics that combines multi-file 
  - [x] Script amalgamation through AST parsing
  - [x] Library creation functionality
  - [x] Library installation functionality
- - [ ] Really good docs!
+ - [x] Really good docs!
 
 **Future-leaning**
 
@@ -84,6 +84,14 @@ DishPy is designed to streamline VEX Competition robotics development in Python.
 This project is licensed under the MIT License.
 
 ## Changelog
+
+**v1.0**
+
+* This marks an important milestone for DishPy. All of the core features of DishPy (read: most of the codebase) is fully stable. I won't need to make any more changes to add major new features.
+* There is still a lot to do to get to feature parity with VEXcode, but all of the core premise has now been fulfilled. I'll slowly add all of that soon.
+* Package management API is now fully stabilized, with helpful tutorials as well (plus some design changes to docs to look better). Registry commands are now under the `dishpy package` namespace.
+* Added separate `build` and `upload` commands by popular request.
+* We are now on PyPI! Previously on test.pypi which required some manual setup by users.
 
 **v0.5**
 

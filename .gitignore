@@ -11,3 +11,4 @@ wheels/
 .venv
 *testing*
 **/vex/__init__.py
+docs/site

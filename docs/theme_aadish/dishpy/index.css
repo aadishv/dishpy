@@ -282,6 +282,23 @@ dialog {
 textarea {
     resize: vertical;
 }
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+    opacity: 1;
+    color: #9ca3af;
+}
+input::placeholder,
+textarea::placeholder {
+    opacity: 1;
+    color: #9ca3af;
+}
+button,
+[role="button"] {
+    cursor: pointer;
+}
+:disabled {
+    cursor: default;
+}
 img,
 svg,
 video,
@@ -349,26 +366,27 @@ video {
 }
 body {
     background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
 }
 h1 {
     font-size: 2.25rem;
-    line-height: 2.5rem;
+    line-height: 5rem;
 }
 h2 {
     font-size: 1.875rem;
-    line-height: 2.25rem;
+    line-height: 4.5rem;
 }
 h3 {
     font-size: 1.5rem;
-    line-height: 2rem;
+    line-height: 4rem;
 }
 h4 {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+    font-size: 1.126rem;
+    line-height: 3.5rem;
 }
 h5 {
     font-size: 1.125rem;
-    line-height: 1.75rem;
+    line-height: 3.5rem;
 }
 h1,
 h2,
@@ -376,7 +394,7 @@ h3,
 h4,
 h5,
 h6 {
-    margin-top: 0.5rem;
+    margin-top: 1rem;
     font-family: Lora, serif;
 }
 pre {

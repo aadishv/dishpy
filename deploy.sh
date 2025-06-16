@@ -6,5 +6,5 @@ echo "🔨 Building package..."
 uv run python -m build
 echo "✅ Checking package..."
 uv run twine check dist/*
-uv run twine upload --repository testpypi dist/*
+uv run twine upload dist/*
 echo "✅ Deployment complete!"

@@ -220,7 +220,7 @@ class Package(Project):
         else:
             # This is a git repo, clone
             subprocess.run(
-                ["git", "clone", str(package), str(package_path)], check=True, text=True
+                ["git", "clone", str(package), str(package_path), "-q"], check=True, text=True
             )
         return package_path, lambda: shutil.rmtree(package_path)
 

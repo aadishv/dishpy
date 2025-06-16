@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dishpy"
-version = "0.6.0"
+version = "1.0.1"
 description = "A Python development tool for VEX Competition robotics that combines multi-file Python projects into single scripts and uploads them to VEX V5 brains"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -42,6 +42,7 @@ dependencies = [
     "testcase>=0.1.0",
     "textcase>=0.4.3",
     "validators>=0.35.0",
+    "requests>=2.32.3",
 ]
 
 [project.urls]
@@ -62,6 +63,9 @@ dev = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["dishpy"]
+
+[[tool.uv.index]]
+url = "file:///Users/aadishverma/Desktop/codeproj/sandbox/dishpy/pypi"
 
 [dependency-groups]
 dev = [

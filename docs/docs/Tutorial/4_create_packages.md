@@ -2,7 +2,7 @@
 
 DishPy 0.5.0 shipped with a beta (extremely experimental) version of package management through a registry-based system (somewhat similar to PROS' approach, but much simpler and more limited in scope).
 
-v0.6.0 finally stabilizes the API for those commands, so we can begin writing tutorials!
+v1.0 finally stabilizes the API for those commands, so we can begin writing tutorials!
 
 ## Philosophy
 
@@ -15,7 +15,7 @@ DishPy has a somewhat simple but possibly unfamiliar methodology for its package
 
 This may seem more complex than the centralized PyPI solution, but it actually isn't much harder. Even `uv add` (think `pip` alternative) maintains a "warm cache" of recently fetched packages from PyPI. It also saves me (Aadish) from all of the costs and investment of running my own centralized registry.
 
-## Creating your first pacakge
+## Creating your first package
 
 Let's actually start working. As we go, keep these points from the philosophy in mind:
 
@@ -105,6 +105,8 @@ which is honestly pretty boring, but a good starting point. Now, in your `main.p
 
 ```python
 from add_two_nums import add_two_numbers
+from vex import Brain
+brain = Brain()
 brain.screen.print(str("10 + 3 = ") + str(add_two_numbers(10, 3)))
 ```
 
