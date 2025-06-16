@@ -6,6 +6,9 @@ A Python development tool for VEX Competition robotics that combines multi-file 
 
 ## Roadmap
 
+**Small things**
+
+ - [ ] --noupdate flag for mu
 
 **Feature parity w/ VEX VSC extension**
 
@@ -18,8 +21,9 @@ A Python development tool for VEX Competition robotics that combines multi-file 
 **Core premise**
 
  - [x] Script amalgamation through AST parsing
- - [ ] Library creation functionality
- - [ ] Library installation functionality
+ - [x] Library creation functionality
+ - [x] Library installation functionality
+ - [ ] Really good docs!
 
 **Future-leaning**
 
