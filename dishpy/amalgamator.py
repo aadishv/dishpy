@@ -61,7 +61,7 @@ class Prefixer(ast.NodeTransformer):
         # Transform function arguments
         for arg in node.args.args:
             self.visit_arg(arg)
-        
+
         # Transform annotations
         if node.returns:
             node.returns = self._visit_annotation(node.returns)
@@ -102,7 +102,7 @@ class Prefixer(ast.NodeTransformer):
             ):
                 new_name = self.global_rename_map[self.file_path][name]
                 node.id = new_name
-        elif hasattr(node, '__dict__'):
+        elif hasattr(node, "__dict__"):
             # Recursively visit other node types
             for field, value in ast.iter_fields(node):
                 if isinstance(value, ast.AST):
@@ -179,7 +179,7 @@ def _analyze_project(entry_file, local_module_map, verbose=False):
     """
     if verbose:
         print(f"DEBUG: Starting project analysis from entry file: {entry_file}")
-    
+
     symbol_deps = defaultdict(set)  # symbol -> set of symbols it depends on
     declared_symbols = defaultdict(set)  # file -> set of symbols declared in that file
     symbol_to_file = {}  # symbol -> file where it's declared
@@ -194,7 +194,7 @@ def _analyze_project(entry_file, local_module_map, verbose=False):
         if current_file in scanned_files:
             continue
         scanned_files.add(current_file)
-        
+
         if verbose:
             print(f"DEBUG: Scanning file: {current_file}")
 
@@ -208,29 +208,47 @@ def _analyze_project(entry_file, local_module_map, verbose=False):
             continue
 
         # Find declared symbols
-        for node in tree.body:
+        for i, node in enumerate(tree.body):
             if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
                 symbol_name = f"{current_file}::{node.name}"
                 declared_symbols[current_file].add(node.name)
                 symbol_to_file[symbol_name] = current_file
                 if verbose:
-                    print(f"DEBUG: Found {type(node).__name__} '{node.name}' in {os.path.basename(current_file)}")
+                    print(
+                        f"DEBUG: Found {type(node).__name__} '{node.name}' in {os.path.basename(current_file)}"
+                    )
             elif isinstance(node, (ast.Assign, ast.AnnAssign, ast.AugAssign)):
-                targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+                targets = (
+                    node.targets if isinstance(node, ast.Assign) else [node.target]
+                )
                 for target in targets:
                     if isinstance(target, ast.Name):
                         symbol_name = f"{current_file}::{target.id}"
                         declared_symbols[current_file].add(target.id)
                         symbol_to_file[symbol_name] = current_file
                         if verbose:
-                            print(f"DEBUG: Found variable '{target.id}' in {os.path.basename(current_file)}")
+                            print(
+                                f"DEBUG: Found variable '{target.id}' in {os.path.basename(current_file)}"
+                            )
+            elif current_file == entry_file and isinstance(node, ast.Expr):
+                # Handle top-level expressions only in the main entry file
+                expr_name = f"__expr_{i}"
+                symbol_name = f"{current_file}::{expr_name}"
+                declared_symbols[current_file].add(expr_name)
+                symbol_to_file[symbol_name] = current_file
+                if verbose:
+                    print(
+                        f"DEBUG: Found top-level expression '{expr_name}' in {os.path.basename(current_file)}"
+                    )
 
         # Find imports and dependencies
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 for alias in node.names:
                     if verbose:
-                        print(f"DEBUG: Found import '{alias.name}' in {os.path.basename(current_file)}")
+                        print(
+                            f"DEBUG: Found import '{alias.name}' in {os.path.basename(current_file)}"
+                        )
                     if alias.name == "vex" or alias.name.startswith("vex."):
                         external_imports.add(ast.unparse(node))
                     elif alias.name in local_module_map:
@@ -239,13 +257,17 @@ def _analyze_project(entry_file, local_module_map, verbose=False):
                             files_to_scan.append(dep_path)
                     else:
                         external_imports.add(ast.unparse(node))
-                        
+
             elif isinstance(node, ast.ImportFrom):
                 module_name = node.module
                 if verbose:
-                    print(f"DEBUG: Found 'from {module_name} import ...' in {os.path.basename(current_file)}")
+                    print(
+                        f"DEBUG: Found 'from {module_name} import ...' in {os.path.basename(current_file)}"
+                    )
 
-                if module_name == "vex" or (module_name and module_name.startswith("vex.")):
+                if module_name == "vex" or (
+                    module_name and module_name.startswith("vex.")
+                ):
                     external_imports.add(ast.unparse(node))
                 else:
                     is_local = module_name in local_module_map
@@ -255,14 +277,20 @@ def _analyze_project(entry_file, local_module_map, verbose=False):
                         origin_file = local_module_map[module_name]
                     else:
                         # Try package-relative imports
-                        current_rel_path = os.path.relpath(current_file, os.path.dirname(os.path.dirname(current_file)))
-                        current_module_path = current_rel_path.replace(os.sep, ".").replace(".py", "")
+                        current_rel_path = os.path.relpath(
+                            current_file, os.path.dirname(os.path.dirname(current_file))
+                        )
+                        current_module_path = current_rel_path.replace(
+                            os.sep, "."
+                        ).replace(".py", "")
                         if current_module_path.endswith(".__init__"):
                             current_module_path = current_module_path[:-9]
 
                         package_parts = current_module_path.split(".")
                         for i in range(len(package_parts)):
-                            package_prefix = ".".join(package_parts[:len(package_parts) - i])
+                            package_prefix = ".".join(
+                                package_parts[: len(package_parts) - i]
+                            )
                             if package_prefix:
                                 potential_module = f"{package_prefix}.{module_name}"
                                 if potential_module in local_module_map:
@@ -273,12 +301,17 @@ def _analyze_project(entry_file, local_module_map, verbose=False):
                     if is_local and origin_file:
                         if origin_file not in scanned_files:
                             files_to_scan.append(origin_file)
-                        
+
                         for alias in node.names:
                             if alias.name == "*":
-                                symbol_origins[current_file]["__WILDCARD_FROM__"] = origin_file
+                                symbol_origins[current_file]["__WILDCARD_FROM__"] = (
+                                    origin_file
+                                )
                             else:
-                                symbol_origins[current_file][alias.name] = (origin_file, alias.name)
+                                symbol_origins[current_file][alias.name] = (
+                                    origin_file,
+                                    alias.name,
+                                )
                     elif node.level == 0:
                         external_imports.add(ast.unparse(node))
 
@@ -296,36 +329,76 @@ def _analyze_project(entry_file, local_module_map, verbose=False):
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
             tree = ast.parse(content, filename=file_path)
-        except:
+        except Exception:
             continue
 
         # Find which symbols each declared symbol depends on
-        for node in tree.body:
+        for i, node in enumerate(tree.body):
             if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
                 symbol_name = f"{file_path}::{node.name}"
-                deps = _find_symbol_dependencies(node, symbol_origins.get(file_path, {}), declared_symbols.get(file_path, set()), file_path)
+                deps = _find_symbol_dependencies(
+                    node,
+                    symbol_origins.get(file_path, {}),
+                    declared_symbols.get(file_path, set()),
+                    file_path,
+                )
                 symbol_deps[symbol_name].update(deps)
             elif isinstance(node, (ast.Assign, ast.AnnAssign, ast.AugAssign)):
-                targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+                targets = (
+                    node.targets if isinstance(node, ast.Assign) else [node.target]
+                )
                 for target in targets:
                     if isinstance(target, ast.Name):
                         symbol_name = f"{file_path}::{target.id}"
                         # For assignments, we need to look at the value being assigned
                         if isinstance(node, ast.Assign):
-                            deps = _find_symbol_dependencies(node.value, symbol_origins.get(file_path, {}), declared_symbols.get(file_path, set()), file_path)
+                            deps = _find_symbol_dependencies(
+                                node.value,
+                                symbol_origins.get(file_path, {}),
+                                declared_symbols.get(file_path, set()),
+                                file_path,
+                            )
                         elif isinstance(node, ast.AnnAssign) and node.value:
-                            deps = _find_symbol_dependencies(node.value, symbol_origins.get(file_path, {}), declared_symbols.get(file_path, set()), file_path)
+                            deps = _find_symbol_dependencies(
+                                node.value,
+                                symbol_origins.get(file_path, {}),
+                                declared_symbols.get(file_path, set()),
+                                file_path,
+                            )
                         else:
-                            deps = _find_symbol_dependencies(node, symbol_origins.get(file_path, {}), declared_symbols.get(file_path, set()), file_path)
+                            deps = _find_symbol_dependencies(
+                                node,
+                                symbol_origins.get(file_path, {}),
+                                declared_symbols.get(file_path, set()),
+                                file_path,
+                            )
                         symbol_deps[symbol_name].update(deps)
+            elif file_path == entry_file and isinstance(node, ast.Expr):
+                # Handle top-level expressions only in the main entry file
+                expr_name = f"__expr_{i}"
+                symbol_name = f"{file_path}::{expr_name}"
+                deps = _find_symbol_dependencies(
+                    node,
+                    symbol_origins.get(file_path, {}),
+                    declared_symbols.get(file_path, set()),
+                    file_path,
+                )
+                symbol_deps[symbol_name].update(deps)
 
-    return symbol_deps, declared_symbols, symbol_origins, external_imports, scanned_files, symbol_to_file
+    return (
+        symbol_deps,
+        declared_symbols,
+        symbol_origins,
+        external_imports,
+        scanned_files,
+        symbol_to_file,
+    )
 
 
 def _find_symbol_dependencies(node, symbol_origins, local_symbols, file_path):
     """Find what symbols a given AST node depends on."""
     dependencies = set()
-    
+
     for child in ast.walk(node):
         if isinstance(child, ast.Name) and isinstance(child.ctx, ast.Load):
             name = child.id
@@ -335,7 +408,7 @@ def _find_symbol_dependencies(node, symbol_origins, local_symbols, file_path):
             elif name in local_symbols:
                 # This is a reference to a local symbol in the same file
                 dependencies.add(f"{file_path}::{name}")
-    
+
     return dependencies
 
 
@@ -352,13 +425,13 @@ def _topological_sort_symbols(symbol_deps, symbol_to_file):
             # Cycle detected - just add it and continue
             sorted_symbols.append(symbol)
             return
-        
+
         visiting.add(symbol)
-        
+
         for dep in symbol_deps.get(symbol, set()):
             if dep in symbol_to_file:  # Only visit dependencies that are in our project
                 visit(dep)
-        
+
         visiting.remove(symbol)
         visited.add(symbol)
         sorted_symbols.append(symbol)
@@ -367,7 +440,7 @@ def _topological_sort_symbols(symbol_deps, symbol_to_file):
     all_symbols = set(symbol_to_file.keys())
     for deps in symbol_deps.values():
         all_symbols.update(deps)
-    
+
     for symbol in sorted(all_symbols):
         if symbol in symbol_to_file:  # Only process symbols that are in our project
             visit(symbol)
@@ -395,20 +468,27 @@ def combine_project(main_file, output_file, verbose=False):
         print(f"DEBUG: Starting analysis of project at {project_dir}")
     local_module_map = _get_local_module_map(project_dir, verbose)
     analysis_result = _analyze_project(main_file_abs, local_module_map, verbose)
-    symbol_deps, declared_symbols, symbol_origins, external_imports, scanned_files, symbol_to_file = analysis_result
+    (
+        symbol_deps,
+        declared_symbols,
+        symbol_origins,
+        external_imports,
+        scanned_files,
+        symbol_to_file,
+    ) = analysis_result
 
     if verbose:
-        print(f"DEBUG: Found symbols:")
+        print("DEBUG: Found symbols:")
         for file_path, symbols in declared_symbols.items():
             rel_path = os.path.relpath(file_path, project_dir)
             print(f"  {rel_path}: {symbols}")
-        
-        print(f"DEBUG: Symbol origins:")
+
+        print("DEBUG: Symbol origins:")
         for file_path, origins in symbol_origins.items():
             rel_path = os.path.relpath(file_path, project_dir)
             print(f"  {rel_path}: {origins}")
-        
-        print(f"DEBUG: Symbol dependencies:")
+
+        print("DEBUG: Symbol dependencies:")
         for symbol, deps in symbol_deps.items():
             print(f"  {symbol} depends on: {deps}")
 
@@ -431,15 +511,17 @@ def combine_project(main_file, output_file, verbose=False):
         print("DEBUG: Sorting symbols topologically...")
     sorted_symbols = _topological_sort_symbols(symbol_deps, symbol_to_file)
     if verbose:
-        print(f"DEBUG: Sorted symbol order: {[s.split('::')[-1] for s in sorted_symbols]}")
+        print(
+            f"DEBUG: Sorted symbol order: {[s.split('::')[-1] for s in sorted_symbols]}"
+        )
 
     # Extract and transform symbols
     if verbose:
         print("DEBUG: Extracting and transforming symbols...")
-    
+
     symbol_code = {}
     file_trees = {}
-    
+
     # Parse all files and extract their ASTs
     for file_path in scanned_files:
         try:
@@ -453,19 +535,27 @@ def combine_project(main_file, output_file, verbose=False):
 
     # Extract individual symbols
     for file_path, tree in file_trees.items():
-        transformer = Prefixer(file_path, global_rename_map, symbol_origins, declared_symbols)
-        
-        for node in tree.body:
+        transformer = Prefixer(
+            file_path, global_rename_map, symbol_origins, declared_symbols
+        )
+
+        for i, node in enumerate(tree.body):
             symbol_key = None
             if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
                 symbol_key = f"{file_path}::{node.name}"
             elif isinstance(node, (ast.Assign, ast.AnnAssign, ast.AugAssign)):
-                targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+                targets = (
+                    node.targets if isinstance(node, ast.Assign) else [node.target]
+                )
                 for target in targets:
                     if isinstance(target, ast.Name):
                         symbol_key = f"{file_path}::{target.id}"
                         break
-            
+            elif file_path == main_file_abs and isinstance(node, ast.Expr):
+                # Handle top-level expressions only in the main entry file
+                expr_name = f"__expr_{i}"
+                symbol_key = f"{file_path}::{expr_name}"
+
             if symbol_key:
                 # Transform the node
                 transformed_node = transformer.visit(node)
@@ -474,7 +564,9 @@ def combine_project(main_file, output_file, verbose=False):
 
     # Write the final script
     with open(output_file, "w", encoding="utf-8") as f:
-        f.write("# This script was generated by combining and prefixing multiple files.\n\n")
+        f.write(
+            "# This script was generated by combining and prefixing multiple files.\n\n"
+        )
         f.write("# --- Combined External Imports ---\n")
         if external_imports:
             for imp in sorted(list(external_imports)):
@@ -492,8 +584,12 @@ def combine_project(main_file, output_file, verbose=False):
                 if verbose:
                     file_path = symbol_to_file[symbol]
                     symbol_name = symbol.split("::")[-1]
-                    print(f"DEBUG: Wrote {symbol_name} from {os.path.basename(file_path)}")
+                    print(
+                        f"DEBUG: Wrote {symbol_name} from {os.path.basename(file_path)}"
+                    )
 
         f.write("\n# --- End of combined script ---")
 
-    console.print(f"✅ [green]Project combined successfully into[/green] [bold cyan]{output_file}[/bold cyan]")
+    console.print(
+        f"✅ [green]Project combined successfully into[/green] [bold cyan]{output_file}[/bold cyan]"
+    )

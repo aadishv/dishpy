@@ -70,11 +70,11 @@ class Project:
         shutil.copy2(template_path, main_file)
         shutil.copy2(vex_path, vex_init)
 
-    def mu(self, verbose=False):
+    def upload(self, path: Path):
+        run_vexcom("--name", self.name, "--slot", str(self.slot), "--write", str(path))
+
+    def build(self, verbose=False):
         combine_project(self.main_file, self.out_dir / "main.py", verbose)
-        run_vexcom(
-            "--name", self.name, "--slot", str(self.slot), "--write", "./.out/main.py"
-        )
 
     def add(self, package: str, path_to_go: Path | None = None):
         package_path = get_vexcom_cache_dir() / "packages" / f"{package}.zip"
@@ -298,6 +298,25 @@ class Cli:
                 }
             ],
         },
+        "build": {
+            "help": "Build project to out directory",
+            "arguments": [
+                {
+                    "name": "--verbose",
+                    "action": "store_true",
+                    "help": "Enable verbose output",
+                }
+            ],
+        },
+        "upload": {
+            "help": "Upload project to VEX V5 brain",
+            "arguments": [
+                {
+                    "name": "path",
+                    "help": "Path to file to upload",
+                }
+            ],
+        },
         "vexcom": {
             "help": "Run vexcom with specified arguments (auto-installs if needed)",
             "arguments": [
@@ -403,9 +422,13 @@ class Cli:
 
             # Handle subcommands
             if "subcommands" in cmd_info:
-                sub_subparsers = cmd_parser.add_subparsers(dest="subcommand", help="Available subcommands")
+                sub_subparsers = cmd_parser.add_subparsers(
+                    dest="subcommand", help="Available subcommands"
+                )
                 for sub_name, sub_info in cmd_info["subcommands"].items():
-                    sub_parser = sub_subparsers.add_parser(sub_name, help=sub_info["help"])
+                    sub_parser = sub_subparsers.add_parser(
+                        sub_name, help=sub_info["help"]
+                    )
                     for arg in sub_info["arguments"]:
                         arg_kwargs = {k: v for k, v in arg.items() if k != "name"}
                         if arg_kwargs.get("type") == "dir_path":
@@ -510,7 +533,20 @@ class Cli:
             case "mu":
                 try:
                     instance = DishPy(Path())
-                    instance.instance.mu()
+                    instance.instance.build(args.verbose)
+                    instance.instance.upload(instance.instance.out_dir / "main.py")
+                except Exception as e:
+                    self.console.print(f"❌ [red]Error: {e}[/red]")
+            case "build":
+                try:
+                    instance = DishPy(Path())
+                    instance.instance.build(args.verbose)
+                except Exception as e:
+                    self.console.print(f"❌ [red]Error: {e}[/red]")
+            case "upload":
+                try:
+                    instance = DishPy(Path())
+                    instance.instance.upload(Path(args.path))
                 except Exception as e:
                     self.console.print(f"❌ [red]Error: {e}[/red]")
             case "vexcom":
