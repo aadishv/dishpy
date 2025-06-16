@@ -238,7 +238,7 @@ sudo apt install curl unzip libarchive-tools git bash
    sudo apt install curl unzip libarchive-tools git bash</code></p>
 <h2 id="python-environment-setup">Python Environment Setup</h2>
 <p>Make sure you have <a href="https://github.com/astral-sh/uv">uv</a> installed.</p>
-<p>Add the following to your <code>.zshrc</code>, <code>.bashrc</code>, etc.:</p>
+<p><strong>If you are installing a version of DishPy pre-1.0, which you probably should not be doing,</strong> add the following to your <code>.zshrc</code>, <code>.bashrc</code>, etc.:</p>
 <pre><code class="language-bash">export UV_INDEX_STRATEGY=&quot;unsafe-best-match&quot;
 export UV_EXTRA_INDEX_URL=&quot;https://test.pypi.org/simple/&quot;
 </code></pre>
@@ -246,6 +246,8 @@ export UV_EXTRA_INDEX_URL=&quot;https://test.pypi.org/simple/&quot;
 <pre><code class="language-bash">$ uv tool run dishpy
 # or
 $ uvx dishpy
+# or, for an old version
+$ uvx dishpy==0.5.0
 # outputs something like
 ╭─────────────────────────────────── Help ────────────────────────────────────╮
 │ dishpy 1.0 - VEX Competition Development Tool                             │
