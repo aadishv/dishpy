@@ -11,8 +11,10 @@
             rel="stylesheet"
         />
         <meta charset="UTF-8" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/xcode.css">
     </head>
     <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <div class="m-5 container">
             
@@ -66,8 +68,14 @@
                                             </div>
                                         
                                             <div style="margin-left: 2rem">
-                                                <a href="../../Tutorial/4_packages/" class="text-sm ">
-                                                    4. Packages in DishPy
+                                                <a href="../../Tutorial/4_create_packages/" class="text-sm ">
+                                                    4. Creating packages
+                                                </a>
+                                            </div>
+                                        
+                                            <div style="margin-left: 2rem">
+                                                <a href="../../Tutorial/5_registry/" class="text-sm ">
+                                                    5. The package registry
                                                 </a>
                                             </div>
                                         
@@ -3579,5 +3587,6 @@ brain.sdcard.savefile('MyTextFile.txt', bytearray("Hello "))
                 }
             });
         </script>
+        <script>hljs.highlightAll();</script>
     </body>
 </html>

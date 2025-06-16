@@ -11,8 +11,10 @@
             rel="stylesheet"
         />
         <meta charset="UTF-8" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/xcode.css">
     </head>
     <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <div class="m-5 container">
             
@@ -66,8 +68,14 @@
                                             </div>
                                         
                                             <div style="margin-left: 2rem">
-                                                <a href="Tutorial/4_packages/" class="text-sm ">
-                                                    4. Packages in DishPy
+                                                <a href="Tutorial/4_create_packages/" class="text-sm ">
+                                                    4. Creating packages
+                                                </a>
+                                            </div>
+                                        
+                                            <div style="margin-left: 2rem">
+                                                <a href="Tutorial/5_registry/" class="text-sm ">
+                                                    5. The package registry
                                                 </a>
                                             </div>
                                         
@@ -235,6 +243,10 @@
 <p>A Python development tool for VEX Competition robotics that combines multi-file Python projects into single scripts and uploads them to VEX V5 brains.</p>
 <p><strong>Looking for tutorials? See <a href="https://aadishv.github.io/dishpy/Tutorial/1_installation/">here</a></strong></p>
 <h2 id="roadmap">Roadmap</h2>
+<p><strong>Small things</strong></p>
+<ul>
+<li>[ ] --noupdate flag for mu</li>
+</ul>
 <p><strong>Feature parity w/ VEX VSC extension</strong></p>
 <ul>
 <li>[x] Bindings to vexcom</li>
@@ -246,8 +258,9 @@
 <p><strong>Core premise</strong></p>
 <ul>
 <li>[x] Script amalgamation through AST parsing</li>
-<li>[ ] Library creation functionality</li>
-<li>[ ] Library installation functionality</li>
+<li>[x] Library creation functionality</li>
+<li>[x] Library installation functionality</li>
+<li>[ ] Really good docs!</li>
 </ul>
 <p><strong>Future-leaning</strong></p>
 <ul>
@@ -367,5 +380,6 @@
                 }
             });
         </script>
+        <script>hljs.highlightAll();</script>
     </body>
 </html>

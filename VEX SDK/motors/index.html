@@ -11,8 +11,10 @@
             rel="stylesheet"
         />
         <meta charset="UTF-8" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/xcode.css">
     </head>
     <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <div class="m-5 container">
             
@@ -66,8 +68,14 @@
                                             </div>
                                         
                                             <div style="margin-left: 2rem">
-                                                <a href="../../Tutorial/4_packages/" class="text-sm ">
-                                                    4. Packages in DishPy
+                                                <a href="../../Tutorial/4_create_packages/" class="text-sm ">
+                                                    4. Creating packages
+                                                </a>
+                                            </div>
+                                        
+                                            <div style="margin-left: 2rem">
+                                                <a href="../../Tutorial/5_registry/" class="text-sm ">
+                                                    5. The package registry
                                                 </a>
                                             </div>
                                         
@@ -2935,7 +2943,9 @@ motor4 = Motor(Ports.PORT4, GearSetting.RATIO_6_1, True)
 
               <details class="quote">
                 <summary>Source code in <code>vex.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2454</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2452</span>
+<span class="normal">2453</span>
+<span class="normal">2454</span>
 <span class="normal">2455</span>
 <span class="normal">2456</span>
 <span class="normal">2457</span>
@@ -3314,9 +3324,7 @@ motor4 = Motor(Ports.PORT4, GearSetting.RATIO_6_1, True)
 <span class="normal">2830</span>
 <span class="normal">2831</span>
 <span class="normal">2832</span>
-<span class="normal">2833</span>
-<span class="normal">2834</span>
-<span class="normal">2835</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Motor</span><span class="p">:</span>
+<span class="normal">2833</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Motor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Motor class - use this to create an instance of a V5 smart motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -3735,16 +3743,16 @@ motor4 = Motor(Ports.PORT4, GearSetting.RATIO_6_1, True)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2826</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2824</span>
+<span class="normal">2825</span>
+<span class="normal">2826</span>
 <span class="normal">2827</span>
 <span class="normal">2828</span>
 <span class="normal">2829</span>
 <span class="normal">2830</span>
 <span class="normal">2831</span>
 <span class="normal">2832</span>
-<span class="normal">2833</span>
-<span class="normal">2834</span>
-<span class="normal">2835</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="normal">2833</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the last velocity sent to the motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -3782,16 +3790,16 @@ motor4 = Motor(Ports.PORT4, GearSetting.RATIO_6_1, True)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2771</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2769</span>
+<span class="normal">2770</span>
+<span class="normal">2771</span>
 <span class="normal">2772</span>
 <span class="normal">2773</span>
 <span class="normal">2774</span>
 <span class="normal">2775</span>
 <span class="normal">2776</span>
 <span class="normal">2777</span>
-<span class="normal">2778</span>
-<span class="normal">2779</span>
-<span class="normal">2780</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">current</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="normal">2778</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">current</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the current the motor is using</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -3829,16 +3837,16 @@ motor4 = Motor(Ports.PORT4, GearSetting.RATIO_6_1, True)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2738</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2736</span>
+<span class="normal">2737</span>
+<span class="normal">2738</span>
 <span class="normal">2739</span>
 <span class="normal">2740</span>
 <span class="normal">2741</span>
 <span class="normal">2742</span>
 <span class="normal">2743</span>
 <span class="normal">2744</span>
-<span class="normal">2745</span>
-<span class="normal">2746</span>
-<span class="normal">2747</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">2745</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the current direction the motor is spinning in</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -3876,16 +3884,16 @@ motor4 = Motor(Ports.PORT4, GearSetting.RATIO_6_1, True)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2804</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2802</span>
+<span class="normal">2803</span>
+<span class="normal">2804</span>
 <span class="normal">2805</span>
 <span class="normal">2806</span>
 <span class="normal">2807</span>
 <span class="normal">2808</span>
 <span class="normal">2809</span>
 <span class="normal">2810</span>
-<span class="normal">2811</span>
-<span class="normal">2812</span>
-<span class="normal">2813</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="normal">2811</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the efficiency of the motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -3923,16 +3931,16 @@ motor4 = Motor(Ports.PORT4, GearSetting.RATIO_6_1, True)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2578</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2576</span>
+<span class="normal">2577</span>
+<span class="normal">2578</span>
 <span class="normal">2579</span>
 <span class="normal">2580</span>
 <span class="normal">2581</span>
 <span class="normal">2582</span>
 <span class="normal">2583</span>
 <span class="normal">2584</span>
-<span class="normal">2585</span>
-<span class="normal">2586</span>
-<span class="normal">2587</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">2585</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the current value of motor timeout</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -3970,16 +3978,16 @@ motor4 = Motor(Ports.PORT4, GearSetting.RATIO_6_1, True)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2480</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2478</span>
+<span class="normal">2479</span>
+<span class="normal">2480</span>
 <span class="normal">2481</span>
 <span class="normal">2482</span>
 <span class="normal">2483</span>
 <span class="normal">2484</span>
 <span class="normal">2485</span>
 <span class="normal">2486</span>
-<span class="normal">2487</span>
-<span class="normal">2488</span>
-<span class="normal">2489</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">installed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">2487</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">installed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Check for device connection</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -4019,7 +4027,9 @@ It will return False if the motor is still spinning or True if it has completed 
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2689</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2687</span>
+<span class="normal">2688</span>
+<span class="normal">2689</span>
 <span class="normal">2690</span>
 <span class="normal">2691</span>
 <span class="normal">2692</span>
@@ -4028,9 +4038,7 @@ It will return False if the motor is still spinning or True if it has completed 
 <span class="normal">2695</span>
 <span class="normal">2696</span>
 <span class="normal">2697</span>
-<span class="normal">2698</span>
-<span class="normal">2699</span>
-<span class="normal">2700</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">2698</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the current status of the spin_to_position or spin_for command</span>
 <span class="sd">    This function is used when False has been passed as the wait parameter to spin_to_position or spin_for\\</span>
 <span class="sd">    It will return False if the motor is still spinning or True if it has completed the move or a timeout occurred.</span>
@@ -4072,7 +4080,9 @@ It will return True if the motor is still spinning or False if it has completed 
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2676</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2674</span>
+<span class="normal">2675</span>
+<span class="normal">2676</span>
 <span class="normal">2677</span>
 <span class="normal">2678</span>
 <span class="normal">2679</span>
@@ -4081,9 +4091,7 @@ It will return True if the motor is still spinning or False if it has completed 
 <span class="normal">2682</span>
 <span class="normal">2683</span>
 <span class="normal">2684</span>
-<span class="normal">2685</span>
-<span class="normal">2686</span>
-<span class="normal">2687</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_spinning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">2685</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_spinning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the current status of the spin_to_position or spin_for command</span>
 <span class="sd">    This function is used when False has been passed as the wait parameter to spin_to_position or spin_for\\</span>
 <span class="sd">    It will return True if the motor is still spinning or False if it has completed the move or a timeout occurred.</span>
@@ -4123,16 +4131,16 @@ It will return True if the motor is still spinning or False if it has completed 
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2749</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2747</span>
+<span class="normal">2748</span>
+<span class="normal">2749</span>
 <span class="normal">2750</span>
 <span class="normal">2751</span>
 <span class="normal">2752</span>
 <span class="normal">2753</span>
 <span class="normal">2754</span>
 <span class="normal">2755</span>
-<span class="normal">2756</span>
-<span class="normal">2757</span>
-<span class="normal">2758</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="normal">2756</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the position of the motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -4170,16 +4178,16 @@ It will return True if the motor is still spinning or False if it has completed 
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2782</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2780</span>
+<span class="normal">2781</span>
+<span class="normal">2782</span>
 <span class="normal">2783</span>
 <span class="normal">2784</span>
 <span class="normal">2785</span>
 <span class="normal">2786</span>
 <span class="normal">2787</span>
 <span class="normal">2788</span>
-<span class="normal">2789</span>
-<span class="normal">2790</span>
-<span class="normal">2791</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="normal">2789</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the power the motor is providing</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -4217,16 +4225,16 @@ It will return True if the motor is still spinning or False if it has completed 
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2540</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2538</span>
+<span class="normal">2539</span>
+<span class="normal">2540</span>
 <span class="normal">2541</span>
 <span class="normal">2542</span>
 <span class="normal">2543</span>
 <span class="normal">2544</span>
 <span class="normal">2545</span>
 <span class="normal">2546</span>
-<span class="normal">2547</span>
-<span class="normal">2548</span>
-<span class="normal">2549</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reset_position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">2547</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reset_position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Reset the motor position to 0</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -4276,7 +4284,9 @@ motor1.set_max_torque(20, PERCENT)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2717</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2715</span>
+<span class="normal">2716</span>
+<span class="normal">2717</span>
 <span class="normal">2718</span>
 <span class="normal">2719</span>
 <span class="normal">2720</span>
@@ -4293,9 +4303,7 @@ motor1.set_max_torque(20, PERCENT)
 <span class="normal">2731</span>
 <span class="normal">2732</span>
 <span class="normal">2733</span>
-<span class="normal">2734</span>
-<span class="normal">2735</span>
-<span class="normal">2736</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_max_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="n">TorquePercentCurrentUnits</span><span class="p">):</span>
+<span class="normal">2734</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_max_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="n">TorquePercentCurrentUnits</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the maximum torque the motor will use</span>
 <span class="sd">    The torque can be set as torque, current or percent of maximum.</span>
 
@@ -4345,7 +4353,9 @@ units : The units for the provided position, the default is DEGREES
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2551</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2549</span>
+<span class="normal">2550</span>
+<span class="normal">2551</span>
 <span class="normal">2552</span>
 <span class="normal">2553</span>
 <span class="normal">2554</span>
@@ -4354,9 +4364,7 @@ units : The units for the provided position, the default is DEGREES
 <span class="normal">2557</span>
 <span class="normal">2558</span>
 <span class="normal">2559</span>
-<span class="normal">2560</span>
-<span class="normal">2561</span>
-<span class="normal">2562</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">vexnumber</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">):</span>
+<span class="normal">2560</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">vexnumber</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the current position of the motor</span>
 <span class="sd">    The position returned by the position() function is set to this value.</span>
 
@@ -4397,7 +4405,9 @@ units : The units for the provided position, the default is DEGREES
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2516</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2514</span>
+<span class="normal">2515</span>
+<span class="normal">2516</span>
 <span class="normal">2517</span>
 <span class="normal">2518</span>
 <span class="normal">2519</span>
@@ -4405,9 +4415,7 @@ units : The units for the provided position, the default is DEGREES
 <span class="normal">2521</span>
 <span class="normal">2522</span>
 <span class="normal">2523</span>
-<span class="normal">2524</span>
-<span class="normal">2525</span>
-<span class="normal">2526</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_reversed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="normal">2524</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_reversed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the reverse flag for the motor</span>
 <span class="sd">    Setting the reverse flag will cause spin commands to run the motor in reverse.</span>
 
@@ -4447,7 +4455,9 @@ units : The units for the provided position, the default is DEGREES
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2528</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2526</span>
+<span class="normal">2527</span>
+<span class="normal">2528</span>
 <span class="normal">2529</span>
 <span class="normal">2530</span>
 <span class="normal">2531</span>
@@ -4455,9 +4465,7 @@ units : The units for the provided position, the default is DEGREES
 <span class="normal">2533</span>
 <span class="normal">2534</span>
 <span class="normal">2535</span>
-<span class="normal">2536</span>
-<span class="normal">2537</span>
-<span class="normal">2538</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_stopping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">BrakeType</span><span class="o">.</span><span class="n">BrakeType</span><span class="p">):</span>
+<span class="normal">2536</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_stopping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">BrakeType</span><span class="o">.</span><span class="n">BrakeType</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the stopping mode of the motor</span>
 <span class="sd">    Setting the action for the motor when stopped.</span>
 
@@ -4499,7 +4507,9 @@ units : The units for the provided timeout, the default is MSEC
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2564</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2562</span>
+<span class="normal">2563</span>
+<span class="normal">2564</span>
 <span class="normal">2565</span>
 <span class="normal">2566</span>
 <span class="normal">2567</span>
@@ -4509,9 +4519,7 @@ units : The units for the provided timeout, the default is MSEC
 <span class="normal">2571</span>
 <span class="normal">2572</span>
 <span class="normal">2573</span>
-<span class="normal">2574</span>
-<span class="normal">2575</span>
-<span class="normal">2576</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">vexnumber</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">TimeUnits</span><span class="o">.</span><span class="n">MSEC</span><span class="p">):</span>
+<span class="normal">2574</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">vexnumber</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">TimeUnits</span><span class="o">.</span><span class="n">MSEC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the timeout value used by the motor</span>
 <span class="sd">    The timeout value is used when performing spin_to_position and spin_for commands.  If timeout is</span>
 <span class="sd">     reached and the motor has not completed moving, then the spin... function will return False.</span>
@@ -4555,7 +4563,9 @@ units : The units for the supplied velocity, the default is RPM
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2502</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2500</span>
+<span class="normal">2501</span>
+<span class="normal">2502</span>
 <span class="normal">2503</span>
 <span class="normal">2504</span>
 <span class="normal">2505</span>
@@ -4565,9 +4575,7 @@ units : The units for the supplied velocity, the default is RPM
 <span class="normal">2509</span>
 <span class="normal">2510</span>
 <span class="normal">2511</span>
-<span class="normal">2512</span>
-<span class="normal">2513</span>
-<span class="normal">2514</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">vexnumber</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
+<span class="normal">2512</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">vexnumber</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set default velocity for the motor</span>
 <span class="sd">    This will be the velocity used for subsequent calls to spin if a velocity is not provided</span>
 <span class="sd">    to that function.</span>
@@ -4629,7 +4637,9 @@ motor1.spin(FORWARD, 360.0, VelocityUnits.DPS)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2589</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2587</span>
+<span class="normal">2588</span>
+<span class="normal">2589</span>
 <span class="normal">2590</span>
 <span class="normal">2591</span>
 <span class="normal">2592</span>
@@ -4652,9 +4662,7 @@ motor1.spin(FORWARD, 360.0, VelocityUnits.DPS)
 <span class="normal">2609</span>
 <span class="normal">2610</span>
 <span class="normal">2611</span>
-<span class="normal">2612</span>
-<span class="normal">2613</span>
-<span class="normal">2614</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="o">.</span><span class="n">DirectionType</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="normal">2612</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="o">.</span><span class="n">DirectionType</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Spin the motor using the provided arguments</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -4732,7 +4740,9 @@ motor1.spin_for(FORWARD, 180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2645</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2643</span>
+<span class="normal">2644</span>
+<span class="normal">2645</span>
 <span class="normal">2646</span>
 <span class="normal">2647</span>
 <span class="normal">2648</span>
@@ -4759,9 +4769,7 @@ motor1.spin_for(FORWARD, 180, DEGREES, wait=False)
 <span class="normal">2669</span>
 <span class="normal">2670</span>
 <span class="normal">2671</span>
-<span class="normal">2672</span>
-<span class="normal">2673</span>
-<span class="normal">2674</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="o">.</span><span class="n">DirectionType</span><span class="p">,</span> <span class="n">rot_or_time</span><span class="p">:</span> <span class="n">vexnumber</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="normal">2672</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="o">.</span><span class="n">DirectionType</span><span class="p">,</span> <span class="n">rot_or_time</span><span class="p">:</span> <span class="n">vexnumber</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Spin the motor to a relative position using the provided arguments</span>
 <span class="sd">    Move the motor to the requested position or for the specified amount of time.\\</span>
 <span class="sd">    The position is relative (ie. an offset) to the current position\\</span>
@@ -4841,7 +4849,9 @@ motor1.spin_to_position(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2616</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2614</span>
+<span class="normal">2615</span>
+<span class="normal">2616</span>
 <span class="normal">2617</span>
 <span class="normal">2618</span>
 <span class="normal">2619</span>
@@ -4866,9 +4876,7 @@ motor1.spin_to_position(180, DEGREES, wait=False)
 <span class="normal">2638</span>
 <span class="normal">2639</span>
 <span class="normal">2640</span>
-<span class="normal">2641</span>
-<span class="normal">2642</span>
-<span class="normal">2643</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin_to_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="p">:</span> <span class="n">vexnumber</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="normal">2641</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin_to_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="p">:</span> <span class="n">vexnumber</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Spin the motor to an absolute position using the provided arguments</span>
 <span class="sd">    Move the motor to the requested position.\\</span>
 <span class="sd">    This function supports keyword arguments.</span>
@@ -4925,7 +4933,9 @@ motor1.spin_to_position(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2705</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2703</span>
+<span class="normal">2704</span>
+<span class="normal">2705</span>
 <span class="normal">2706</span>
 <span class="normal">2707</span>
 <span class="normal">2708</span>
@@ -4933,9 +4943,7 @@ motor1.spin_to_position(180, DEGREES, wait=False)
 <span class="normal">2710</span>
 <span class="normal">2711</span>
 <span class="normal">2712</span>
-<span class="normal">2713</span>
-<span class="normal">2714</span>
-<span class="normal">2715</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">2713</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Stop the motor, set to 0 velocity and set current stopping_mode</span>
 <span class="sd">    The motor will be stopped and set to COAST, BRAKE or HOLD</span>
 
@@ -4974,16 +4982,16 @@ motor1.spin_to_position(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2815</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2813</span>
+<span class="normal">2814</span>
+<span class="normal">2815</span>
 <span class="normal">2816</span>
 <span class="normal">2817</span>
 <span class="normal">2818</span>
 <span class="normal">2819</span>
 <span class="normal">2820</span>
 <span class="normal">2821</span>
-<span class="normal">2822</span>
-<span class="normal">2823</span>
-<span class="normal">2824</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="normal">2822</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the temperature of the motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -5021,16 +5029,16 @@ motor1.spin_to_position(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2491</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2489</span>
+<span class="normal">2490</span>
+<span class="normal">2491</span>
 <span class="normal">2492</span>
 <span class="normal">2493</span>
 <span class="normal">2494</span>
 <span class="normal">2495</span>
 <span class="normal">2496</span>
 <span class="normal">2497</span>
-<span class="normal">2498</span>
-<span class="normal">2499</span>
-<span class="normal">2500</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">timestamp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">2498</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">timestamp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Request the timestamp of last received message from the motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -5068,16 +5076,16 @@ motor1.spin_to_position(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2793</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2791</span>
+<span class="normal">2792</span>
+<span class="normal">2793</span>
 <span class="normal">2794</span>
 <span class="normal">2795</span>
 <span class="normal">2796</span>
 <span class="normal">2797</span>
 <span class="normal">2798</span>
 <span class="normal">2799</span>
-<span class="normal">2800</span>
-<span class="normal">2801</span>
-<span class="normal">2802</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="normal">2800</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the torque the motor is providing</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -5115,16 +5123,16 @@ motor1.spin_to_position(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2760</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2758</span>
+<span class="normal">2759</span>
+<span class="normal">2760</span>
 <span class="normal">2761</span>
 <span class="normal">2762</span>
 <span class="normal">2763</span>
 <span class="normal">2764</span>
 <span class="normal">2765</span>
 <span class="normal">2766</span>
-<span class="normal">2767</span>
-<span class="normal">2768</span>
-<span class="normal">2769</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="normal">2767</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the velocity of the motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -5185,7 +5193,9 @@ mg1 = MotorGroup(motor1, motor2)
 
               <details class="quote">
                 <summary>Source code in <code>vex.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5740</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5738</span>
+<span class="normal">5739</span>
+<span class="normal">5740</span>
 <span class="normal">5741</span>
 <span class="normal">5742</span>
 <span class="normal">5743</span>
@@ -5611,9 +5621,7 @@ mg1 = MotorGroup(motor1, motor2)
 <span class="normal">6163</span>
 <span class="normal">6164</span>
 <span class="normal">6165</span>
-<span class="normal">6166</span>
-<span class="normal">6167</span>
-<span class="normal">6168</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MotorGroup</span><span class="p">:</span>
+<span class="normal">6166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MotorGroup</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### MotorGroup class - use this to create a group of motors</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -6079,16 +6087,16 @@ mg1 = MotorGroup(motor1, motor2)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5764</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5762</span>
+<span class="normal">5763</span>
+<span class="normal">5764</span>
 <span class="normal">5765</span>
 <span class="normal">5766</span>
 <span class="normal">5767</span>
 <span class="normal">5768</span>
 <span class="normal">5769</span>
 <span class="normal">5770</span>
-<span class="normal">5771</span>
-<span class="normal">5772</span>
-<span class="normal">5773</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">5771</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### return the number of motors in the group</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -6126,7 +6134,9 @@ mg1 = MotorGroup(motor1, motor2)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6095</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6093</span>
+<span class="normal">6094</span>
+<span class="normal">6095</span>
 <span class="normal">6096</span>
 <span class="normal">6097</span>
 <span class="normal">6098</span>
@@ -6136,9 +6146,7 @@ mg1 = MotorGroup(motor1, motor2)
 <span class="normal">6102</span>
 <span class="normal">6103</span>
 <span class="normal">6104</span>
-<span class="normal">6105</span>
-<span class="normal">6106</span>
-<span class="normal">6107</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">current</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">CurrentUnits</span><span class="o">.</span><span class="n">AMP</span><span class="p">):</span>
+<span class="normal">6105</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">current</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">CurrentUnits</span><span class="o">.</span><span class="n">AMP</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the total current all motors are using</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -6179,16 +6187,16 @@ mg1 = MotorGroup(motor1, motor2)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6059</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6057</span>
+<span class="normal">6058</span>
+<span class="normal">6059</span>
 <span class="normal">6060</span>
 <span class="normal">6061</span>
 <span class="normal">6062</span>
 <span class="normal">6063</span>
 <span class="normal">6064</span>
 <span class="normal">6065</span>
-<span class="normal">6066</span>
-<span class="normal">6067</span>
-<span class="normal">6068</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">6066</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the current direction the first motor is spinning in</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -6226,16 +6234,16 @@ mg1 = MotorGroup(motor1, motor2)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6134</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6132</span>
+<span class="normal">6133</span>
+<span class="normal">6134</span>
 <span class="normal">6135</span>
 <span class="normal">6136</span>
 <span class="normal">6137</span>
 <span class="normal">6138</span>
 <span class="normal">6139</span>
 <span class="normal">6140</span>
-<span class="normal">6141</span>
-<span class="normal">6142</span>
-<span class="normal">6143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">PercentUnits</span><span class="o">.</span><span class="n">PERCENT</span><span class="p">):</span>
+<span class="normal">6141</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">PercentUnits</span><span class="o">.</span><span class="n">PERCENT</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the efficiency of the first motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -6275,7 +6283,9 @@ It will return False if any motor is still spinning or True if they have complet
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6008</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6006</span>
+<span class="normal">6007</span>
+<span class="normal">6008</span>
 <span class="normal">6009</span>
 <span class="normal">6010</span>
 <span class="normal">6011</span>
@@ -6284,9 +6294,7 @@ It will return False if any motor is still spinning or True if they have complet
 <span class="normal">6014</span>
 <span class="normal">6015</span>
 <span class="normal">6016</span>
-<span class="normal">6017</span>
-<span class="normal">6018</span>
-<span class="normal">6019</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">6017</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the current status of the spin_to_position or spin_for command</span>
 <span class="sd">    This function is used when False has been passed as the wait parameter to spin_to_position or spin_for\\</span>
 <span class="sd">    It will return False if any motor is still spinning or True if they have completed the move or a timeout occurred.</span>
@@ -6328,7 +6336,9 @@ It will return True if any motor is still spinning or False if they have complet
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5984</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5982</span>
+<span class="normal">5983</span>
+<span class="normal">5984</span>
 <span class="normal">5985</span>
 <span class="normal">5986</span>
 <span class="normal">5987</span>
@@ -6340,9 +6350,7 @@ It will return True if any motor is still spinning or False if they have complet
 <span class="normal">5993</span>
 <span class="normal">5994</span>
 <span class="normal">5995</span>
-<span class="normal">5996</span>
-<span class="normal">5997</span>
-<span class="normal">5998</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_spinning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">5996</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_spinning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the current status of the spin_to_position or spin_for command</span>
 <span class="sd">    This function is used when False has been passed as the wait parameter to spin_to_position or spin_for\\</span>
 <span class="sd">    It will return True if any motor is still spinning or False if they have completed the move or a timeout occurred.</span>
@@ -6385,16 +6393,16 @@ It will return True if any motor is still spinning or False if they have complet
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6071</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6069</span>
+<span class="normal">6070</span>
+<span class="normal">6071</span>
 <span class="normal">6072</span>
 <span class="normal">6073</span>
 <span class="normal">6074</span>
 <span class="normal">6075</span>
 <span class="normal">6076</span>
 <span class="normal">6077</span>
-<span class="normal">6078</span>
-<span class="normal">6079</span>
-<span class="normal">6080</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">):</span>
+<span class="normal">6078</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the position of the first motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -6432,16 +6440,16 @@ It will return True if any motor is still spinning or False if they have complet
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6110</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6108</span>
+<span class="normal">6109</span>
+<span class="normal">6110</span>
 <span class="normal">6111</span>
 <span class="normal">6112</span>
 <span class="normal">6113</span>
 <span class="normal">6114</span>
 <span class="normal">6115</span>
 <span class="normal">6116</span>
-<span class="normal">6117</span>
-<span class="normal">6118</span>
-<span class="normal">6119</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">PowerUnits</span><span class="o">.</span><span class="n">WATT</span><span class="p">):</span>
+<span class="normal">6117</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">PowerUnits</span><span class="o">.</span><span class="n">WATT</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the power the first motor is providing</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -6479,7 +6487,9 @@ It will return True if any motor is still spinning or False if they have complet
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5806</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5804</span>
+<span class="normal">5805</span>
+<span class="normal">5806</span>
 <span class="normal">5807</span>
 <span class="normal">5808</span>
 <span class="normal">5809</span>
@@ -6487,9 +6497,7 @@ It will return True if any motor is still spinning or False if they have complet
 <span class="normal">5811</span>
 <span class="normal">5812</span>
 <span class="normal">5813</span>
-<span class="normal">5814</span>
-<span class="normal">5815</span>
-<span class="normal">5816</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reset_position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">5814</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reset_position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Reset the motor position to 0 for all motors in the group</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -6540,7 +6548,9 @@ motor1.set_max_torque(20, PERCENT)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6036</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6034</span>
+<span class="normal">6035</span>
+<span class="normal">6036</span>
 <span class="normal">6037</span>
 <span class="normal">6038</span>
 <span class="normal">6039</span>
@@ -6558,9 +6568,7 @@ motor1.set_max_torque(20, PERCENT)
 <span class="normal">6051</span>
 <span class="normal">6052</span>
 <span class="normal">6053</span>
-<span class="normal">6054</span>
-<span class="normal">6055</span>
-<span class="normal">6056</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_max_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">TorquePercentCurrentUnits</span><span class="o">=</span><span class="n">TorqueUnits</span><span class="o">.</span><span class="n">NM</span><span class="p">):</span>
+<span class="normal">6054</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_max_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">TorquePercentCurrentUnits</span><span class="o">=</span><span class="n">TorqueUnits</span><span class="o">.</span><span class="n">NM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the maximum torque all motors in the group will use</span>
 <span class="sd">    The torque can be set as torque, current or percent of maximum.</span>
 
@@ -6611,7 +6619,9 @@ units : The units for the provided position, the default is DEGREES
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5819</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5817</span>
+<span class="normal">5818</span>
+<span class="normal">5819</span>
 <span class="normal">5820</span>
 <span class="normal">5821</span>
 <span class="normal">5822</span>
@@ -6621,9 +6631,7 @@ units : The units for the provided position, the default is DEGREES
 <span class="normal">5826</span>
 <span class="normal">5827</span>
 <span class="normal">5828</span>
-<span class="normal">5829</span>
-<span class="normal">5830</span>
-<span class="normal">5831</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">5829</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the current position for all motors in the group</span>
 <span class="sd">    The position returned by the position() function is set to this value.</span>
 
@@ -6665,7 +6673,9 @@ units : The units for the provided position, the default is DEGREES
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5792</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5790</span>
+<span class="normal">5791</span>
+<span class="normal">5792</span>
 <span class="normal">5793</span>
 <span class="normal">5794</span>
 <span class="normal">5795</span>
@@ -6674,9 +6684,7 @@ units : The units for the provided position, the default is DEGREES
 <span class="normal">5798</span>
 <span class="normal">5799</span>
 <span class="normal">5800</span>
-<span class="normal">5801</span>
-<span class="normal">5802</span>
-<span class="normal">5803</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_stopping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">BrakeType</span><span class="o">.</span><span class="n">COAST</span><span class="p">):</span>
+<span class="normal">5801</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_stopping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">BrakeType</span><span class="o">.</span><span class="n">COAST</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the stopping mode for all motors in the group</span>
 <span class="sd">    Setting the action for the motor when stopped.</span>
 
@@ -6719,7 +6727,9 @@ units : The units for the provided timeout, the default is MSEC
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5834</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5832</span>
+<span class="normal">5833</span>
+<span class="normal">5834</span>
 <span class="normal">5835</span>
 <span class="normal">5836</span>
 <span class="normal">5837</span>
@@ -6739,9 +6749,7 @@ units : The units for the provided timeout, the default is MSEC
 <span class="normal">5851</span>
 <span class="normal">5852</span>
 <span class="normal">5853</span>
-<span class="normal">5854</span>
-<span class="normal">5855</span>
-<span class="normal">5856</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">TimeUnits</span><span class="o">.</span><span class="n">MSEC</span><span class="p">):</span>
+<span class="normal">5854</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">TimeUnits</span><span class="o">.</span><span class="n">MSEC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the timeout value used for all motors in the group</span>
 <span class="sd">    The timeout value is used when performing spin_to_position and spin_for commands.  If timeout is</span>
 <span class="sd">     reached and the motor has not completed moving, then the spin... function will return False.</span>
@@ -6795,7 +6803,9 @@ units : The units for the supplied velocity, the default is RPM
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5776</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5774</span>
+<span class="normal">5775</span>
+<span class="normal">5776</span>
 <span class="normal">5777</span>
 <span class="normal">5778</span>
 <span class="normal">5779</span>
@@ -6806,9 +6816,7 @@ units : The units for the supplied velocity, the default is RPM
 <span class="normal">5784</span>
 <span class="normal">5785</span>
 <span class="normal">5786</span>
-<span class="normal">5787</span>
-<span class="normal">5788</span>
-<span class="normal">5789</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">5787</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set default velocity for all motors in the group</span>
 <span class="sd">    This will be the velocity used for subsequent calls to spin if a velocity is not provided</span>
 <span class="sd">    to that function.</span>
@@ -6871,7 +6879,9 @@ mg1.spin(FORWARD, 360.0, VelocityUnits.DPS)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5859</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5857</span>
+<span class="normal">5858</span>
+<span class="normal">5859</span>
 <span class="normal">5860</span>
 <span class="normal">5861</span>
 <span class="normal">5862</span>
@@ -6895,9 +6905,7 @@ mg1.spin(FORWARD, 360.0, VelocityUnits.DPS)
 <span class="normal">5880</span>
 <span class="normal">5881</span>
 <span class="normal">5882</span>
-<span class="normal">5883</span>
-<span class="normal">5884</span>
-<span class="normal">5885</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
+<span class="normal">5883</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Spin all motors in the group using the provided arguments</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -6976,7 +6984,9 @@ mg1.spin_for(FORWARD, 180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5946</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5944</span>
+<span class="normal">5945</span>
+<span class="normal">5946</span>
 <span class="normal">5947</span>
 <span class="normal">5948</span>
 <span class="normal">5949</span>
@@ -7009,9 +7019,7 @@ mg1.spin_for(FORWARD, 180, DEGREES, wait=False)
 <span class="normal">5976</span>
 <span class="normal">5977</span>
 <span class="normal">5978</span>
-<span class="normal">5979</span>
-<span class="normal">5980</span>
-<span class="normal">5981</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">RotationTimeUnits</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">,</span>
+<span class="normal">5979</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">RotationTimeUnits</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">,</span>
              <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units_v</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Spin all motors in the group to a relative position using the provided arguments</span>
 <span class="sd">    Move the motor to the requested position or for the specified amount of time.\\</span>
@@ -7097,7 +7105,9 @@ mg1.spin_to_position(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5888</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5886</span>
+<span class="normal">5887</span>
+<span class="normal">5888</span>
 <span class="normal">5889</span>
 <span class="normal">5890</span>
 <span class="normal">5891</span>
@@ -7129,9 +7139,7 @@ mg1.spin_to_position(180, DEGREES, wait=False)
 <span class="normal">5917</span>
 <span class="normal">5918</span>
 <span class="normal">5919</span>
-<span class="normal">5920</span>
-<span class="normal">5921</span>
-<span class="normal">5922</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin_to_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">,</span>
+<span class="normal">5920</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin_to_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">,</span>
                      <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units_v</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Spin all motors in the group to an absolute position using the provided arguments</span>
 <span class="sd">    Move the motor to the requested position.\\</span>
@@ -7195,7 +7203,9 @@ mg1.spin_to_position(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6022</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6020</span>
+<span class="normal">6021</span>
+<span class="normal">6022</span>
 <span class="normal">6023</span>
 <span class="normal">6024</span>
 <span class="normal">6025</span>
@@ -7204,9 +7214,7 @@ mg1.spin_to_position(180, DEGREES, wait=False)
 <span class="normal">6028</span>
 <span class="normal">6029</span>
 <span class="normal">6030</span>
-<span class="normal">6031</span>
-<span class="normal">6032</span>
-<span class="normal">6033</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">6031</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Stop all motors in the group, set to 0 velocity and set current stopping_mode</span>
 <span class="sd">    The motor will be stopped and set to COAST, BRAKE or HOLD</span>
 
@@ -7246,16 +7254,16 @@ mg1.spin_to_position(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6146</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6144</span>
+<span class="normal">6145</span>
+<span class="normal">6146</span>
 <span class="normal">6147</span>
 <span class="normal">6148</span>
 <span class="normal">6149</span>
 <span class="normal">6150</span>
 <span class="normal">6151</span>
 <span class="normal">6152</span>
-<span class="normal">6153</span>
-<span class="normal">6154</span>
-<span class="normal">6155</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">TemperatureUnits</span><span class="o">.</span><span class="n">CELSIUS</span><span class="p">):</span>
+<span class="normal">6153</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">TemperatureUnits</span><span class="o">.</span><span class="n">CELSIUS</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the temperature of the first motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -7293,16 +7301,16 @@ mg1.spin_to_position(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6122</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6120</span>
+<span class="normal">6121</span>
+<span class="normal">6122</span>
 <span class="normal">6123</span>
 <span class="normal">6124</span>
 <span class="normal">6125</span>
 <span class="normal">6126</span>
 <span class="normal">6127</span>
 <span class="normal">6128</span>
-<span class="normal">6129</span>
-<span class="normal">6130</span>
-<span class="normal">6131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">TorquePercentCurrentUnits</span><span class="o">=</span><span class="n">TorqueUnits</span><span class="o">.</span><span class="n">NM</span><span class="p">):</span>
+<span class="normal">6129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">TorquePercentCurrentUnits</span><span class="o">=</span><span class="n">TorqueUnits</span><span class="o">.</span><span class="n">NM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the torque the first motor is providing</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -7340,16 +7348,16 @@ mg1.spin_to_position(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6083</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6081</span>
+<span class="normal">6082</span>
+<span class="normal">6083</span>
 <span class="normal">6084</span>
 <span class="normal">6085</span>
 <span class="normal">6086</span>
 <span class="normal">6087</span>
 <span class="normal">6088</span>
 <span class="normal">6089</span>
-<span class="normal">6090</span>
-<span class="normal">6091</span>
-<span class="normal">6092</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
+<span class="normal">6090</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the velocity of the first motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -7426,7 +7434,9 @@ drive1 = DriveTrain(mgl, mgr, 8.6, 10, 12, INCHES)
 
               <details class="quote">
                 <summary>Source code in <code>vex.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6183</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6181</span>
+<span class="normal">6182</span>
+<span class="normal">6183</span>
 <span class="normal">6184</span>
 <span class="normal">6185</span>
 <span class="normal">6186</span>
@@ -7768,9 +7778,7 @@ drive1 = DriveTrain(mgl, mgr, 8.6, 10, 12, INCHES)
 <span class="normal">6522</span>
 <span class="normal">6523</span>
 <span class="normal">6524</span>
-<span class="normal">6525</span>
-<span class="normal">6526</span>
-<span class="normal">6527</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DriveTrain</span><span class="p">:</span>
+<span class="normal">6525</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DriveTrain</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### DriveTrain class - use this to create a simple drivetrain</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -8152,16 +8160,16 @@ drive1 = DriveTrain(mgl, mgr, 8.6, 10, 12, INCHES)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6462</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6460</span>
+<span class="normal">6461</span>
+<span class="normal">6462</span>
 <span class="normal">6463</span>
 <span class="normal">6464</span>
 <span class="normal">6465</span>
 <span class="normal">6466</span>
 <span class="normal">6467</span>
 <span class="normal">6468</span>
-<span class="normal">6469</span>
-<span class="normal">6470</span>
-<span class="normal">6471</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">current</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">CurrentUnits</span><span class="o">.</span><span class="n">AMP</span><span class="p">):</span>
+<span class="normal">6469</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">current</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">CurrentUnits</span><span class="o">.</span><span class="n">AMP</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the total current all drivetrain motors are using</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -8222,7 +8230,9 @@ drive1.drive(FORWARD, 360.0, VelocityUnits.DPS)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6294</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6292</span>
+<span class="normal">6293</span>
+<span class="normal">6294</span>
 <span class="normal">6295</span>
 <span class="normal">6296</span>
 <span class="normal">6297</span>
@@ -8248,9 +8258,7 @@ drive1.drive(FORWARD, 360.0, VelocityUnits.DPS)
 <span class="normal">6317</span>
 <span class="normal">6318</span>
 <span class="normal">6319</span>
-<span class="normal">6320</span>
-<span class="normal">6321</span>
-<span class="normal">6322</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">drive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
+<span class="normal">6320</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">drive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### drive the drivetrain using the provided arguments</span>
 
 <span class="sd">    The drive command is similar to the motor spin command.\\</span>
@@ -8321,7 +8329,9 @@ drive1.drive_for(REVERSE, 10000, MM, 50, RPM)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6325</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6323</span>
+<span class="normal">6324</span>
+<span class="normal">6325</span>
 <span class="normal">6326</span>
 <span class="normal">6327</span>
 <span class="normal">6328</span>
@@ -8343,9 +8353,7 @@ drive1.drive_for(REVERSE, 10000, MM, 50, RPM)
 <span class="normal">6344</span>
 <span class="normal">6345</span>
 <span class="normal">6346</span>
-<span class="normal">6347</span>
-<span class="normal">6348</span>
-<span class="normal">6349</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">drive_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">DistanceUnits</span><span class="o">.</span><span class="n">IN</span><span class="p">,</span>
+<span class="normal">6347</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">drive_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">DistanceUnits</span><span class="o">.</span><span class="n">IN</span><span class="p">,</span>
               <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units_v</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### move the drivetrain using the provided arguments</span>
 
@@ -8399,7 +8407,9 @@ drive1.drive_for(REVERSE, 10000, MM, 50, RPM)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6502</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6500</span>
+<span class="normal">6501</span>
+<span class="normal">6502</span>
 <span class="normal">6503</span>
 <span class="normal">6504</span>
 <span class="normal">6505</span>
@@ -8408,9 +8418,7 @@ drive1.drive_for(REVERSE, 10000, MM, 50, RPM)
 <span class="normal">6508</span>
 <span class="normal">6509</span>
 <span class="normal">6510</span>
-<span class="normal">6511</span>
-<span class="normal">6512</span>
-<span class="normal">6513</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">PercentUnits</span><span class="o">.</span><span class="n">PERCENT</span><span class="p">):</span>
+<span class="normal">6511</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">PercentUnits</span><span class="o">.</span><span class="n">PERCENT</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the average efficiency of the left and right motors</span>
 
 <span class="sd">    This command only considers the first motor for left and right sides of the drive.</span>
@@ -8450,16 +8458,16 @@ drive1.drive_for(REVERSE, 10000, MM, 50, RPM)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6282</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6280</span>
+<span class="normal">6281</span>
+<span class="normal">6282</span>
 <span class="normal">6283</span>
 <span class="normal">6284</span>
 <span class="normal">6285</span>
 <span class="normal">6286</span>
 <span class="normal">6287</span>
 <span class="normal">6288</span>
-<span class="normal">6289</span>
-<span class="normal">6290</span>
-<span class="normal">6291</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">6289</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Get the current timeout value used by the drivetrain</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -8499,7 +8507,9 @@ It will return False if the drivetrain is still moving or True if it has complet
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6422</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6420</span>
+<span class="normal">6421</span>
+<span class="normal">6422</span>
 <span class="normal">6423</span>
 <span class="normal">6424</span>
 <span class="normal">6425</span>
@@ -8508,9 +8518,7 @@ It will return False if the drivetrain is still moving or True if it has complet
 <span class="normal">6428</span>
 <span class="normal">6429</span>
 <span class="normal">6430</span>
-<span class="normal">6431</span>
-<span class="normal">6432</span>
-<span class="normal">6433</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">6431</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the current status of the drive_for or turn_for command</span>
 <span class="sd">    This function is used when False has been passed as the wait parameter to drive_for or turn_for\\</span>
 <span class="sd">    It will return False if the drivetrain is still moving or True if it has completed the move or a timeout occurred.</span>
@@ -8552,7 +8560,9 @@ It will return True if the drivetrain is still moving or False if it has complet
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6408</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6406</span>
+<span class="normal">6407</span>
+<span class="normal">6408</span>
 <span class="normal">6409</span>
 <span class="normal">6410</span>
 <span class="normal">6411</span>
@@ -8561,9 +8571,7 @@ It will return True if the drivetrain is still moving or False if it has complet
 <span class="normal">6414</span>
 <span class="normal">6415</span>
 <span class="normal">6416</span>
-<span class="normal">6417</span>
-<span class="normal">6418</span>
-<span class="normal">6419</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">6417</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the current status of the drive_for or turn_for command</span>
 <span class="sd">    This function is used when False has been passed as the wait parameter to drive_for or turn_for\\</span>
 <span class="sd">    It will return True if the drivetrain is still moving or False if it has completed the move or a timeout occurred.</span>
@@ -8604,7 +8612,9 @@ It will return True if the drivetrain is still moving or False if it has complet
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6474</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6472</span>
+<span class="normal">6473</span>
+<span class="normal">6474</span>
 <span class="normal">6475</span>
 <span class="normal">6476</span>
 <span class="normal">6477</span>
@@ -8613,9 +8623,7 @@ It will return True if the drivetrain is still moving or False if it has complet
 <span class="normal">6480</span>
 <span class="normal">6481</span>
 <span class="normal">6482</span>
-<span class="normal">6483</span>
-<span class="normal">6484</span>
-<span class="normal">6485</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">PowerUnits</span><span class="o">.</span><span class="n">WATT</span><span class="p">):</span>
+<span class="normal">6483</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">PowerUnits</span><span class="o">.</span><span class="n">WATT</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the total power all drivetrain motors are using</span>
 
 <span class="sd">    This command only considers the first motor for left and right sides of the drive.</span>
@@ -8658,7 +8666,9 @@ units : The units for the supplied velocity, the default is RPM
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6224</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6222</span>
+<span class="normal">6223</span>
+<span class="normal">6224</span>
 <span class="normal">6225</span>
 <span class="normal">6226</span>
 <span class="normal">6227</span>
@@ -8668,9 +8678,7 @@ units : The units for the supplied velocity, the default is RPM
 <span class="normal">6231</span>
 <span class="normal">6232</span>
 <span class="normal">6233</span>
-<span class="normal">6234</span>
-<span class="normal">6235</span>
-<span class="normal">6236</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_drive_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
+<span class="normal">6234</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_drive_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set default velocity for drive commands</span>
 <span class="sd">    This will be the velocity used for subsequent calls to drive if a velocity is not provided</span>
 <span class="sd">    to that function.</span>
@@ -8712,7 +8720,9 @@ units : The units for the supplied velocity, the default is RPM
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6254</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6252</span>
+<span class="normal">6253</span>
+<span class="normal">6254</span>
 <span class="normal">6255</span>
 <span class="normal">6256</span>
 <span class="normal">6257</span>
@@ -8720,9 +8730,7 @@ units : The units for the supplied velocity, the default is RPM
 <span class="normal">6259</span>
 <span class="normal">6260</span>
 <span class="normal">6261</span>
-<span class="normal">6262</span>
-<span class="normal">6263</span>
-<span class="normal">6264</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_stopping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">BrakeType</span><span class="o">.</span><span class="n">COAST</span><span class="p">):</span>
+<span class="normal">6262</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_stopping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">BrakeType</span><span class="o">.</span><span class="n">COAST</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the stopping mode for all motors on the drivetrain</span>
 <span class="sd">    Setting the action for the motors when stopped.</span>
 
@@ -8764,7 +8772,9 @@ units : The units for the provided timeout, the default is MSEC
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6267</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6265</span>
+<span class="normal">6266</span>
+<span class="normal">6267</span>
 <span class="normal">6268</span>
 <span class="normal">6269</span>
 <span class="normal">6270</span>
@@ -8774,9 +8784,7 @@ units : The units for the provided timeout, the default is MSEC
 <span class="normal">6274</span>
 <span class="normal">6275</span>
 <span class="normal">6276</span>
-<span class="normal">6277</span>
-<span class="normal">6278</span>
-<span class="normal">6279</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">TimeUnits</span><span class="o">.</span><span class="n">MSEC</span><span class="p">):</span>
+<span class="normal">6277</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">TimeUnits</span><span class="o">.</span><span class="n">MSEC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the timeout value used all motors on the drivetrain</span>
 <span class="sd">    The timeout value is used when performing drive_for and turn_for commands.  If timeout is</span>
 <span class="sd">     reached and the motor has not completed moving, then the function will return False.</span>
@@ -8820,7 +8828,9 @@ units : The units for the supplied velocity, the default is RPM
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6239</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6237</span>
+<span class="normal">6238</span>
+<span class="normal">6239</span>
 <span class="normal">6240</span>
 <span class="normal">6241</span>
 <span class="normal">6242</span>
@@ -8830,9 +8840,7 @@ units : The units for the supplied velocity, the default is RPM
 <span class="normal">6246</span>
 <span class="normal">6247</span>
 <span class="normal">6248</span>
-<span class="normal">6249</span>
-<span class="normal">6250</span>
-<span class="normal">6251</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_turn_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
+<span class="normal">6249</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_turn_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set default velocity for turn commands</span>
 <span class="sd">    This will be the velocity used for subsequent calls to turn if a velocity is not provided</span>
 <span class="sd">    to that function.</span>
@@ -8874,7 +8882,9 @@ units : The units for the supplied velocity, the default is RPM
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6437</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6435</span>
+<span class="normal">6436</span>
+<span class="normal">6437</span>
 <span class="normal">6438</span>
 <span class="normal">6439</span>
 <span class="normal">6440</span>
@@ -8882,9 +8892,7 @@ units : The units for the supplied velocity, the default is RPM
 <span class="normal">6442</span>
 <span class="normal">6443</span>
 <span class="normal">6444</span>
-<span class="normal">6445</span>
-<span class="normal">6446</span>
-<span class="normal">6447</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">6445</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Stop the drivetrain, set to 0 velocity and set current stopping_mode</span>
 <span class="sd">    The motors will be stopped and set to COAST, BRAKE or HOLD</span>
 
@@ -8924,7 +8932,9 @@ units : The units for the supplied velocity, the default is RPM
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6516</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6514</span>
+<span class="normal">6515</span>
+<span class="normal">6516</span>
 <span class="normal">6517</span>
 <span class="normal">6518</span>
 <span class="normal">6519</span>
@@ -8933,9 +8943,7 @@ units : The units for the supplied velocity, the default is RPM
 <span class="normal">6522</span>
 <span class="normal">6523</span>
 <span class="normal">6524</span>
-<span class="normal">6525</span>
-<span class="normal">6526</span>
-<span class="normal">6527</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">TemperatureUnits</span><span class="o">.</span><span class="n">CELSIUS</span><span class="p">):</span>
+<span class="normal">6525</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">TemperatureUnits</span><span class="o">.</span><span class="n">CELSIUS</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the average temperature of the left and right motors</span>
 
 <span class="sd">    This command only considers the first motor for left and right sides of the drive.</span>
@@ -8976,7 +8984,9 @@ units : The units for the supplied velocity, the default is RPM
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6488</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6486</span>
+<span class="normal">6487</span>
+<span class="normal">6488</span>
 <span class="normal">6489</span>
 <span class="normal">6490</span>
 <span class="normal">6491</span>
@@ -8985,9 +8995,7 @@ units : The units for the supplied velocity, the default is RPM
 <span class="normal">6494</span>
 <span class="normal">6495</span>
 <span class="normal">6496</span>
-<span class="normal">6497</span>
-<span class="normal">6498</span>
-<span class="normal">6499</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">TorqueUnits</span><span class="o">.</span><span class="n">NM</span><span class="p">):</span>
+<span class="normal">6497</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">TorqueUnits</span><span class="o">.</span><span class="n">NM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the total torque all drivetrain motors are using</span>
 
 <span class="sd">    This command only considers the first motor for left and right sides of the drive.</span>
@@ -9047,7 +9055,9 @@ drive1.turn(RIGHT, 360.0, VelocityUnits.DPS)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6352</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6350</span>
+<span class="normal">6351</span>
+<span class="normal">6352</span>
 <span class="normal">6353</span>
 <span class="normal">6354</span>
 <span class="normal">6355</span>
@@ -9071,9 +9081,7 @@ drive1.turn(RIGHT, 360.0, VelocityUnits.DPS)
 <span class="normal">6373</span>
 <span class="normal">6374</span>
 <span class="normal">6375</span>
-<span class="normal">6376</span>
-<span class="normal">6377</span>
-<span class="normal">6378</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
+<span class="normal">6376</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### turn the drivetrain using the provided arguments</span>
 
 <span class="sd">    The drive command is similar to the motor spin command.\\</span>
@@ -9142,7 +9150,9 @@ drive1.turn_for(LEFT, 180, DEGREES, 50, RPM)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6381</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6379</span>
+<span class="normal">6380</span>
+<span class="normal">6381</span>
 <span class="normal">6382</span>
 <span class="normal">6383</span>
 <span class="normal">6384</span>
@@ -9164,9 +9174,7 @@ drive1.turn_for(LEFT, 180, DEGREES, 50, RPM)
 <span class="normal">6400</span>
 <span class="normal">6401</span>
 <span class="normal">6402</span>
-<span class="normal">6403</span>
-<span class="normal">6404</span>
-<span class="normal">6405</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">turn_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">,</span>
+<span class="normal">6403</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">turn_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">,</span>
              <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units_v</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### turn the drivetrain using the provided arguments</span>
 
@@ -9219,16 +9227,16 @@ drive1.turn_for(LEFT, 180, DEGREES, 50, RPM)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6450</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6448</span>
+<span class="normal">6449</span>
+<span class="normal">6450</span>
 <span class="normal">6451</span>
 <span class="normal">6452</span>
 <span class="normal">6453</span>
 <span class="normal">6454</span>
 <span class="normal">6455</span>
 <span class="normal">6456</span>
-<span class="normal">6457</span>
-<span class="normal">6458</span>
-<span class="normal">6459</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
+<span class="normal">6457</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns average velocity of the left and right motors</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -9312,7 +9320,9 @@ smart1 = SmartDrive(mgl, mgr, imu1, 8.6, 10, 12, INCHES)
 
               <details class="quote">
                 <summary>Source code in <code>vex.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6542</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6540</span>
+<span class="normal">6541</span>
+<span class="normal">6542</span>
 <span class="normal">6543</span>
 <span class="normal">6544</span>
 <span class="normal">6545</span>
@@ -9594,9 +9604,7 @@ smart1 = SmartDrive(mgl, mgr, imu1, 8.6, 10, 12, INCHES)
 <span class="normal">6821</span>
 <span class="normal">6822</span>
 <span class="normal">6823</span>
-<span class="normal">6824</span>
-<span class="normal">6825</span>
-<span class="normal">6826</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SmartDrive</span><span class="p">(</span><span class="n">DriveTrain</span><span class="p">):</span>
+<span class="normal">6824</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SmartDrive</span><span class="p">(</span><span class="n">DriveTrain</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### SmartDrive class - use this to create a smart drivetrain</span>
 
 <span class="sd">    A smart drivetrain uses a gyro or similar sensor to turn more accurately.\\</span>
@@ -9923,7 +9931,9 @@ value = smart1.heading()
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6657</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6655</span>
+<span class="normal">6656</span>
+<span class="normal">6657</span>
 <span class="normal">6658</span>
 <span class="normal">6659</span>
 <span class="normal">6660</span>
@@ -9936,9 +9946,7 @@ value = smart1.heading()
 <span class="normal">6667</span>
 <span class="normal">6668</span>
 <span class="normal">6669</span>
-<span class="normal">6670</span>
-<span class="normal">6671</span>
-<span class="normal">6672</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">heading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">):</span>
+<span class="normal">6670</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">heading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### read the current heading of the smartdrive</span>
 
 <span class="sd">    heading will be returned in the range 0 - 359.99 degrees</span>
@@ -9984,7 +9992,9 @@ It will return True if the drivetrain is still moving or False if it has complet
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6815</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6813</span>
+<span class="normal">6814</span>
+<span class="normal">6815</span>
 <span class="normal">6816</span>
 <span class="normal">6817</span>
 <span class="normal">6818</span>
@@ -9993,9 +10003,7 @@ It will return True if the drivetrain is still moving or False if it has complet
 <span class="normal">6821</span>
 <span class="normal">6822</span>
 <span class="normal">6823</span>
-<span class="normal">6824</span>
-<span class="normal">6825</span>
-<span class="normal">6826</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">6824</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the current status of the drive_for command</span>
 <span class="sd">    This function is used when False has been passed as the wait parameter to drive_for\\</span>
 <span class="sd">    It will return True if the drivetrain is still moving or False if it has completed the move or a timeout occurred.</span>
@@ -10037,7 +10045,9 @@ It will return True if the drivetrain is still moving or False if it has complet
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6801</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6799</span>
+<span class="normal">6800</span>
+<span class="normal">6801</span>
 <span class="normal">6802</span>
 <span class="normal">6803</span>
 <span class="normal">6804</span>
@@ -10046,9 +10056,7 @@ It will return True if the drivetrain is still moving or False if it has complet
 <span class="normal">6807</span>
 <span class="normal">6808</span>
 <span class="normal">6809</span>
-<span class="normal">6810</span>
-<span class="normal">6811</span>
-<span class="normal">6812</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_turning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">6810</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_turning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Returns the current status of the turn_to_heading, turn_to_rotation or turn_for command</span>
 <span class="sd">    This function is used when False has been passed as the wait parameter to turn_to_heading or turn_for\\</span>
 <span class="sd">    It will return True if the drivetrain is still moving or False if it has completed the move or a timeout occurred.</span>
@@ -10093,7 +10101,9 @@ value = smart1.rotation()
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6692</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6690</span>
+<span class="normal">6691</span>
+<span class="normal">6692</span>
 <span class="normal">6693</span>
 <span class="normal">6694</span>
 <span class="normal">6695</span>
@@ -10106,9 +10116,7 @@ value = smart1.rotation()
 <span class="normal">6702</span>
 <span class="normal">6703</span>
 <span class="normal">6704</span>
-<span class="normal">6705</span>
-<span class="normal">6706</span>
-<span class="normal">6707</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">):</span>
+<span class="normal">6705</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### read the current rotation of the smartdrive</span>
 
 <span class="sd">    rotation is not limited, it can be both positive and negative and shows the absolute angle of the gyro.</span>
@@ -10158,7 +10166,9 @@ smart1.set_heading(180)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6638</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6636</span>
+<span class="normal">6637</span>
+<span class="normal">6638</span>
 <span class="normal">6639</span>
 <span class="normal">6640</span>
 <span class="normal">6641</span>
@@ -10172,9 +10182,7 @@ smart1.set_heading(180)
 <span class="normal">6649</span>
 <span class="normal">6650</span>
 <span class="normal">6651</span>
-<span class="normal">6652</span>
-<span class="normal">6653</span>
-<span class="normal">6654</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_heading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">):</span>
+<span class="normal">6652</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_heading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### set the smartdrive heading to a new value</span>
 
 <span class="sd">    The new value for heading should be in the range 0 - 359.99 degrees.</span>
@@ -10224,7 +10232,9 @@ smart1.set_rotation(180)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6675</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6673</span>
+<span class="normal">6674</span>
+<span class="normal">6675</span>
 <span class="normal">6676</span>
 <span class="normal">6677</span>
 <span class="normal">6678</span>
@@ -10236,9 +10246,7 @@ smart1.set_rotation(180)
 <span class="normal">6684</span>
 <span class="normal">6685</span>
 <span class="normal">6686</span>
-<span class="normal">6687</span>
-<span class="normal">6688</span>
-<span class="normal">6689</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">):</span>
+<span class="normal">6687</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### set the smartdrive rotation to a new value</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -10284,7 +10292,9 @@ turns angular error into motor velocity.</p>
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6610</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6608</span>
+<span class="normal">6609</span>
+<span class="normal">6610</span>
 <span class="normal">6611</span>
 <span class="normal">6612</span>
 <span class="normal">6613</span>
@@ -10295,9 +10305,7 @@ turns angular error into motor velocity.</p>
 <span class="normal">6618</span>
 <span class="normal">6619</span>
 <span class="normal">6620</span>
-<span class="normal">6621</span>
-<span class="normal">6622</span>
-<span class="normal">6623</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_turn_constant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="normal">6621</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_turn_constant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the turning constant for the smartdrive</span>
 
 <span class="sd">    The smartdrive uses a simple P controller when doing turns.\\</span>
@@ -10339,16 +10347,16 @@ turns angular error into motor velocity.</p>
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6626</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6624</span>
+<span class="normal">6625</span>
+<span class="normal">6626</span>
 <span class="normal">6627</span>
 <span class="normal">6628</span>
 <span class="normal">6629</span>
 <span class="normal">6630</span>
 <span class="normal">6631</span>
 <span class="normal">6632</span>
-<span class="normal">6633</span>
-<span class="normal">6634</span>
-<span class="normal">6635</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_turn_direction_reverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="normal">6633</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_turn_direction_reverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the expected turn direction for positive heading change</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -10389,7 +10397,9 @@ not complete.</p>
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6594</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6592</span>
+<span class="normal">6593</span>
+<span class="normal">6594</span>
 <span class="normal">6595</span>
 <span class="normal">6596</span>
 <span class="normal">6597</span>
@@ -10400,9 +10410,7 @@ not complete.</p>
 <span class="normal">6602</span>
 <span class="normal">6603</span>
 <span class="normal">6604</span>
-<span class="normal">6605</span>
-<span class="normal">6606</span>
-<span class="normal">6607</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_turn_threshold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="normal">6605</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_turn_threshold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the turning threshold for the smartdrive</span>
 
 <span class="sd">    This is the threshold value used to determine that turns are complete.\\</span>
@@ -10458,7 +10466,9 @@ smart1.turn_for(LEFT, 180, DEGREES, 50, RPM)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6774</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6772</span>
+<span class="normal">6773</span>
+<span class="normal">6774</span>
 <span class="normal">6775</span>
 <span class="normal">6776</span>
 <span class="normal">6777</span>
@@ -10480,9 +10490,7 @@ smart1.turn_for(LEFT, 180, DEGREES, 50, RPM)
 <span class="normal">6793</span>
 <span class="normal">6794</span>
 <span class="normal">6795</span>
-<span class="normal">6796</span>
-<span class="normal">6797</span>
-<span class="normal">6798</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">turn_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">,</span>
+<span class="normal">6796</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">turn_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">,</span>
              <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units_v</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### turn the smartdrive using the provided arguments</span>
 
@@ -10556,7 +10564,9 @@ smart1.turn_to_heading(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6710</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6708</span>
+<span class="normal">6709</span>
+<span class="normal">6710</span>
 <span class="normal">6711</span>
 <span class="normal">6712</span>
 <span class="normal">6713</span>
@@ -10583,9 +10593,7 @@ smart1.turn_to_heading(180, DEGREES, wait=False)
 <span class="normal">6734</span>
 <span class="normal">6735</span>
 <span class="normal">6736</span>
-<span class="normal">6737</span>
-<span class="normal">6738</span>
-<span class="normal">6739</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">turn_to_heading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">,</span>
+<span class="normal">6737</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">turn_to_heading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">,</span>
                     <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units_v</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### turn the smartdrive to an absolute position using the provided arguments</span>
 
@@ -10664,7 +10672,9 @@ smart1.turn_to_rotation(180, DEGREES, wait=False)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6742</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6740</span>
+<span class="normal">6741</span>
+<span class="normal">6742</span>
 <span class="normal">6743</span>
 <span class="normal">6744</span>
 <span class="normal">6745</span>
@@ -10691,9 +10701,7 @@ smart1.turn_to_rotation(180, DEGREES, wait=False)
 <span class="normal">6766</span>
 <span class="normal">6767</span>
 <span class="normal">6768</span>
-<span class="normal">6769</span>
-<span class="normal">6770</span>
-<span class="normal">6771</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">turn_to_rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">,</span>
+<span class="normal">6769</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">turn_to_rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">RotationUnits</span><span class="o">.</span><span class="n">DEG</span><span class="p">,</span>
                      <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units_v</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### turn the smartdrive to an absolute position using the provided arguments</span>
 
@@ -10776,7 +10784,9 @@ reverse_flag (optional) : set reverse flag for this motor, spin commands will ca
 
               <details class="quote">
                 <summary>Source code in <code>vex.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4389</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4387</span>
+<span class="normal">4388</span>
+<span class="normal">4389</span>
 <span class="normal">4390</span>
 <span class="normal">4391</span>
 <span class="normal">4392</span>
@@ -10884,9 +10894,7 @@ reverse_flag (optional) : set reverse flag for this motor, spin commands will ca
 <span class="normal">4494</span>
 <span class="normal">4495</span>
 <span class="normal">4496</span>
-<span class="normal">4497</span>
-<span class="normal">4498</span>
-<span class="normal">4499</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Motor29</span><span class="p">:</span>
+<span class="normal">4497</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Motor29</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Motor29 class - create a new pwm motor output</span>
 
 <span class="sd">    The Motor29 class will create raw RC style pwm waveform.\\</span>
@@ -11038,7 +11046,9 @@ motor1.set_reversed(True)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4446</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4444</span>
+<span class="normal">4445</span>
+<span class="normal">4446</span>
 <span class="normal">4447</span>
 <span class="normal">4448</span>
 <span class="normal">4449</span>
@@ -11049,9 +11059,7 @@ motor1.set_reversed(True)
 <span class="normal">4454</span>
 <span class="normal">4455</span>
 <span class="normal">4456</span>
-<span class="normal">4457</span>
-<span class="normal">4458</span>
-<span class="normal">4459</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_reversed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="normal">4457</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_reversed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the reversed flag for the motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -11096,7 +11104,9 @@ units : The units for the supplied velocity, the default is RPM
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4432</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4430</span>
+<span class="normal">4431</span>
+<span class="normal">4432</span>
 <span class="normal">4433</span>
 <span class="normal">4434</span>
 <span class="normal">4435</span>
@@ -11106,9 +11116,7 @@ units : The units for the supplied velocity, the default is RPM
 <span class="normal">4439</span>
 <span class="normal">4440</span>
 <span class="normal">4441</span>
-<span class="normal">4442</span>
-<span class="normal">4443</span>
-<span class="normal">4444</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
+<span class="normal">4442</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set default velocity for the motor</span>
 <span class="sd">    This will be the velocity used for subsequent calls to spin of a velocity is not provided</span>
 <span class="sd">    to that function.</span>
@@ -11171,7 +11179,9 @@ motor1.spin(FORWARD, 360.0, VelocityUnits.DPS)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4461</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4459</span>
+<span class="normal">4460</span>
+<span class="normal">4461</span>
 <span class="normal">4462</span>
 <span class="normal">4463</span>
 <span class="normal">4464</span>
@@ -11196,9 +11206,7 @@ motor1.spin(FORWARD, 360.0, VelocityUnits.DPS)
 <span class="normal">4483</span>
 <span class="normal">4484</span>
 <span class="normal">4485</span>
-<span class="normal">4486</span>
-<span class="normal">4487</span>
-<span class="normal">4488</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="o">.</span><span class="n">DirectionType</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">4486</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="o">.</span><span class="n">DirectionType</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Spin the motor using the provided arguments</span>
 
 <span class="sd">    The motor is assumed to have a maximum velocity of 100 rpm.</span>
@@ -11254,16 +11262,16 @@ motor1.spin(FORWARD, 360.0, VelocityUnits.DPS)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4490</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4488</span>
+<span class="normal">4489</span>
+<span class="normal">4490</span>
 <span class="normal">4491</span>
 <span class="normal">4492</span>
 <span class="normal">4493</span>
 <span class="normal">4494</span>
 <span class="normal">4495</span>
 <span class="normal">4496</span>
-<span class="normal">4497</span>
-<span class="normal">4498</span>
-<span class="normal">4499</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">4497</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Stop the  motor, set to 0 velocity</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -11308,7 +11316,9 @@ value = motor1.value()
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4410</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4408</span>
+<span class="normal">4409</span>
+<span class="normal">4410</span>
 <span class="normal">4411</span>
 <span class="normal">4412</span>
 <span class="normal">4413</span>
@@ -11323,9 +11333,7 @@ value = motor1.value()
 <span class="normal">4422</span>
 <span class="normal">4423</span>
 <span class="normal">4424</span>
-<span class="normal">4425</span>
-<span class="normal">4426</span>
-<span class="normal">4427</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">4425</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Read the current raw motor controller pwm value.</span>
 
 <span class="sd">    This is the raw internal pwm value\\</span>
@@ -11395,7 +11403,9 @@ reverse_flag (optional) : set reverse flag for this motor, spin commands will ca
 
               <details class="quote">
                 <summary>Source code in <code>vex.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4503</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4501</span>
+<span class="normal">4502</span>
+<span class="normal">4503</span>
 <span class="normal">4504</span>
 <span class="normal">4505</span>
 <span class="normal">4506</span>
@@ -11502,9 +11512,7 @@ reverse_flag (optional) : set reverse flag for this motor, spin commands will ca
 <span class="normal">4607</span>
 <span class="normal">4608</span>
 <span class="normal">4609</span>
-<span class="normal">4610</span>
-<span class="normal">4611</span>
-<span class="normal">4612</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MotorVictor</span><span class="p">:</span>
+<span class="normal">4610</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MotorVictor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### MotorVictor class - create a new pwm motor output</span>
 
 <span class="sd">    The MotorVictor class will create raw RC style pwm waveform.\\</span>
@@ -11655,7 +11663,9 @@ motor1.set_reversed(True)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4559</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4557</span>
+<span class="normal">4558</span>
+<span class="normal">4559</span>
 <span class="normal">4560</span>
 <span class="normal">4561</span>
 <span class="normal">4562</span>
@@ -11666,9 +11676,7 @@ motor1.set_reversed(True)
 <span class="normal">4567</span>
 <span class="normal">4568</span>
 <span class="normal">4569</span>
-<span class="normal">4570</span>
-<span class="normal">4571</span>
-<span class="normal">4572</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_reversed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="normal">4570</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_reversed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set the reversed flag for the motor</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -11713,7 +11721,9 @@ units : The units for the supplied velocity, the default is RPM
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4545</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4543</span>
+<span class="normal">4544</span>
+<span class="normal">4545</span>
 <span class="normal">4546</span>
 <span class="normal">4547</span>
 <span class="normal">4548</span>
@@ -11723,9 +11733,7 @@ units : The units for the supplied velocity, the default is RPM
 <span class="normal">4552</span>
 <span class="normal">4553</span>
 <span class="normal">4554</span>
-<span class="normal">4555</span>
-<span class="normal">4556</span>
-<span class="normal">4557</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
+<span class="normal">4555</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span><span class="n">VelocityPercentUnits</span><span class="o">=</span><span class="n">VelocityUnits</span><span class="o">.</span><span class="n">RPM</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Set default velocity for the motor</span>
 <span class="sd">    This will be the velocity used for subsequent calls to spin of a velocity is not provided</span>
 <span class="sd">    to that function.</span>
@@ -11788,7 +11796,9 @@ motor1.spin(FORWARD, 360.0, VelocityUnits.DPS)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4574</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4572</span>
+<span class="normal">4573</span>
+<span class="normal">4574</span>
 <span class="normal">4575</span>
 <span class="normal">4576</span>
 <span class="normal">4577</span>
@@ -11813,9 +11823,7 @@ motor1.spin(FORWARD, 360.0, VelocityUnits.DPS)
 <span class="normal">4596</span>
 <span class="normal">4597</span>
 <span class="normal">4598</span>
-<span class="normal">4599</span>
-<span class="normal">4600</span>
-<span class="normal">4601</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">4599</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Spin the motor using the provided arguments</span>
 
 <span class="sd">    The motor is assumed to have a maximum velocity of 100 rpm.</span>
@@ -11871,16 +11879,16 @@ motor1.spin(FORWARD, 360.0, VelocityUnits.DPS)
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4603</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4601</span>
+<span class="normal">4602</span>
+<span class="normal">4603</span>
 <span class="normal">4604</span>
 <span class="normal">4605</span>
 <span class="normal">4606</span>
 <span class="normal">4607</span>
 <span class="normal">4608</span>
 <span class="normal">4609</span>
-<span class="normal">4610</span>
-<span class="normal">4611</span>
-<span class="normal">4612</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">4610</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Stop the  motor, set to 0 velocity</span>
 
 <span class="sd">    #### Arguments:</span>
@@ -11925,7 +11933,9 @@ value = motor1.value()
 
             <details class="quote">
               <summary>Source code in <code>vex.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4523</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">4521</span>
+<span class="normal">4522</span>
+<span class="normal">4523</span>
 <span class="normal">4524</span>
 <span class="normal">4525</span>
 <span class="normal">4526</span>
@@ -11940,9 +11950,7 @@ value = motor1.value()
 <span class="normal">4535</span>
 <span class="normal">4536</span>
 <span class="normal">4537</span>
-<span class="normal">4538</span>
-<span class="normal">4539</span>
-<span class="normal">4540</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">4538</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;### Read the current raw motor controller pwm value.</span>
 
 <span class="sd">    This is the raw internal pwm value\\</span>
@@ -12008,5 +12016,6 @@ value = motor1.value()
                 }
             });
         </script>
+        <script>hljs.highlightAll();</script>
     </body>
 </html>
