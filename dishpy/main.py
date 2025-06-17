@@ -39,7 +39,7 @@ class Project:
 
     @staticmethod
     def scaffold(
-        path: Path | None = None, name: str | None = None, slot: int | None = None
+        path: Path | None = None, name: str | None = None, slot: int | None = None, template_path: Path | None = None
     ):
         if not path:
             path = Path.cwd()
@@ -63,7 +63,6 @@ class Project:
                 i.mkdir()
 
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        template_path = os.path.join(script_dir, "resources", "template.py")
         vex_path = os.path.join(script_dir, "resources", "vex.py")
 
         # Copy template to src/main.py
@@ -121,6 +120,7 @@ class Package(Project):
         name: str | None = None,
         slot: int | None = None,
         package_name: int | None = None,
+        template_path: Path | None = None,
     ):
         if not path:
             path = Path.cwd()
@@ -130,7 +130,7 @@ class Package(Project):
             slot = 1
         if not package_name:
             package_name = textcase.snake(name)
-        Project.scaffold(path, name, slot)
+        Project.scaffold(path, name, slot, template_path)
         with open(path / "dishpy.toml", "rb") as f:
             project_config = tomllib.load(f)
         project_config["package"] = {}
@@ -270,6 +270,7 @@ class Cli:
             "arguments": [
                 {"name": "--name", "required": True, "help": "Project name (required)"},
                 {"name": "--slot", "type": int, "help": "Project slot number"},
+                {"name": "--template", "default": "empty", "help": "Template name"},
                 {
                     "name": "--package",
                     "nargs": "?",
@@ -477,17 +478,27 @@ class Cli:
             self.console.print(f"❌ [red]Error: {e}[/red]")
 
     def create(self, args):
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        templates = list(Path(os.path.join(script_dir, "resources", "templates")).iterdir())
+        if any([str(i).endswith(args.template + '.py') for i in templates]):
+            template_path = [i for i in templates if str(i).endswith(args.template + '.py')][0]
+        else:
+            console.print(
+                f"[red]X {args.template} is not a valid template\n"
+                f"Available templates: {', '.join([str(i).split('/')[-1][:-3] for i in templates])}[/red]"
+            )
+            return
         path = Path() / args.name
         path.mkdir()
         if not args.package:
-            Project.scaffold(path, args.name, args.slot)
+            Project.scaffold(path, args.name, args.slot, template_path)
             console.print(
                 f"✨ [green]Created and initialized project in[/green] [bold cyan]{path}/[/bold cyan]"
             )
         else:
             pkg_name = args.package if isinstance(args.package, str) else args.name
             pkg_name = textcase.snake(pkg_name)
-            Package.scaffold(path, args.name, args.slot, pkg_name)
+            Package.scaffold(path, args.name, args.slot, pkg_name, template_path)
             package_path = path / "src" / pkg_name
             console.print(
                 f"✨ [green]Created and initialized project in [bold cyan]{path}/[/bold cyan]"
@@ -522,9 +533,8 @@ class Cli:
                 print("cache dir:", get_vexcom_cache_dir())
                 print("available templates")
                 script_dir = os.path.dirname(os.path.abspath(__file__))
-                templates_path = Path(os.path.join(script_dir, "resources", "templates"))
-                for i in templates_path.iterdir():
-                    print('*', str(i).split('/')[-1][:-3])
+                templates = list(Path(os.path.join(script_dir, "resources", "templates")).iterdir())
+                print([str(i).split('/')[-1][:-3] for i in templates])
             case "package":
                 match args.subcommand:
                     case "register":
