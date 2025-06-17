@@ -36,6 +36,7 @@ try:
     from http.server import HTTPServer, BaseHTTPRequestHandler
     import socketserver
     import urllib.parse
+
     WEB_AVAILABLE = True
 except ImportError:
     WEB_AVAILABLE = False
@@ -722,7 +723,7 @@ class Color:
             elif isinstance(arg, int):
                 self.value = arg & 0xFFFFFF
             elif isinstance(arg, str):
-                if arg.startswith('#'):
+                if arg.startswith("#"):
                     if len(arg) == 4:  # #RGB
                         r = int(arg[1], 16) * 17
                         g = int(arg[2], 16) * 17
@@ -738,7 +739,9 @@ class Color:
                 self.value = 0
         elif len(args) == 3:
             r, g, b = args
-            self.value = ((int(r) & 0xFF) << 16) | ((int(g) & 0xFF) << 8) | (int(b) & 0xFF)
+            self.value = (
+                ((int(r) & 0xFF) << 16) | ((int(g) & 0xFF) << 8) | (int(b) & 0xFF)
+            )
         else:
             self.value = 0
 
@@ -763,7 +766,9 @@ class Color:
             self.value = int(args[0]) & 0xFFFFFF
         elif len(args) == 3:
             r, g, b = args
-            self.value = ((int(r) & 0xFF) << 16) | ((int(g) & 0xFF) << 8) | (int(b) & 0xFF)
+            self.value = (
+                ((int(r) & 0xFF) << 16) | ((int(g) & 0xFF) << 8) | (int(b) & 0xFF)
+            )
         return self.value
 
     def hsv(self, hue: vexnumber, saturation: vexnumber, value: vexnumber):
@@ -782,6 +787,7 @@ class Color:
             c.hsv( 0, 1.0, 1.0)
         """
         import colorsys
+
         hue = hue % 360 / 360.0
         saturation = max(0, min(1, saturation))
         value = max(0, min(1, value))
@@ -804,7 +810,7 @@ class Color:
             # create a color that is red
             c.web('#F00')
         """
-        if value.startswith('#'):
+        if value.startswith("#"):
             if len(value) == 4:  # #RGB
                 r = int(value[1], 16) * 17
                 g = int(value[2], 16) * 17
@@ -897,39 +903,58 @@ class Brain:
             self._drawing_commands = []
             self._events = []
 
+            # Draw a 30px tall, full width, blue (#0499CC) rectangle at the top of the screen
+            self._drawing_commands.append(
+                {
+                    "type": "draw_rectangle",
+                    "x": 0,
+                    "y": 0,
+                    "width": 480,
+                    "height": 30,
+                    "fill_color": (4, 153, 204),
+                    "pen_color": (4, 153, 204),
+                    "pen_width": 0,
+                }
+            )
+
         def _ensure_initialized(self):
             """Initialize web server if not already done"""
             if WEB_AVAILABLE and not self._initialized:
                 self._start_web_server()
                 self._initialized = True
                 # Open browser to show the screen
-                webbrowser.open(f'http://localhost:{self._port}')
+                webbrowser.open(f"http://localhost:{self._port}")
 
         def _start_web_server(self):
             """Start the web server"""
             # Start HTTP server in a separate thread
-            self._server_thread = threading.Thread(target=self._run_http_server, daemon=True)
+            self._server_thread = threading.Thread(
+                target=self._run_http_server, daemon=True
+            )
             self._server_thread.start()
-            
+
             time.sleep(0.5)  # Give server time to start
 
         def _run_http_server(self):
             """Run the HTTP server"""
             try:
+
                 class VexHTTPRequestHandler(BaseHTTPRequestHandler):
                     def __init__(self, brain_lcd, *args, **kwargs):
                         self.brain_lcd = brain_lcd
                         super().__init__(*args, **kwargs)
-                    
+
                     def do_GET(self):
-                        if self.path == '/':
+                        if self.path == "/":
                             self.send_response(200)
-                            self.send_header('Content-type', 'text/html')
+                            self.send_header("Content-type", "text/html")
                             self.end_headers()
-                            self.wfile.write(self.brain_lcd._get_html_content().encode())
-                        elif self.path == '/commands':
+                            self.wfile.write(
+                                self.brain_lcd._get_html_content().encode()
+                            )
+                        elif self.path == "/commands":
                             self.send_response(200)
-                            self.send_header('Content-type', 'application/json')
+                            self.send_header("Content-type", "application/json")
                             self.end_headers()
                             commands = self.brain_lcd._drawing_commands[:]
                             self.brain_lcd._drawing_commands = []
@@ -937,10 +962,10 @@ class Brain:
                         else:
                             self.send_response(404)
                             self.end_headers()
-                    
+
                     def do_POST(self):
-                        if self.path == '/events':
-                            content_length = int(self.headers['Content-Length'])
+                        if self.path == "/events":
+                            content_length = int(self.headers["Content-Length"])
                             post_data = self.rfile.read(content_length)
                             event_data = json.loads(post_data.decode())
                             self.brain_lcd._handle_touch_event(event_data)
@@ -949,20 +974,25 @@ class Brain:
                         else:
                             self.send_response(404)
                             self.end_headers()
-                
+
                 def handler(*args, **kwargs):
                     return VexHTTPRequestHandler(self, *args, **kwargs)
-                
+
                 # Try to start server, if port is taken try another random port
                 max_attempts = 10
                 for attempt in range(max_attempts):
                     try:
                         with socketserver.TCPServer(("", self._port), handler) as httpd:
-                            print(f"HTTP server started on http://localhost:{self._port}")
+                            print(
+                                f"HTTP server started on http://localhost:{self._port}"
+                            )
                             httpd.serve_forever()
                             break
                     except OSError as e:
-                        if "Address already in use" in str(e) and attempt < max_attempts - 1:
+                        if (
+                            "Address already in use" in str(e)
+                            and attempt < max_attempts - 1
+                        ):
                             self._port = random.randint(8999, 9999)
                             print(f"Port {self._port} in use, trying port {self._port}")
                         else:
@@ -970,14 +1000,12 @@ class Brain:
             except Exception as e:
                 print(f"HTTP Server error: {e}")
 
-
-
         def _handle_touch_event(self, data):
             """Handle touch events from web client"""
-            self._last_touch_x = data['x']
-            self._last_touch_y = data['y']
-            
-            if data['event'] == 'mousedown':
+            self._last_touch_x = data["x"]
+            self._last_touch_y = data["y"]
+
+            if data["event"] == "mousedown":
                 self._is_pressing = True
                 for callback, args in self._pressed_callbacks:
                     try:
@@ -987,7 +1015,7 @@ class Brain:
                             callback()
                     except:
                         pass
-            elif data['event'] == 'mouseup':
+            elif data["event"] == "mouseup":
                 self._is_pressing = False
                 for callback, args in self._released_callbacks:
                     try:
@@ -1006,11 +1034,11 @@ class Brain:
     <title>VEX Brain Screen</title>
     <style>
         body {{ margin: 0; padding: 20px; background: #333; font-family: Arial, sans-serif; }}
-        #screen {{ 
-            width: {self.width}px; 
-            height: {self.height}px; 
-            background: black; 
-            border: 2px solid #666; 
+        #screen {{
+            width: {self.width}px;
+            height: {self.height}px;
+            background: black;
+            border: 2px solid #666;
             position: relative;
             margin: 0 auto;
         }}
@@ -1025,11 +1053,20 @@ class Brain:
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        
+
         // Clear screen to black initially
         ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, {self.width}, {self.height});
         
+        // Draw the blue header rectangle that always stays on top
+        function drawHeaderBar() {{
+            ctx.fillStyle = '#0499CC';
+            ctx.fillRect(0, 0, {self.width}, 30);
+        }}
+        
+        // Draw initial header
+        drawHeaderBar();
+
         // Handle touch events
         canvas.addEventListener('mousedown', (e) => {{
             const rect = canvas.getBoundingClientRect();
@@ -1037,14 +1074,14 @@ class Brain:
             const y = e.clientY - rect.top;
             sendEvent({{type: 'touch', event: 'mousedown', x: x, y: y}});
         }});
-        
+
         canvas.addEventListener('mouseup', (e) => {{
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             sendEvent({{type: 'touch', event: 'mouseup', x: x, y: y}});
         }});
-        
+
         function sendEvent(data) {{
             fetch('/events', {{
                 method: 'POST',
@@ -1052,16 +1089,20 @@ class Brain:
                 body: JSON.stringify(data)
             }});
         }}
-        
+
         // Poll for drawing commands
         setInterval(() => {{
             fetch('/commands')
                 .then(response => response.json())
                 .then(commands => {{
                     commands.forEach(cmd => executeDrawCommand(cmd));
+                    // Always redraw the header bar on top
+                    if (commands.length > 0) {{
+                        drawHeaderBar();
+                    }}
                 }});
         }}, 50); // Poll every 50ms
-        
+
         function executeDrawCommand(cmd) {{
             switch(cmd.type) {{
                 case 'clear_screen':
@@ -1111,8 +1152,6 @@ class Brain:
 </body>
 </html>'''
 
-
-
         def _queue_command(self, command):
             """Queue a drawing command to be sent to the web client"""
             self._drawing_commands.append(command)
@@ -1126,7 +1165,7 @@ class Brain:
             elif isinstance(color, int):
                 value = color
             elif isinstance(color, str):
-                if color.startswith('#'):
+                if color.startswith("#"):
                     if len(color) == 4:  # #RGB
                         r = int(color[1], 16) * 17
                         g = int(color[2], 16) * 17
@@ -1199,12 +1238,19 @@ class Brain:
             """
             # Map font types to sizes
             font_sizes = {
-                'MONO12': 12, 'MONO15': 15, 'MONO20': 20,
-                'MONO30': 30, 'MONO40': 40, 'MONO60': 60,
-                'PROP20': 20, 'PROP30': 30, 'PROP40': 40, 'PROP60': 60
+                "MONO12": 12,
+                "MONO15": 15,
+                "MONO20": 20,
+                "MONO30": 30,
+                "MONO40": 40,
+                "MONO60": 60,
+                "PROP20": 20,
+                "PROP30": 30,
+                "PROP40": 40,
+                "PROP60": 60,
             }
 
-            if hasattr(fontname, 'name'):
+            if hasattr(fontname, "name"):
                 size = font_sizes.get(fontname.name, 20)
             else:
                 size = 20
@@ -1291,10 +1337,7 @@ class Brain:
             self._ensure_initialized()
             if WEB_AVAILABLE:
                 clear_color = self._convert_color(color)
-                self._queue_command({
-                    'type': 'clear_screen',
-                    'color': clear_color
-                })
+                self._queue_command({"type": "clear_screen", "color": clear_color})
 
         # deprecated
         def clear_line(self, number=None, color=Color.BLACK):
@@ -1324,16 +1367,18 @@ class Brain:
                 row = number if number is not None else self._row
                 clear_color = self._convert_color(color)
                 y_pos = (row - 1) * self._font_size
-                self._queue_command({
-                    'type': 'draw_rectangle',
-                    'x': 0,
-                    'y': y_pos,
-                    'width': self.width,
-                    'height': self._font_size,
-                    'fill_color': clear_color,
-                    'pen_color': clear_color,
-                    'pen_width': 0
-                })
+                self._queue_command(
+                    {
+                        "type": "draw_rectangle",
+                        "x": 0,
+                        "y": y_pos,
+                        "width": self.width,
+                        "height": self._font_size,
+                        "fill_color": clear_color,
+                        "pen_color": clear_color,
+                        "pen_width": 0,
+                    }
+                )
 
         # deprecated
         def new_line(self):
@@ -1369,12 +1414,14 @@ class Brain:
             if WEB_AVAILABLE:
                 pixel_x = int(x + self._originx)
                 pixel_y = int(y + self._originy)
-                self._queue_command({
-                    'type': 'draw_pixel',
-                    'x': pixel_x,
-                    'y': pixel_y,
-                    'color': self._pen_color
-                })
+                self._queue_command(
+                    {
+                        "type": "draw_pixel",
+                        "x": pixel_x,
+                        "y": pixel_y,
+                        "color": self._pen_color,
+                    }
+                )
 
         def draw_line(self, x1: vexnumber, y1: vexnumber, x2: vexnumber, y2: vexnumber):
             """### Draw a line on the screen using the current pen color.
@@ -1395,15 +1442,17 @@ class Brain:
             """
             self._ensure_initialized()
             if WEB_AVAILABLE:
-                self._queue_command({
-                    'type': 'draw_line',
-                    'x1': int(x1 + self._originx),
-                    'y1': int(y1 + self._originy),
-                    'x2': int(x2 + self._originx),
-                    'y2': int(y2 + self._originy),
-                    'color': self._pen_color,
-                    'width': self._pen_width
-                })
+                self._queue_command(
+                    {
+                        "type": "draw_line",
+                        "x1": int(x1 + self._originx),
+                        "y1": int(y1 + self._originy),
+                        "x2": int(x2 + self._originx),
+                        "y2": int(y2 + self._originy),
+                        "color": self._pen_color,
+                        "width": self._pen_width,
+                    }
+                )
 
         def draw_rectangle(
             self,
@@ -1437,17 +1486,23 @@ class Brain:
             """
             self._ensure_initialized()
             if WEB_AVAILABLE:
-                fill_color = self._convert_color(color) if color is not None else self._fill_color
-                self._queue_command({
-                    'type': 'draw_rectangle',
-                    'x': int(x + self._originx),
-                    'y': int(y + self._originy),
-                    'width': int(width),
-                    'height': int(height),
-                    'fill_color': fill_color,
-                    'pen_color': self._pen_color,
-                    'pen_width': self._pen_width
-                })
+                fill_color = (
+                    self._convert_color(color)
+                    if color is not None
+                    else self._fill_color
+                )
+                self._queue_command(
+                    {
+                        "type": "draw_rectangle",
+                        "x": int(x + self._originx),
+                        "y": int(y + self._originy),
+                        "width": int(width),
+                        "height": int(height),
+                        "fill_color": fill_color,
+                        "pen_color": self._pen_color,
+                        "pen_width": self._pen_width,
+                    }
+                )
 
         def draw_circle(
             self, x: vexnumber, y: vexnumber, radius: vexnumber, color: Any = None
@@ -1475,16 +1530,22 @@ class Brain:
             """
             self._ensure_initialized()
             if WEB_AVAILABLE:
-                fill_color = self._convert_color(color) if color is not None else self._fill_color
-                self._queue_command({
-                    'type': 'draw_circle',
-                    'x': int(x + self._originx),
-                    'y': int(y + self._originy),
-                    'radius': int(radius),
-                    'fill_color': fill_color,
-                    'pen_color': self._pen_color,
-                    'pen_width': self._pen_width
-                })
+                fill_color = (
+                    self._convert_color(color)
+                    if color is not None
+                    else self._fill_color
+                )
+                self._queue_command(
+                    {
+                        "type": "draw_circle",
+                        "x": int(x + self._originx),
+                        "y": int(y + self._originy),
+                        "radius": int(radius),
+                        "fill_color": fill_color,
+                        "pen_color": self._pen_color,
+                        "pen_width": self._pen_width,
+                    }
+                )
 
         def get_string_width(self, *args):
             """### get width of a string
@@ -1495,7 +1556,7 @@ class Brain:
             #### Returns:
                 width of string as integer.
             """
-            text = ' '.join(str(arg) for arg in args)
+            text = " ".join(str(arg) for arg in args)
             # Approximate width based on font size
             return len(text) * (self._font_size * 0.6)
 
@@ -1533,21 +1594,23 @@ class Brain:
             """
             self._ensure_initialized()
             if WEB_AVAILABLE:
-                sep = kwargs.get('sep', ' ')
+                sep = kwargs.get("sep", " ")
                 text = sep.join(str(arg) for arg in args)
 
                 # Calculate position based on cursor
                 x = (self._col - 1) * 10 + self._originx
                 y = (self._row - 1) * self._font_size + self._originy
 
-                self._queue_command({
-                    'type': 'draw_text',
-                    'text': text,
-                    'x': x,
-                    'y': y,
-                    'color': self._pen_color,
-                    'font_size': self._font_size
-                })
+                self._queue_command(
+                    {
+                        "type": "draw_text",
+                        "text": text,
+                        "x": x,
+                        "y": y,
+                        "color": self._pen_color,
+                        "font_size": self._font_size,
+                    }
+                )
 
                 # Update cursor position
                 self._col += len(text)
@@ -1580,19 +1643,21 @@ class Brain:
             """
             self._ensure_initialized()
             if WEB_AVAILABLE:
-                x = kwargs.get('x', 0)
-                y = kwargs.get('y', 0)
-                sep = kwargs.get('sep', ' ')
+                x = kwargs.get("x", 0)
+                y = kwargs.get("y", 0)
+                sep = kwargs.get("sep", " ")
 
                 text = sep.join(str(arg) for arg in args)
-                self._queue_command({
-                    'type': 'draw_text',
-                    'text': text,
-                    'x': int(x + self._originx),
-                    'y': int(y + self._originy),
-                    'color': self._pen_color,
-                    'font_size': self._font_size
-                })
+                self._queue_command(
+                    {
+                        "type": "draw_text",
+                        "text": text,
+                        "x": int(x + self._originx),
+                        "y": int(y + self._originy),
+                        "color": self._pen_color,
+                        "font_size": self._font_size,
+                    }
+                )
 
         def pressed(self, callback: Callable[..., None], arg: tuple = ()):
             """### Register a function to be called when the screen is pressed
@@ -1695,12 +1760,14 @@ class Brain:
             """
             self._ensure_initialized()
             if WEB_AVAILABLE:
-                self._queue_command({
-                    'type': 'draw_image',
-                    'filename': filename,
-                    'x': int(x + self._originx),
-                    'y': int(y + self._originy)
-                })
+                self._queue_command(
+                    {
+                        "type": "draw_image",
+                        "filename": filename,
+                        "x": int(x + self._originx),
+                        "y": int(y + self._originy),
+                    }
+                )
                 return True
             return False
 
@@ -1742,13 +1809,15 @@ class Brain:
             """
             self._ensure_initialized()
             if WEB_AVAILABLE:
-                self._queue_command({
-                    'type': 'set_clip',
-                    'x': int(x + self._originx),
-                    'y': int(y + self._originy),
-                    'width': int(width),
-                    'height': int(height)
-                })
+                self._queue_command(
+                    {
+                        "type": "set_clip",
+                        "x": int(x + self._originx),
+                        "y": int(y + self._originy),
+                        "width": int(width),
+                        "height": int(height),
+                    }
+                )
 
     class Battery:
         """### Battery class - access the brain battery
