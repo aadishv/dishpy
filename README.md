@@ -6,17 +6,13 @@ A Python development tool for VEX Competition robotics that combines multi-file 
 
 ## Roadmap
 
-**Small things**
-
- - [ ] --noupdate flag for mu
-
 **Feature parity w/ VEX VSC extension**
 
  - [x] Bindings to vexcom
  - [x] Project initialization CLI
  - [x] Better documentation for using vexcom's common functions
  - [ ] VEXcom wrappers for ease-of-use
- - [ ] templates
+ - [x] templates
 
 **Core premise**
 
