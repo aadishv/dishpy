@@ -12,3 +12,4 @@ wheels/
 *testing*
 **/vex/__init__.py
 docs/site
+.DS_Store

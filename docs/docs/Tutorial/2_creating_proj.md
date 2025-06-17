@@ -16,6 +16,32 @@ You can also specify which slot on the V5 brain your program should use (default
 uvx dishpy create --name "my-robot" --slot 2
 ```
 
+### Using a Template
+
+DishPy supports project templates to help you get started with different robot configurations or code patterns. Use the `--template` option to select a template when creating your project:
+
+```bash
+uvx dishpy create --name "my-robot" --template TEMPLATE_NAME
+```
+
+Available templates:
+- right_arcade_control
+- clawbot_controller_tank
+- clawbot
+- empty
+- limit_bumper_sensing
+- drive_to_location_gps
+- using_threads
+- competition_template
+- split_arcade_control
+- drivetrain_sensing
+
+For example, to start a project with the `clawbot` template:
+
+```bash
+uvx dishpy create --name "my-robot" --template clawbot
+```
+
 ## Project Structure
 
 After running the create command, DishPy will generate a project directory with the following structure:
