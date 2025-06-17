@@ -23,16 +23,22 @@
 import time
 import sys
 import queue
+import threading
+import webbrowser
+import json
+import random
 from typing import Union
 from typing import Any
 from typing import Callable
 from typing import List
 
 try:
-    import pygame
-    PYGAME_AVAILABLE = True
+    from http.server import HTTPServer, BaseHTTPRequestHandler
+    import socketserver
+    import urllib.parse
+    WEB_AVAILABLE = True
 except ImportError:
-    PYGAME_AVAILABLE = False
+    WEB_AVAILABLE = False
 
 # ----------------------------------------------------------
 # V5 brain port definition
@@ -884,137 +890,232 @@ class Brain:
             self._command_queue = queue.Queue()
             self._initialized = False
 
-            # Pygame initialization (lazy)
-            self.screen = None
-            self.clock = None
-            self.font = None
+            # Web server initialization
+            self._server = None
+            self._server_thread = None
+            self._port = random.randint(8999, 9999)
+            self._drawing_commands = []
+            self._events = []
 
         def _ensure_initialized(self):
-            """Initialize pygame if not already done (must be called from main thread)"""
-            if PYGAME_AVAILABLE and not self._initialized:
-                if not pygame.get_init():
-                    pygame.init()
-                self.screen = pygame.display.set_mode((self.width, self.height))
-                pygame.display.set_caption("VEX Brain Screen")
-                self.clock = pygame.time.Clock()
-                self.font = pygame.font.Font(None, self._font_size)
+            """Initialize web server if not already done"""
+            if WEB_AVAILABLE and not self._initialized:
+                self._start_web_server()
                 self._initialized = True
-                self._process_events()
+                # Open browser to show the screen
+                webbrowser.open(f'http://localhost:{self._port}')
 
-        def _process_events(self):
-            """Process pygame events and drawing commands"""
-            if not self._initialized:
-                return
+        def _start_web_server(self):
+            """Start the web server"""
+            # Start HTTP server in a separate thread
+            self._server_thread = threading.Thread(target=self._run_http_server, daemon=True)
+            self._server_thread.start()
+            
+            time.sleep(0.5)  # Give server time to start
 
-            # Handle pygame events
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    self._initialized = False
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    self._last_touch_x, self._last_touch_y = event.pos
-                    self._is_pressing = True
-                    for callback, args in self._pressed_callbacks:
-                        try:
-                            if args:
-                                callback(*args)
-                            else:
-                                callback()
-                        except:
-                            pass
-                elif event.type == pygame.MOUSEBUTTONUP:
-                    self._last_touch_x, self._last_touch_y = event.pos
-                    self._is_pressing = False
-                    for callback, args in self._released_callbacks:
-                        try:
-                            if args:
-                                callback(*args)
-                            else:
-                                callback()
-                        except:
-                            pass
+        def _run_http_server(self):
+            """Run the HTTP server"""
+            try:
+                class VexHTTPRequestHandler(BaseHTTPRequestHandler):
+                    def __init__(self, brain_lcd, *args, **kwargs):
+                        self.brain_lcd = brain_lcd
+                        super().__init__(*args, **kwargs)
+                    
+                    def do_GET(self):
+                        if self.path == '/':
+                            self.send_response(200)
+                            self.send_header('Content-type', 'text/html')
+                            self.end_headers()
+                            self.wfile.write(self.brain_lcd._get_html_content().encode())
+                        elif self.path == '/commands':
+                            self.send_response(200)
+                            self.send_header('Content-type', 'application/json')
+                            self.end_headers()
+                            commands = self.brain_lcd._drawing_commands[:]
+                            self.brain_lcd._drawing_commands = []
+                            self.wfile.write(json.dumps(commands).encode())
+                        else:
+                            self.send_response(404)
+                            self.end_headers()
+                    
+                    def do_POST(self):
+                        if self.path == '/events':
+                            content_length = int(self.headers['Content-Length'])
+                            post_data = self.rfile.read(content_length)
+                            event_data = json.loads(post_data.decode())
+                            self.brain_lcd._handle_touch_event(event_data)
+                            self.send_response(200)
+                            self.end_headers()
+                        else:
+                            self.send_response(404)
+                            self.end_headers()
+                
+                def handler(*args, **kwargs):
+                    return VexHTTPRequestHandler(self, *args, **kwargs)
+                
+                # Try to start server, if port is taken try another random port
+                max_attempts = 10
+                for attempt in range(max_attempts):
+                    try:
+                        with socketserver.TCPServer(("", self._port), handler) as httpd:
+                            print(f"HTTP server started on http://localhost:{self._port}")
+                            httpd.serve_forever()
+                            break
+                    except OSError as e:
+                        if "Address already in use" in str(e) and attempt < max_attempts - 1:
+                            self._port = random.randint(8999, 9999)
+                            print(f"Port {self._port} in use, trying port {self._port}")
+                        else:
+                            raise e
+            except Exception as e:
+                print(f"HTTP Server error: {e}")
 
-            # Process drawing commands from queue
-            while not self._command_queue.empty():
-                try:
-                    command = self._command_queue.get_nowait()
-                    self._execute_command(command)
-                except queue.Empty:
-                    break
 
-        def _execute_command(self, command):
-            """Execute a drawing command"""
-            if not self._initialized or not self.screen:
-                return
 
-            cmd_type = command.get('type')
+        def _handle_touch_event(self, data):
+            """Handle touch events from web client"""
+            self._last_touch_x = data['x']
+            self._last_touch_y = data['y']
+            
+            if data['event'] == 'mousedown':
+                self._is_pressing = True
+                for callback, args in self._pressed_callbacks:
+                    try:
+                        if args:
+                            callback(*args)
+                        else:
+                            callback()
+                    except:
+                        pass
+            elif data['event'] == 'mouseup':
+                self._is_pressing = False
+                for callback, args in self._released_callbacks:
+                    try:
+                        if args:
+                            callback(*args)
+                        else:
+                            callback()
+                    except:
+                        pass
 
-            if cmd_type == 'clear_screen':
-                color = command.get('color', (0, 0, 0))
-                self.screen.fill(color)
-            elif cmd_type == 'draw_pixel':
-                x, y = command.get('pos')
-                color = command.get('color')
-                if 0 <= x < self.width and 0 <= y < self.height:
-                    self.screen.set_at((x, y), color)
-            elif cmd_type == 'draw_line':
-                start_pos = command.get('start_pos')
-                end_pos = command.get('end_pos')
-                color = command.get('color')
-                width = command.get('width', 1)
-                pygame.draw.line(self.screen, color, start_pos, end_pos, width)
-            elif cmd_type == 'draw_rectangle':
-                rect = command.get('rect')
-                fill_color = command.get('fill_color')
-                pen_color = command.get('pen_color')
-                pen_width = command.get('pen_width', 0)
-                pygame.draw.rect(self.screen, fill_color, rect)
-                if pen_width > 0:
-                    pygame.draw.rect(self.screen, pen_color, rect, pen_width)
-            elif cmd_type == 'draw_circle':
-                center = command.get('center')
-                radius = command.get('radius')
-                fill_color = command.get('fill_color')
-                pen_color = command.get('pen_color')
-                pen_width = command.get('pen_width', 0)
-                pygame.draw.circle(self.screen, fill_color, center, radius)
-                if pen_width > 0:
-                    pygame.draw.circle(self.screen, pen_color, center, radius, pen_width)
-            elif cmd_type == 'draw_text':
-                text = command.get('text')
-                pos = command.get('pos')
-                color = command.get('color')
-                font = command.get('font', self.font)
-                if font:
-                    text_surface = font.render(text, True, color)
-                    self.screen.blit(text_surface, pos)
-            elif cmd_type == 'clear_row':
-                row = command.get('row')
-                color = command.get('color')
-                row_height = command.get('row_height')
-                y_pos = (row - 1) * row_height
-                rect = pygame.Rect(0, y_pos, self.width, row_height)
-                pygame.draw.rect(self.screen, color, rect)
-            elif cmd_type == 'draw_image':
-                filename = command.get('filename')
-                pos = command.get('pos')
-                try:
-                    image = pygame.image.load(filename)
-                    self.screen.blit(image, pos)
-                except:
-                    pass
-            elif cmd_type == 'set_clip':
-                rect = command.get('rect')
-                self.screen.set_clip(rect)
+        def _get_html_content(self):
+            """Get the HTML content for the brain screen"""
+            return f'''<!DOCTYPE html>
+<html>
+<head>
+    <title>VEX Brain Screen</title>
+    <style>
+        body {{ margin: 0; padding: 20px; background: #333; font-family: Arial, sans-serif; }}
+        #screen {{ 
+            width: {self.width}px; 
+            height: {self.height}px; 
+            background: black; 
+            border: 2px solid #666; 
+            position: relative;
+            margin: 0 auto;
+        }}
+        canvas {{ display: block; }}
+    </style>
+</head>
+<body>
+    <h1 style="color: white; text-align: center;">VEX Brain Screen</h1>
+    <div id="screen">
+        <canvas id="canvas" width="{self.width}" height="{self.height}"></canvas>
+    </div>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Clear screen to black initially
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, {self.width}, {self.height});
+        
+        // Handle touch events
+        canvas.addEventListener('mousedown', (e) => {{
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            sendEvent({{type: 'touch', event: 'mousedown', x: x, y: y}});
+        }});
+        
+        canvas.addEventListener('mouseup', (e) => {{
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            sendEvent({{type: 'touch', event: 'mouseup', x: x, y: y}});
+        }});
+        
+        function sendEvent(data) {{
+            fetch('/events', {{
+                method: 'POST',
+                headers: {{'Content-Type': 'application/json'}},
+                body: JSON.stringify(data)
+            }});
+        }}
+        
+        // Poll for drawing commands
+        setInterval(() => {{
+            fetch('/commands')
+                .then(response => response.json())
+                .then(commands => {{
+                    commands.forEach(cmd => executeDrawCommand(cmd));
+                }});
+        }}, 50); // Poll every 50ms
+        
+        function executeDrawCommand(cmd) {{
+            switch(cmd.type) {{
+                case 'clear_screen':
+                    ctx.fillStyle = `rgb(${{cmd.color[0]}}, ${{cmd.color[1]}}, ${{cmd.color[2]}})`;
+                    ctx.fillRect(0, 0, {self.width}, {self.height});
+                    break;
+                case 'draw_pixel':
+                    ctx.fillStyle = `rgb(${{cmd.color[0]}}, ${{cmd.color[1]}}, ${{cmd.color[2]}})`;
+                    ctx.fillRect(cmd.x, cmd.y, 1, 1);
+                    break;
+                case 'draw_line':
+                    ctx.strokeStyle = `rgb(${{cmd.color[0]}}, ${{cmd.color[1]}}, ${{cmd.color[2]}})`;
+                    ctx.lineWidth = cmd.width;
+                    ctx.beginPath();
+                    ctx.moveTo(cmd.x1, cmd.y1);
+                    ctx.lineTo(cmd.x2, cmd.y2);
+                    ctx.stroke();
+                    break;
+                case 'draw_rectangle':
+                    ctx.fillStyle = `rgb(${{cmd.fill_color[0]}}, ${{cmd.fill_color[1]}}, ${{cmd.fill_color[2]}})`;
+                    ctx.fillRect(cmd.x, cmd.y, cmd.width, cmd.height);
+                    if (cmd.pen_width > 0) {{
+                        ctx.strokeStyle = `rgb(${{cmd.pen_color[0]}}, ${{cmd.pen_color[1]}}, ${{cmd.pen_color[2]}})`;
+                        ctx.lineWidth = cmd.pen_width;
+                        ctx.strokeRect(cmd.x, cmd.y, cmd.width, cmd.height);
+                    }}
+                    break;
+                case 'draw_circle':
+                    ctx.fillStyle = `rgb(${{cmd.fill_color[0]}}, ${{cmd.fill_color[1]}}, ${{cmd.fill_color[2]}})`;
+                    ctx.beginPath();
+                    ctx.arc(cmd.x, cmd.y, cmd.radius, 0, 2 * Math.PI);
+                    ctx.fill();
+                    if (cmd.pen_width > 0) {{
+                        ctx.strokeStyle = `rgb(${{cmd.pen_color[0]}}, ${{cmd.pen_color[1]}}, ${{cmd.pen_color[2]}})`;
+                        ctx.lineWidth = cmd.pen_width;
+                        ctx.stroke();
+                    }}
+                    break;
+                case 'draw_text':
+                    ctx.fillStyle = `rgb(${{cmd.color[0]}}, ${{cmd.color[1]}}, ${{cmd.color[2]}})`;
+                    ctx.font = `${{cmd.font_size}}px monospace`;
+                    ctx.fillText(cmd.text, cmd.x, cmd.y + cmd.font_size);
+                    break;
+            }}
+        }}
+    </script>
+</body>
+</html>'''
+
+
 
         def _queue_command(self, command):
-            """Queue a drawing command for execution"""
-            self._command_queue.put(command)
-            # Immediately process if we can (on main thread)
-            try:
-                self._process_events()
-            except:
-                pass  # Not on main thread, will be processed later
+            """Queue a drawing command to be sent to the web client"""
+            self._drawing_commands.append(command)
 
         def _convert_color(self, color):
             """Convert various color formats to RGB tuple"""
@@ -1098,19 +1199,17 @@ class Brain:
             """
             # Map font types to sizes
             font_sizes = {
-                'MONO12': 12, 'MONO15': 15, 'MONO20': 20, 
+                'MONO12': 12, 'MONO15': 15, 'MONO20': 20,
                 'MONO30': 30, 'MONO40': 40, 'MONO60': 60,
                 'PROP20': 20, 'PROP30': 30, 'PROP40': 40, 'PROP60': 60
             }
-            
+
             if hasattr(fontname, 'name'):
                 size = font_sizes.get(fontname.name, 20)
             else:
                 size = 20
-                
+
             self._font_size = size
-            if PYGAME_AVAILABLE and self._initialized:
-                self.font = pygame.font.Font(None, size)
 
         def set_pen_width(self, width: vexnumber):
             """### Set the pen width used for drawing lines, rectangles and circles
@@ -1190,14 +1289,12 @@ class Brain:
                 brain.screen.clear_screen(Color.BLUE)
             """
             self._ensure_initialized()
-            if PYGAME_AVAILABLE:
+            if WEB_AVAILABLE:
                 clear_color = self._convert_color(color)
                 self._queue_command({
                     'type': 'clear_screen',
                     'color': clear_color
                 })
-                if self._initialized:
-                    pygame.display.flip()
 
         # deprecated
         def clear_line(self, number=None, color=Color.BLACK):
@@ -1223,17 +1320,20 @@ class Brain:
                 brain.screen.clear_row(2, Color.RED)
             """
             self._ensure_initialized()
-            if PYGAME_AVAILABLE:
+            if WEB_AVAILABLE:
                 row = number if number is not None else self._row
                 clear_color = self._convert_color(color)
+                y_pos = (row - 1) * self._font_size
                 self._queue_command({
-                    'type': 'clear_row',
-                    'row': row,
-                    'color': clear_color,
-                    'row_height': self._font_size
+                    'type': 'draw_rectangle',
+                    'x': 0,
+                    'y': y_pos,
+                    'width': self.width,
+                    'height': self._font_size,
+                    'fill_color': clear_color,
+                    'pen_color': clear_color,
+                    'pen_width': 0
                 })
-                if self._initialized:
-                    pygame.display.flip()
 
         # deprecated
         def new_line(self):
@@ -1266,16 +1366,15 @@ class Brain:
                 brain.screen.draw_pixel(10, 10)
             """
             self._ensure_initialized()
-            if PYGAME_AVAILABLE:
+            if WEB_AVAILABLE:
                 pixel_x = int(x + self._originx)
                 pixel_y = int(y + self._originy)
                 self._queue_command({
                     'type': 'draw_pixel',
-                    'pos': (pixel_x, pixel_y),
+                    'x': pixel_x,
+                    'y': pixel_y,
                     'color': self._pen_color
                 })
-                if self._initialized:
-                    pygame.display.flip()
 
         def draw_line(self, x1: vexnumber, y1: vexnumber, x2: vexnumber, y2: vexnumber):
             """### Draw a line on the screen using the current pen color.
@@ -1295,18 +1394,16 @@ class Brain:
                 brain.screen.draw_line(10, 10, 20, 20)
             """
             self._ensure_initialized()
-            if PYGAME_AVAILABLE:
-                start_pos = (int(x1 + self._originx), int(y1 + self._originy))
-                end_pos = (int(x2 + self._originx), int(y2 + self._originy))
+            if WEB_AVAILABLE:
                 self._queue_command({
                     'type': 'draw_line',
-                    'start_pos': start_pos,
-                    'end_pos': end_pos,
+                    'x1': int(x1 + self._originx),
+                    'y1': int(y1 + self._originy),
+                    'x2': int(x2 + self._originx),
+                    'y2': int(y2 + self._originy),
                     'color': self._pen_color,
                     'width': self._pen_width
                 })
-                if self._initialized:
-                    pygame.display.flip()
 
         def draw_rectangle(
             self,
@@ -1339,24 +1436,18 @@ class Brain:
                 brain.screen.draw_rectangle(50, 50, 20, 20, Color.RED)
             """
             self._ensure_initialized()
-            if PYGAME_AVAILABLE:
-                rect = pygame.Rect(
-                    int(x + self._originx), 
-                    int(y + self._originy), 
-                    int(width), 
-                    int(height)
-                )
-                
+            if WEB_AVAILABLE:
                 fill_color = self._convert_color(color) if color is not None else self._fill_color
                 self._queue_command({
                     'type': 'draw_rectangle',
-                    'rect': rect,
+                    'x': int(x + self._originx),
+                    'y': int(y + self._originy),
+                    'width': int(width),
+                    'height': int(height),
                     'fill_color': fill_color,
                     'pen_color': self._pen_color,
                     'pen_width': self._pen_width
                 })
-                if self._initialized:
-                    pygame.display.flip()
 
         def draw_circle(
             self, x: vexnumber, y: vexnumber, radius: vexnumber, color: Any = None
@@ -1383,19 +1474,17 @@ class Brain:
                 brain.screen.draw_circle(100, 50, 10, Color.RED)
             """
             self._ensure_initialized()
-            if PYGAME_AVAILABLE:
-                center = (int(x + self._originx), int(y + self._originy))
+            if WEB_AVAILABLE:
                 fill_color = self._convert_color(color) if color is not None else self._fill_color
                 self._queue_command({
                     'type': 'draw_circle',
-                    'center': center,
+                    'x': int(x + self._originx),
+                    'y': int(y + self._originy),
                     'radius': int(radius),
                     'fill_color': fill_color,
                     'pen_color': self._pen_color,
                     'pen_width': self._pen_width
                 })
-                if self._initialized:
-                    pygame.display.flip()
 
         def get_string_width(self, *args):
             """### get width of a string
@@ -1406,12 +1495,9 @@ class Brain:
             #### Returns:
                 width of string as integer.
             """
-            self._ensure_initialized()
-            if PYGAME_AVAILABLE and self._initialized and self.font:
-                text = ' '.join(str(arg) for arg in args)
-                text_surface = self.font.render(text, True, (255, 255, 255))
-                return text_surface.get_width()
-            return len(' '.join(str(arg) for arg in args)) * 8
+            text = ' '.join(str(arg) for arg in args)
+            # Approximate width based on font size
+            return len(text) * (self._font_size * 0.6)
 
         def get_string_height(self, *args):
             """### get height of a string
@@ -1422,9 +1508,6 @@ class Brain:
             #### Returns:
                 height of string as integer.
             """
-            self._ensure_initialized()
-            if PYGAME_AVAILABLE and self._initialized and self.font:
-                return self.font.get_height()
             return self._font_size
 
         def print(self, *args, **kwargs):
@@ -1449,26 +1532,25 @@ class Brain:
                 brain.screen.print("motor  1 : % 7.2f" %(motor1.velocity()))
             """
             self._ensure_initialized()
-            if PYGAME_AVAILABLE:
+            if WEB_AVAILABLE:
                 sep = kwargs.get('sep', ' ')
                 text = sep.join(str(arg) for arg in args)
-                
+
                 # Calculate position based on cursor
                 x = (self._col - 1) * 10 + self._originx
                 y = (self._row - 1) * self._font_size + self._originy
-                
+
                 self._queue_command({
                     'type': 'draw_text',
                     'text': text,
-                    'pos': (x, y),
+                    'x': x,
+                    'y': y,
                     'color': self._pen_color,
-                    'font': self.font
+                    'font_size': self._font_size
                 })
-                
+
                 # Update cursor position
                 self._col += len(text)
-                if self._initialized:
-                    pygame.display.flip()
 
         def print_at(self, *args, **kwargs):
             """### print text on the screen at x and coordinates.
@@ -1497,21 +1579,20 @@ class Brain:
                 brain.screen.print_at("motor  1 : % 7.2f" %(motor1.velocity()), x=100, y=40)
             """
             self._ensure_initialized()
-            if PYGAME_AVAILABLE:
+            if WEB_AVAILABLE:
                 x = kwargs.get('x', 0)
                 y = kwargs.get('y', 0)
                 sep = kwargs.get('sep', ' ')
-                
+
                 text = sep.join(str(arg) for arg in args)
                 self._queue_command({
                     'type': 'draw_text',
                     'text': text,
-                    'pos': (int(x + self._originx), int(y + self._originy)),
+                    'x': int(x + self._originx),
+                    'y': int(y + self._originy),
                     'color': self._pen_color,
-                    'font': self.font
+                    'font_size': self._font_size
                 })
-                if self._initialized:
-                    pygame.display.flip()
 
         def pressed(self, callback: Callable[..., None], arg: tuple = ()):
             """### Register a function to be called when the screen is pressed
@@ -1613,15 +1694,14 @@ class Brain:
                 brain.screen.draw_image_from_file('vex.bmp', 0, 0)
             """
             self._ensure_initialized()
-            if PYGAME_AVAILABLE:
+            if WEB_AVAILABLE:
                 self._queue_command({
                     'type': 'draw_image',
                     'filename': filename,
-                    'pos': (int(x + self._originx), int(y + self._originy))
+                    'x': int(x + self._originx),
+                    'y': int(y + self._originy)
                 })
-                if self._initialized:
-                    pygame.display.flip()
-                    return True
+                return True
             return False
 
         def render(self):
@@ -1638,9 +1718,7 @@ class Brain:
 
             #### Examples:
             """
-            self._ensure_initialized()
-            if PYGAME_AVAILABLE and self._initialized:
-                pygame.display.flip()
+            # No need to explicitly render with web canvas
             return True
 
         def set_clip_region(
@@ -1663,16 +1741,13 @@ class Brain:
             #### Examples:
             """
             self._ensure_initialized()
-            if PYGAME_AVAILABLE:
-                clip_rect = pygame.Rect(
-                    int(x + self._originx), 
-                    int(y + self._originy), 
-                    int(width), 
-                    int(height)
-                )
+            if WEB_AVAILABLE:
                 self._queue_command({
                     'type': 'set_clip',
-                    'rect': clip_rect
+                    'x': int(x + self._originx),
+                    'y': int(y + self._originy),
+                    'width': int(width),
+                    'height': int(height)
                 })
 
     class Battery:
