@@ -1,5 +1,7 @@
 # DishPy
 
+**[GitHub](https://github.com/aadishv/dishpy) ・ [Docs](https://aadishv.github.io/dishpy) ・ [PyPI](https://pypi.org/project/dishpy/)**
+
 A Python development tool for VEX Competition robotics that combines multi-file Python projects into single scripts and uploads them to VEX V5 brains.
 
 **Looking for tutorials? See [here](https://aadishv.github.io/dishpy/Tutorial/1_installation/)**
