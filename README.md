@@ -1,6 +1,6 @@
-![DishPy logo](https://raw.githubusercontent.com/aadishv/dishpy/refs/heads/main/logo-new.png)
-
 # DishPy
+
+![DishPy logo](https://raw.githubusercontent.com/aadishv/dishpy/refs/heads/main/logo.png)
 
 **[GitHub](https://github.com/aadishv/dishpy) ・ [Docs](https://aadishv.github.io/dishpy) ・ [PyPI](https://pypi.org/project/dishpy/)**
 
