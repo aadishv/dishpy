@@ -249,7 +249,7 @@
 <li>[x] Bindings to vexcom</li>
 <li>[x] Project initialization CLI</li>
 <li>[x] Better documentation for using vexcom's common functions</li>
-<li>[ ] VEXcom wrappers for ease-of-use</li>
+<li>[x] VEXcom wrappers for ease-of-use</li>
 <li>[x] templates</li>
 </ul>
 <p><strong>Core premise</strong></p>
@@ -262,6 +262,7 @@
 <p><strong>Future-leaning</strong></p>
 <ul>
 <li>[ ] Simulation API</li>
+<li>[ ] Import from VScode</li>
 </ul>
 <h2 id="whywhen-should-i-use-dishpy-over-x">Why/when should I use DishPy over X?</h2>
 <ul>
@@ -272,14 +273,8 @@
 </ul>
 <p>Note that, unlike PROS &amp; vexide, DishPy is not a <em>from-scratch</em> rewrite that does scheduling and everything (as an eight grader I am physically unable to make such a thing). Instead, it uses the exact same Python VM as VEXcode and the VScode extension and uploads code in the exact same way and binds to the same SDK -- the only difference is that the DX of DishPy is wayyy better.</p>
 <h2 id="should-you-use-dishpy">Should you use DishPy?</h2>
-<p>Unfortunately, the answer right now is <strong>probably not</strong> if you are a competition team. I cannot confirm I will be available to debug or maintain this at all times, so keep that in mind.</p>
-<p>If you do want to use this in competition, make sure to read the amalgamated files before running the programs to make sure nothing was lost in translation.</p>
-<p>If you want to make this better, feel free to</p>
-<ol>
-<li>Contribute and file a PR. The entire repository is open-source (that's probably how you are reading this :P)</li>
-<li>Fork it! This is MIT licensed so you can do whatever you want</li>
-<li>Play with it, report errors, and ping me in VTOW about them.</li>
-</ol>
+<p>Yes! If you are currently using Python in VEXcode or VSCode, it is <strong>zero cost</strong> to switch; your current code will Just Work™.</p>
+<p>To be clear, DishPy is still in active development and is not fully finished -- there will definitely be some sharp corners. I cannot confirm I will be available to debug or maintain this at all times, so keep that in mind. If you want to be safe when using this in competition, make sure to read the amalgamated files before running the programs to make sure nothing was lost in translation.</p>
 <h2 id="features">Features</h2>
 <ul>
 <li><strong>Project Management</strong>: Initialize new VEX robotics projects with a structured template</li>
@@ -298,17 +293,27 @@
 </ul>
 <h2 id="requirements">Requirements</h2>
 <ul>
-<li>Python 3.12+ with uv (see <a href="https://raw.githubusercontent.com/aadishv/dishpy/refs/heads/main/Tutorial/1_installation.md">1. Installation</a>)</li>
+<li>Python 3.12+ with uv (see <a href="https://aadishv.github.io/dishpy/Tutorial/1_installation/">1. Installation</a>)</li>
 <li>VEX V5 Brain with USB connection</li>
 </ul>
 <h2 id="contributing">Contributing</h2>
-<p>DishPy is designed to streamline VEX Competition robotics development in Python. Contributions are welcome for:</p>
+<p>Contributions are welcome for:</p>
 <ul>
 <li>Literally anything</li>
 </ul>
+<p>If you want to help improve DishPy, feel free to</p>
+<ol>
+<li>Contribute and file a PR. The entire repository is open-source (that's probably how you are reading this :P)</li>
+<li>Fork it! This is MIT licensed so you can do whatever you want</li>
+<li>Play with it, report errors, and ping me in VTOW about them.</li>
+</ol>
 <h2 id="license">License</h2>
 <p>This project is licensed under the MIT License.</p>
 <h2 id="changelog">Changelog</h2>
+<p><strong>v1.0.1</strong></p>
+<ul>
+<li>Added <code>requests</code> as a dependency to avoid installation not working.</li>
+</ul>
 <p><strong>v1.0</strong></p>
 <ul>
 <li>This marks an important milestone for DishPy. All of the core features of DishPy (read: most of the codebase) is fully stable. I won't need to make any more changes to add major new features.</li>
