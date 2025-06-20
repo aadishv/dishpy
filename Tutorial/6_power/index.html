@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>
-            3. Using multi-file capabilities in DishPy - DishPy Docs
+            6. DishPy for power users - DishPy Docs
         </title>
         <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
         <link rel="stylesheet" href="/dishpy/index.css" />
@@ -62,7 +62,7 @@
                                             </div>
                                         
                                             <div style="margin-left: 2rem">
-                                                <a href="./" class="text-sm font-semibold">
+                                                <a href="../3_multifile/" class="text-sm ">
                                                     3. Using multi-file capabilities in DishPy
                                                 </a>
                                             </div>
@@ -80,7 +80,7 @@
                                             </div>
                                         
                                             <div style="margin-left: 2rem">
-                                                <a href="../6_power/" class="text-sm ">
+                                                <a href="./" class="text-sm font-semibold">
                                                     6. DishPy for power users
                                                 </a>
                                             </div>
@@ -161,36 +161,43 @@
                             <div id="toc-content" class="px-6 pb-6 ml-5" style="display: none;">
                                 
                                     <div>
-                                        <a href="#3-using-multi-file-capabilities-in-dishpy" class="text-sm">
-                                            3. Using multi-file capabilities in DishPy
+                                        <a href="#6-dishpy-for-power-users" class="text-sm">
+                                            6. DishPy for power users
                                         </a>
                                     </div>
                                     
                                         
                                             <div style="margin-left: 2rem">
-                                                <a href="#example-simple-multi-file-robot" class="text-sm">
-                                                    Example: Simple Multi-File Robot
+                                                <a href="#interactive-python-repl" class="text-sm">
+                                                    Interactive Python REPL
+                                                </a>
+                                            </div>
+                                            
+                                        
+                                            <div style="margin-left: 2rem">
+                                                <a href="#separate-build-and-upload-commands" class="text-sm">
+                                                    Separate Build and Upload Commands
                                                 </a>
                                             </div>
                                             
                                                 
                                                     <div style="margin-left: 4rem">
-                                                        <a href="#project-structure" class="text-sm">
-                                                            Project Structure
+                                                        <a href="#build-only" class="text-sm">
+                                                            Build Only
                                                         </a>
                                                     </div>
                                                     
                                                 
                                                     <div style="margin-left: 4rem">
-                                                        <a href="#motor-module-srcmotorspy" class="text-sm">
-                                                            Motor Module (src/motors.py)
+                                                        <a href="#upload-only" class="text-sm">
+                                                            Upload Only
                                                         </a>
                                                     </div>
                                                     
                                                 
                                                     <div style="margin-left: 4rem">
-                                                        <a href="#main-program-srcmainpy" class="text-sm">
-                                                            Main Program (src/main.py)
+                                                        <a href="#when-to-use-separate-commands" class="text-sm">
+                                                            When to Use Separate Commands
                                                         </a>
                                                     </div>
                                                     
@@ -198,17 +205,33 @@
                                             
                                         
                                             <div style="margin-left: 2rem">
-                                                <a href="#building" class="text-sm">
-                                                    Building
+                                                <a href="#simulation-api" class="text-sm">
+                                                    Simulation API
                                                 </a>
                                             </div>
                                             
-                                        
-                                            <div style="margin-left: 2rem">
-                                                <a href="#benefits" class="text-sm">
-                                                    Benefits
-                                                </a>
-                                            </div>
+                                                
+                                                    <div style="margin-left: 4rem">
+                                                        <a href="#understanding-stubbed-functions" class="text-sm">
+                                                            Understanding Stubbed Functions
+                                                        </a>
+                                                    </div>
+                                                    
+                                                
+                                                    <div style="margin-left: 4rem">
+                                                        <a href="#creating-custom-simulations" class="text-sm">
+                                                            Creating Custom Simulations
+                                                        </a>
+                                                    </div>
+                                                    
+                                                
+                                                    <div style="margin-left: 4rem">
+                                                        <a href="#simulation-frontends" class="text-sm">
+                                                            Simulation Frontends
+                                                        </a>
+                                                    </div>
+                                                    
+                                                
                                             
                                         
                                     
@@ -219,57 +242,98 @@
                 </div>
             
 
-            <h1 id="3-using-multi-file-capabilities-in-dishpy">3. Using multi-file capabilities in DishPy</h1>
-<p>As your robot programs grow, organizing code into multiple files makes development easier. DishPy automatically combines all your files into a single program for the V5 brain.</p>
-<h2 id="example-simple-multi-file-robot">Example: Simple Multi-File Robot</h2>
-<p>Let's split our robot code into logical modules:</p>
-<h3 id="project-structure">Project Structure</h3>
-<pre><code>my-robot/
-├── dishpy.toml
-├── src/
-│   ├── main.py
-│   ├── motors.py
-│   └── vex/
-└── .out/
+            <h1 id="6-dishpy-for-power-users">6. DishPy for power users</h1>
+<p>If you are a more advanced user, DishPy offers some more powerful functionality as well.</p>
+<h2 id="interactive-python-repl">Interactive Python REPL</h2>
+<p>One of the most powerful features for debugging and experimentation is the ability to access the MicroPython REPL (Read-Eval-Print Loop) directly on your V5 brain.</p>
+<p>After running your Python program and opening the terminal with <code>uvx dishpy terminal</code>, once your competition task finishes executing, you can press Enter to drop into the MicroPython REPL. The REPL is an interactive Python shell that allows you to type Python commands and see them execute immediately on the V5 brain.</p>
+<p>Here's how to use it:</p>
+<ol>
+<li>
+<p>Run your program and open the terminal:
+   <code>bash
+   uvx dishpy mu
+   uvx dishpy terminal</code></p>
+</li>
+<li>
+<p>Wait for your program to finish running (or reach a stopping point)</p>
+</li>
+<li>
+<p>Press Enter to access the REPL prompt (<code>&gt;&gt;&gt;</code>)</p>
+</li>
+<li>
+<p>Type Python code directly and see it execute on the V5 brain:</p>
+</li>
+</ol>
+<pre><code class="language-python">&gt;&gt;&gt; print(&quot;Hello from the REPL!&quot;)
+Hello from the REPL!
+&gt;&gt;&gt; import vex
+&gt;&gt;&gt; brain = vex.Brain()
+&gt;&gt;&gt; brain.screen.print(&quot;Direct control!&quot;)
+&gt;&gt;&gt; motor = vex.Motor(vex.Ports.PORT1)
+&gt;&gt;&gt; motor.spin(vex.FORWARD, 50, vex.PERCENT)
 </code></pre>
-<h3 id="motor-module-srcmotorspy">Motor Module (<code>src/motors.py</code>)</h3>
-<pre><code class="language-python">import vex
-
-left_motor = vex.Motor(vex.Ports.PORT1)
-right_motor = vex.Motor(vex.Ports.PORT2, True)
-
-def drive_forward():
-    left_motor.spin(vex.FORWARD, 50, vex.PERCENT)
-    right_motor.spin(vex.FORWARD, 50, vex.PERCENT)
-
-def stop():
-    left_motor.stop()
-    right_motor.stop()
-</code></pre>
-<h3 id="main-program-srcmainpy">Main Program (<code>src/main.py</code>)</h3>
-<pre><code class="language-python">import vex
-from motors import drive_forward, stop
-
-brain = vex.Brain()
-
-brain.screen.print(&quot;Multi-file robot!&quot;)
-drive_forward()
-vex.wait(2, vex.SECONDS)
-stop()
-brain.screen.print(&quot;Done!&quot;)
-</code></pre>
-<h2 id="building">Building</h2>
-<pre><code class="language-bash">uvx dishpy mu
-</code></pre>
-<p>DishPy will combine both files into <code>.out/main.py</code> and upload to your brain.</p>
-<h2 id="benefits">Benefits</h2>
+<p>This is incredibly useful for:</p>
 <ul>
-<li><strong>Organization</strong>: Related code stays together</li>
-<li><strong>Reusability</strong>: Share motor functions across projects</li>
-<li><strong>Team work</strong>: Multiple people can work on different files</li>
-<li><strong>Single deployment</strong>: V5 brain still gets one optimized file</li>
+<li>Testing motor movements without redeploying code</li>
+<li>Debugging sensor values in real-time</li>
+<li>Experimenting with new code snippets</li>
+<li>Learning the VEX API interactively</li>
 </ul>
-<p>The amalgamation process handles all imports and ensures your multi-file project works exactly the same as a single file would.</p>
+<h2 id="separate-build-and-upload-commands">Separate Build and Upload Commands</h2>
+<p>While <code>dishpy mu</code> is the most convenient command for everyday development (as it builds and uploads your project in one step), DishPy also provides separate <code>build</code> and <code>upload</code> commands for more advanced workflows.</p>
+<h3 id="build-only">Build Only</h3>
+<p>To build your project without uploading it to the brain:</p>
+<pre><code class="language-bash">uvx dishpy build
+</code></pre>
+<p>This command:</p>
+<ul>
+<li>Combines all your project files into a single Python file</li>
+<li>Places the result in <code>.out/main.py</code></li>
+<li>Does not attempt to connect to or upload to the V5 brain</li>
+</ul>
+<p>This is useful when you want to:</p>
+<ul>
+<li>Check that your code compiles without having a brain connected</li>
+<li>Inspect the combined output before uploading</li>
+<li>Build as part of a CI/CD pipeline</li>
+</ul>
+<h3 id="upload-only">Upload Only</h3>
+<p>To upload a previously built file to the brain:</p>
+<pre><code class="language-bash">uvx dishpy upload .out/main.py
+</code></pre>
+<p>This command uploads the specified file directly to the V5 brain without building first.</p>
+<h3 id="when-to-use-separate-commands">When to Use Separate Commands</h3>
+<p>You should generally use <code>dishpy mu</code> unless you have a specific reason to separate the build and upload steps, such as:</p>
+<ul>
+<li>Building on one machine and uploading on another</li>
+<li>Testing the build process in automated environments</li>
+<li>Uploading different versions of code without rebuilding</li>
+<li>Debugging build issues by examining the intermediate output</li>
+</ul>
+<h2 id="simulation-api">Simulation API</h2>
+<p>One of the powerful aspects of DishPy is that all DishPy programs are regular Python programs. This means you can run your robot code directly on your computer for testing and simulation purposes:</p>
+<pre><code class="language-bash">python3 src/main.py
+</code></pre>
+<h3 id="understanding-stubbed-functions">Understanding Stubbed Functions</h3>
+<p>When you run your code on your computer, calling VEX functions (like <code>motor.spin()</code> or <code>brain.screen.print()</code>) results in nothing happening. These functions are "stubbed" in <code>src/vex/__init__.py</code>.</p>
+<p>Stubbing means that the functions are defined but contain no actual implementation - they're empty placeholders that do nothing when called. This allows your code to run without errors even when the actual VEX hardware isn't available.</p>
+<h3 id="creating-custom-simulations">Creating Custom Simulations</h3>
+<p>If you want to simulate specific robot behaviors, you can modify the functions in <code>src/vex/__init__.py</code> to add your own implementation. For example, you could:</p>
+<ul>
+<li>Make <code>motor.spin()</code> print debug information about motor commands</li>
+<li>Have <code>brain.screen.print()</code> display text in a GUI window</li>
+<li>Make sensors return simulated values based on your test scenarios</li>
+</ul>
+<h3 id="simulation-frontends">Simulation Frontends</h3>
+<p>You can leverage this simulation capability to attach your own simulation frontends:</p>
+<ul>
+<li>Connect to robotics simulators like Webots or Gazebo</li>
+<li>Create visual representations of your robot's behavior</li>
+<li>Build automated testing frameworks that run your code against various scenarios</li>
+<li>Develop debugging tools that visualize sensor data and motor commands</li>
+</ul>
+<p>This flexibility makes DishPy programs highly testable and allows for rapid development without constant hardware deployment.</p>
         </div>
 
         <script>
