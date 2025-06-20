@@ -86,6 +86,16 @@ This project is licensed under the MIT License.
 
 ## Changelog
 
+**v1.1**
+
+* We have an actual logo(!!!). It is... wait for it... a pie... on a dish 🤯
+* We now support templates! These templates are the exact same as those available in VEXcode and VSCode
+* Added a `dishpy terminal` command
+* Added docs for terminal, as well as a dedicated section on advanced uses of DishPy.
+* Lightning bugfixes
+  * Fixed `dishpy vexcom args` not correctly passing through `args`
+  * Fixed bug in `time.sleep` call in Python stubs
+
 **v1.0.1**
 
 * Added `requests` as a dependency to avoid installation not working.
