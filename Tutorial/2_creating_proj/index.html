@@ -167,6 +167,15 @@
                                                 </a>
                                             </div>
                                             
+                                                
+                                                    <div style="margin-left: 4rem">
+                                                        <a href="#using-a-template" class="text-sm">
+                                                            Using a Template
+                                                        </a>
+                                                    </div>
+                                                    
+                                                
+                                            
                                         
                                             <div style="margin-left: 2rem">
                                                 <a href="#project-structure" class="text-sm">
@@ -230,6 +239,24 @@
 </code></pre>
 <p>You can also specify which slot on the V5 brain your program should use (defaults to slot 1):</p>
 <pre><code class="language-bash">uvx dishpy create --name &quot;my-robot&quot; --slot 2
+</code></pre>
+<h3 id="using-a-template">Using a Template</h3>
+<p>DishPy supports project templates to help you get started with different robot configurations or code patterns. Use the <code>--template</code> option to select a template when creating your project:</p>
+<pre><code class="language-bash">uvx dishpy create --name &quot;my-robot&quot; --template TEMPLATE_NAME
+</code></pre>
+<p>Available templates:
+- right_arcade_control
+- clawbot_controller_tank
+- clawbot
+- empty
+- limit_bumper_sensing
+- drive_to_location_gps
+- using_threads
+- competition_template
+- split_arcade_control
+- drivetrain_sensing</p>
+<p>For example, to start a project with the <code>clawbot</code> template:</p>
+<pre><code class="language-bash">uvx dishpy create --name &quot;my-robot&quot; --template clawbot
 </code></pre>
 <h2 id="project-structure">Project Structure</h2>
 <p>After running the create command, DishPy will generate a project directory with the following structure:</p>
