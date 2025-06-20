@@ -13,7 +13,7 @@ A Python development tool for VEX Competition robotics that combines multi-file 
  - [x] Bindings to vexcom
  - [x] Project initialization CLI
  - [x] Better documentation for using vexcom's common functions
- - [ ] VEXcom wrappers for ease-of-use
+ - [x] VEXcom wrappers for ease-of-use
  - [x] templates
 
 **Core premise**
@@ -26,6 +26,7 @@ A Python development tool for VEX Competition robotics that combines multi-file 
 **Future-leaning**
 
  - [ ] Simulation API
+ - [ ] Import from VScode
 
 ## Why/when should I use DishPy over X?
 
@@ -38,16 +39,10 @@ Note that, unlike PROS & vexide, DishPy is not a *from-scratch* rewrite that doe
 
 ## Should you use DishPy?
 
-Unfortunately, the answer right now is **probably not** if you are a competition team. I cannot confirm I will be available to debug or maintain this at all times, so keep that in mind.
+Yes! If you are currently using Python in VEXcode or VSCode, it is **zero cost** to switch; your current code will Just Work™.
 
-If you do want to use this in competition, make sure to read the amalgamated files before running the programs to make sure nothing was lost in translation.
 
-If you want to make this better, feel free to
-
-1. Contribute and file a PR. The entire repository is open-source (that's probably how you are reading this :P)
-2. Fork it! This is MIT licensed so you can do whatever you want
-3. Play with it, report errors, and ping me in VTOW about them.
-
+To be clear, DishPy is still in active development and is not fully finished -- there will definitely be some sharp corners. I cannot confirm I will be available to debug or maintain this at all times, so keep that in mind. If you want to be safe when using this in competition, make sure to read the amalgamated files before running the programs to make sure nothing was lost in translation.
 
 ## Features
 
@@ -68,20 +63,30 @@ DishPy includes pre-compiled vexcom binaries for:
 
 ## Requirements
 
-- Python 3.12+ with uv (see [1. Installation](Tutorial/1_installation.md))
+- Python 3.12+ with uv (see [1. Installation](https://aadishv.github.io/dishpy/Tutorial/1_installation/))
 - VEX V5 Brain with USB connection
 
 ## Contributing
 
-DishPy is designed to streamline VEX Competition robotics development in Python. Contributions are welcome for:
+Contributions are welcome for:
 
 * Literally anything
+
+If you want to help improve DishPy, feel free to
+
+1. Contribute and file a PR. The entire repository is open-source (that's probably how you are reading this :P)
+2. Fork it! This is MIT licensed so you can do whatever you want
+3. Play with it, report errors, and ping me in VTOW about them.
 
 ## License
 
 This project is licensed under the MIT License.
 
 ## Changelog
+
+**v1.0.1**
+
+* Added `requests` as a dependency to avoid installation not working.
 
 **v1.0**
 
