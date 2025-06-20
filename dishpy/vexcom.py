@@ -2,6 +2,7 @@ import platform
 import sys
 import subprocess
 import os
+import signal
 from pathlib import Path
 from platformdirs import user_cache_dir
 from rich.console import Console
@@ -95,6 +96,28 @@ def install_vexcom():
     except Exception as e:
         console.print(f"❌ [red]Error installing VEXcom tools: {e}[/red]")
         raise
+
+
+def run_in_process(*args):
+    """Run vexcom by replacing the current process - Ctrl+C naturally forwards to vexcom"""
+    # Check if vexcom is installed, install if not
+    if not is_vexcom_installed():
+        install_vexcom()
+
+    # Verify installation was successful
+    if not is_vexcom_installed():
+        console.print("❌ [red]VEXcom installation failed[/red]")
+        sys.exit(1)
+
+    vexcom_exe = get_vexcom_executable()
+    
+    # Replace the current process with vexcom
+    # This way Ctrl+C will naturally go to vexcom
+    try:
+        os.execvp(str(vexcom_exe), [str(vexcom_exe)] + list(args))
+    except OSError as e:
+        console.print(f"❌ [red]Error executing vexcom: {e}[/red]")
+        sys.exit(1)
 
 
 def run_vexcom(*args):

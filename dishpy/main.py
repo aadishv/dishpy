@@ -7,7 +7,7 @@ from . import __version__
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
-from .vexcom import run_vexcom, get_vexcom_cache_dir
+from .vexcom import run_vexcom, get_vexcom_cache_dir, run_in_process
 from .amalgamator import combine_project
 from .utils import get_url_file_type, dir_path
 import tomllib
@@ -351,6 +351,10 @@ class Cli:
                 },
             },
         },
+        "terminal": {
+            "help": "open terminal for the V5 brain",
+            "arguments": [],
+        },
     }
 
     @staticmethod
@@ -522,6 +526,13 @@ class Cli:
         if len(sys.argv) <= 1 or sys.argv[1] in ["-h", "--help", "help"]:
             self.show_help()
             return
+
+        # Special handling for vexcom to pass through all arguments
+        if len(sys.argv) > 1 and sys.argv[1] == "vexcom":
+            vexcom_args = sys.argv[2:]  # Everything after 'vexcom'
+            run_vexcom(*vexcom_args)
+            return
+
         parser = self.parse_args()
         try:
             args = parser.parse_args()
@@ -565,9 +576,12 @@ class Cli:
                 except Exception as e:
                     self.console.print(f"❌ [red]Error: {e}[/red]")
             case "vexcom":
+                # This case should not be reached due to special handling above
                 run_vexcom(*args.args)
             case "add":
                 self.add(args)
+            case "terminal":
+                run_in_process("--user")
             case _:
                 self.show_help()
 
