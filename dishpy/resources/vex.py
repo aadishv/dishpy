@@ -618,9 +618,9 @@ def wait(duration: vexnumber, units=TimeUnits.MSEC):
         None
     """
     if units == TimeUnits.SECONDS:
-        time.sleep(duration / 1000)
-    else:
         time.sleep(duration)
+    else: # milliseconds
+        time.sleep(duration / 1000)
 
 
 def on_screen_errors(value: int):
