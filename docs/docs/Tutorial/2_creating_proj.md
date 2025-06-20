@@ -100,4 +100,14 @@ The `mu` command will:
 
 > **Note**: Since this is a simple single-file project, the `.out/main.py` file will be nearly identical to your `src/main.py`. The real power of DishPy's code combination becomes apparent when you start using multiple files and importing local modules, which we'll cover in later tutorials.
 
-After uploading, you should see your message displayed on the V5 brain's screen!
+After uploading and running, you should see your message displayed on the V5 brain's screen!
+
+## Opening a Terminal to the V5 Brain
+
+DishPy also provides a convenient way to open a terminal connection to your V5 brain for debugging and monitoring:
+
+```bash
+uvx dishpy terminal
+```
+
+This command opens a direct terminal connection to the V5 brain, allowing you to see print output from your program in real-time and interact with the brain's console. This is especially useful for debugging your robot programs.
