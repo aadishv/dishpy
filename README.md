@@ -86,6 +86,14 @@ This project is licensed under the MIT License.
 
 ## Changelog
 
+**v1.2**
+
+* Bumped package version to `1.2`.
+* New `dishpy mut` command: builds the project, uploads it to the V5 brain, then opens a terminal session.
+* Improved build pipeline to have faster and simpler builds.
+* Uploads now shows progress and timer.
+* DishPy will now automatically scaffold missing project files if a requested project is nonexistent and falls back to an empty template when appropriate.
+
 **v1.1**
 
 * We have an actual logo(!!!). It is... wait for it... a pie... on a dish 🤯

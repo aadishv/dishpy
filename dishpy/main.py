@@ -8,8 +8,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 from .vexcom import run_vexcom, get_vexcom_cache_dir, run_in_process
-from .amalgamator import combine_project
 from .utils import get_url_file_type, dir_path
+import python_combiner as python_compiler
 import tomllib
 import tomli_w
 import textcase
@@ -35,7 +35,9 @@ class Project:
 
         for i in [self.src, self.main_file, self.vex_dir, self.vex_init, self.out_dir]:
             if not i.exists():
-                raise FileNotFoundError()
+                self.scaffold(path, name, slot)
+                console.print("🔧 [yellow]Scaffolded missing parts of project[/yellow]")
+                break
 
     @staticmethod
     def scaffold(
@@ -66,14 +68,36 @@ class Project:
         vex_path = os.path.join(script_dir, "resources", "vex.py")
 
         # Copy template to src/main.py
-        shutil.copy2(template_path, main_file)
-        shutil.copy2(vex_path, vex_init)
+        if template_path is None:
+            template_path = os.path.join(vex_path, 'resources', 'empty.py')
+        if not main_file.exists():
+            shutil.copy2(template_path, main_file)
+        if not vex_init.exists():
+            shutil.copy2(vex_path, vex_init)
 
     def upload(self, path: Path):
-        run_vexcom("--name", self.name, "--slot", str(self.slot), "--write", str(path))
+        run_vexcom("--name", self.name, "--slot", str(self.slot), "--write", str(path), "--timer", "--progress")
 
     def build(self, verbose=False):
-        combine_project(self.main_file, self.out_dir / "main.py", verbose)
+        console.print("📦 [yellow]Combining project into a single file...[/yellow]")
+        with open(self.main_file, "r") as f:
+            main_src = f.read()
+        compiler = python_compiler.Compiler(
+            main_src,
+            str(self.main_file),
+            options=python_compiler.CompilerOptions(
+                plugins=[],
+                remove_imports=['vex'],
+                export_dictionary_mode="class_instance"
+            ),
+        )
+        with open(self.out_dir / "main.py", "w") as f:
+            f.write(compiler())
+        console.print(
+            "✅ [green]Project combined successfully into[/green] [bold cyan] "
+            + str(self.out_dir / "main.py")
+            + "[/bold cyan]"
+        )
 
     def add(self, package: str, path_to_go: Path | None = None):
         package_path = get_vexcom_cache_dir() / "packages" / f"{package}.zip"
@@ -244,21 +268,16 @@ class DishPy:
             and (name := project.get("name"))
             and (slot := project.get("slot"))
         ):
-            try:
-                if (
-                    (package := self.config.get("package"))
-                    and (package_name := package.get("package_name"))
-                    and (version := package.get("version"))
-                ):
-                    self.instance = Package(
-                        self.path, name, slot, package_name, version
-                    )
-                else:
-                    self.instance = Project(self.path, name, slot)
-            except FileNotFoundError:
-                raise FileNotFoundError(
-                    f"Project '{self.config['project']['name']}' not found"
+            if (
+                (package := self.config.get("package"))
+                and (package_name := package.get("package_name"))
+                and (version := package.get("version"))
+            ):
+                self.instance = Package(
+                    self.path, name, slot, package_name, version
                 )
+            else:
+                self.instance = Project(self.path, name, slot)
         else:
             raise FileNotFoundError("Malformed 'dishpy.toml' file")
 
@@ -298,6 +317,10 @@ class Cli:
                     "help": "Enable verbose output",
                 }
             ],
+        },
+        "mut": {
+            "help": "Build, upload project to VEX V5 brain, then open terminal",
+            "arguments": [],
         },
         "build": {
             "help": "Build project to out directory",
@@ -561,6 +584,15 @@ class Cli:
                     instance = DishPy(Path())
                     instance.instance.build(args.verbose)
                     instance.instance.upload(instance.instance.out_dir / "main.py")
+                except Exception as e:
+                    self.console.print(f"❌ [red]Error: {e}[/red]")
+            case "mut":
+                try:
+                    instance = DishPy(Path())
+                    # no flags for mut; use default verbose=False
+                    instance.instance.build()
+                    instance.instance.upload(instance.instance.out_dir / "main.py")
+                    run_in_process("--user")
                 except Exception as e:
                     self.console.print(f"❌ [red]Error: {e}[/red]")
             case "build":
