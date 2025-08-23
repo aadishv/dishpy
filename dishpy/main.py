@@ -76,7 +76,7 @@ class Project:
             shutil.copy2(vex_path, vex_init)
 
     def upload(self, path: Path):
-        run_vexcom("--name", self.name, "--slot", str(self.slot), "--write", str(path))
+        run_vexcom("--name", self.name, "--slot", str(self.slot), "--write", str(path), "--timer", "--progress")
 
     def build(self, verbose=False):
         console.print("📦 [yellow]Combining project into a single file...[/yellow]")
