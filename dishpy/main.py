@@ -316,6 +316,10 @@ class Cli:
                 }
             ],
         },
+        "mut": {
+            "help": "Build, upload project to VEX V5 brain, then open terminal",
+            "arguments": [],
+        },
         "build": {
             "help": "Build project to out directory",
             "arguments": [
@@ -578,6 +582,15 @@ class Cli:
                     instance = DishPy(Path())
                     instance.instance.build(args.verbose)
                     instance.instance.upload(instance.instance.out_dir / "main.py")
+                except Exception as e:
+                    self.console.print(f"❌ [red]Error: {e}[/red]")
+            case "mut":
+                try:
+                    instance = DishPy(Path())
+                    # no flags for mut; use default verbose=False
+                    instance.instance.build()
+                    instance.instance.upload(instance.instance.out_dir / "main.py")
+                    run_in_process("--user")
                 except Exception as e:
                     self.console.print(f"❌ [red]Error: {e}[/red]")
             case "build":
