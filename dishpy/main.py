@@ -10,7 +10,6 @@ from rich.text import Text
 from .vexcom import run_vexcom, get_vexcom_cache_dir, run_in_process
 from .utils import get_url_file_type, dir_path
 import python_combiner as python_compiler
-from python_combiner.plugin.minifier import MinifyPlugin
 import tomllib
 import tomli_w
 import textcase
@@ -87,7 +86,9 @@ class Project:
             main_src,
             str(self.main_file),
             options=python_compiler.CompilerOptions(
-                plugins=[MinifyPlugin()]
+                plugins=[],
+                remove_imports=['vex'],
+                export_dictionary_mode="class_instance"
             ),
         )
         with open(self.out_dir / "main.py", "w") as f:

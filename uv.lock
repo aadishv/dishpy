@@ -180,6 +180,8 @@ dependencies = [
     { name = "mkdocstrings", extra = ["python"] },
     { name = "platformdirs" },
     { name = "pygame" },
+    { name = "python-combiner" },
+    { name = "python-minifier" },
     { name = "requests" },
     { name = "rich" },
     { name = "testcase" },
@@ -212,6 +214,8 @@ requires-dist = [
     { name = "platformdirs", specifier = ">=4.0.0" },
     { name = "pygame", specifier = ">=2.6.1" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0.0" },
+    { name = "python-combiner", specifier = ">=0.3.0" },
+    { name = "python-minifier", specifier = ">=2.2.0" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "rich", specifier = ">=14.0.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.1.0" },
@@ -735,6 +739,15 @@ wheels = [
 ]
 
 [[package]]
+name = "python-combiner"
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ba/33/307be901dbe5546b8d12240e2fa0796288613a6f285ad39e9ec9bbcbb1f2/python_combiner-0.3.0.tar.gz", hash = "sha256:7d800553f3551d983d5818a978b65d0ba71aef0065079c1d66069b54560b06be", size = 18400, upload-time = "2025-02-22T08:04:59.21Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9b/87/291e9be1da5a1db3c6e968b6cb6ca0e938e1f02df01b0142e58ec634cfd6/python_combiner-0.3.0-py3-none-any.whl", hash = "sha256:756f69dc45d4e976cad5b1d57fe4cdd97ca92f4c34585dd9901d852200de0f1c", size = 21896, upload-time = "2025-02-22T08:04:57.159Z" },
+]
+
+[[package]]
 name = "python-dateutil"
 version = "2.9.0.post0"
 source = { registry = "https://pypi.org/simple" }
@@ -744,6 +757,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/66/c0/0c8b6ad9f17a802ee498c46e004a0eb49bc148f2fd230864601a86dcf6db/python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3", size = 342432, upload-time = "2024-03-01T18:36:20.211Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427", size = 229892, upload-time = "2024-03-01T18:36:18.57Z" },
+]
+
+[[package]]
+name = "python-minifier"
+version = "3.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/3d/ca/6e16622e3730c55a0f25df37e03360e3f35263fc018569bd3e151bcdd3ac/python_minifier-3.0.0.tar.gz", hash = "sha256:5d892a20a8c56a34176fa8bfff007afc2aa4999abc81fa1c3507fb0b1a9790da", size = 69082, upload-time = "2025-08-13T15:40:18.587Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/38/de/00a567ad50de5eebfe658acb93d4267138571bf40248c67a372949e185a5/python_minifier-3.0.0-py3-none-any.whl", hash = "sha256:a1f6806d3865c35a1297e89c1584c04387926ad1853c86681b1cc734f269fa0d", size = 57100, upload-time = "2025-08-13T15:40:17.011Z" },
 ]
 
 [[package]]
