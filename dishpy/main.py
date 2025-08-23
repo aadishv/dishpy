@@ -8,8 +8,9 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 from .vexcom import run_vexcom, get_vexcom_cache_dir, run_in_process
-from .amalgamator import combine_project
 from .utils import get_url_file_type, dir_path
+import python_combiner as python_compiler
+from python_combiner.plugin.minifier import MinifyPlugin
 import tomllib
 import tomli_w
 import textcase
@@ -73,7 +74,23 @@ class Project:
         run_vexcom("--name", self.name, "--slot", str(self.slot), "--write", str(path))
 
     def build(self, verbose=False):
-        combine_project(self.main_file, self.out_dir / "main.py", verbose)
+        console.print("📦 [yellow]Combining project into a single file...[/yellow]")
+        with open(self.main_file, "r") as f:
+            main_src = f.read()
+        compiler = python_compiler.Compiler(
+            main_src,
+            str(self.main_file),
+            options=python_compiler.CompilerOptions(
+                plugins=[MinifyPlugin()]
+            ),
+        )
+        with open(self.out_dir / "main.py", "w") as f:
+            f.write(compiler())
+        console.print(
+            "✅ [green]Project combined successfully into[/green] [bold cyan] "
+            + str(self.out_dir / "main.py")
+            + "[/bold cyan]"
+        )
 
     def add(self, package: str, path_to_go: Path | None = None):
         package_path = get_vexcom_cache_dir() / "packages" / f"{package}.zip"

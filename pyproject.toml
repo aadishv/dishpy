@@ -45,6 +45,8 @@ dependencies = [
     "requests>=2.32.3",
     "mkdocs-embed-external-markdown>=3.0.2",
     "pygame>=2.6.1",
+    "python-combiner>=0.3.0",
+    "python-minifier>=2.2.0",
 ]
 
 [project.urls]
