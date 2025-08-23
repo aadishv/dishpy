@@ -36,7 +36,9 @@ class Project:
 
         for i in [self.src, self.main_file, self.vex_dir, self.vex_init, self.out_dir]:
             if not i.exists():
-                raise FileNotFoundError()
+                self.scaffold(path, name, slot)
+                console.print("🔧 [yellow]Scaffolded missing parts of project[/yellow]")
+                break
 
     @staticmethod
     def scaffold(
@@ -67,8 +69,12 @@ class Project:
         vex_path = os.path.join(script_dir, "resources", "vex.py")
 
         # Copy template to src/main.py
-        shutil.copy2(template_path, main_file)
-        shutil.copy2(vex_path, vex_init)
+        if template_path is None:
+            template_path = os.path.join(vex_path, 'resources', 'empty.py')
+        if not main_file.exists():
+            shutil.copy2(template_path, main_file)
+        if not vex_init.exists():
+            shutil.copy2(vex_path, vex_init)
 
     def upload(self, path: Path):
         run_vexcom("--name", self.name, "--slot", str(self.slot), "--write", str(path))
@@ -261,21 +267,16 @@ class DishPy:
             and (name := project.get("name"))
             and (slot := project.get("slot"))
         ):
-            try:
-                if (
-                    (package := self.config.get("package"))
-                    and (package_name := package.get("package_name"))
-                    and (version := package.get("version"))
-                ):
-                    self.instance = Package(
-                        self.path, name, slot, package_name, version
-                    )
-                else:
-                    self.instance = Project(self.path, name, slot)
-            except FileNotFoundError:
-                raise FileNotFoundError(
-                    f"Project '{self.config['project']['name']}' not found"
+            if (
+                (package := self.config.get("package"))
+                and (package_name := package.get("package_name"))
+                and (version := package.get("version"))
+            ):
+                self.instance = Package(
+                    self.path, name, slot, package_name, version
                 )
+            else:
+                self.instance = Project(self.path, name, slot)
         else:
             raise FileNotFoundError("Malformed 'dishpy.toml' file")
 
