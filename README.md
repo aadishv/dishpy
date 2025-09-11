@@ -151,5 +151,3 @@ This project is licensed under the MIT License.
 * andrew | 781X (digging thru extension code w/ me)
 * Aadish | 3151A (me)
 * Chroma | 3332A | 3151A (inspiration)
-* Gemini 2.5 Pro (LLM -- first run)
-* Claude 4 Sonnet (LLM -- agentic tasks)
