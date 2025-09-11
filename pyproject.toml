@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dishpy"
-version = "1.2"
+version = "1.2.1"
 description = "A Python development tool for VEX Competition robotics that combines multi-file Python projects into single scripts and uploads them to VEX V5 brains"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -30,23 +30,15 @@ classifiers = [
     "Topic :: Software Development :: Build Tools",
     "Topic :: Software Development :: Code Generators",
 ]
+
 dependencies = [
-    "mkdocs>=1.6.1",
-    "mkdocs-shadcn>=0.5.0",
-    "mkdocs-terminal>=4.7.0",
-    "mkdocstrings[python]>=0.29.1",
     "rich>=14.0.0",
     "platformdirs>=4.0.0",
     "tomli-w>=1.2.0",
     "tomli>=1.2.0; python_version<'3.11'",
-    "testcase>=0.1.0",
     "textcase>=0.4.3",
     "validators>=0.35.0",
-    "requests>=2.32.3",
-    "mkdocs-embed-external-markdown>=3.0.2",
-    "pygame>=2.6.1",
-    "python-combiner>=0.3.0",
-    "python-minifier>=2.2.0",
+    "requests>=2.32.3"
 ]
 
 [project.urls]
@@ -75,4 +67,9 @@ url = "file:///Users/aadishverma/Desktop/codeproj/sandbox/dishpy/pypi"
 dev = [
     "build>=1.2.2.post1",
     "twine>=6.1.0",
+    "mkdocs>=1.6.1",
+    "mkdocs-shadcn>=0.5.0",
+    "mkdocs-terminal>=4.7.0",
+    "mkdocstrings[python]>=0.29.1",
+    "mkdocs-embed-external-markdown>=3.0.2"
 ]

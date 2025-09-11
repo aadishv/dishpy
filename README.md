@@ -35,7 +35,7 @@ A Python development tool for VEX Competition robotics that combines multi-file 
 * PROS/VEXcode text -> you don't like C++
 * vexide -> you don't like Rust
 * VEXcode blocks -> you're a grown up /j
-* VEXcode Python -> you want multifile support, an editor other than VEXcode/VSCode, libraries (coming soon!), and a CLI
+* VEXcode Python -> you want multifile support, an editor other than VEXcode/VSCode, libraries, and a CLI
 
 Note that, unlike PROS & vexide, DishPy is not a *from-scratch* rewrite that does scheduling and everything (as an eight grader I am physically unable to make such a thing). Instead, it uses the exact same Python VM as VEXcode and the VScode extension and uploads code in the exact same way and binds to the same SDK -- the only difference is that the DX of DishPy is wayyy better.
 
@@ -86,9 +86,13 @@ This project is licensed under the MIT License.
 
 ## Changelog
 
+**v1.2.1**
+
+* Reverted to our initial amalgamator implementation -- the library we used for the rewrite was way simpler but failed on some larger repos. The old (vibe-coded) solution was janky but it works, so oh well.
+* Fix minor typos in README.
+
 **v1.2**
 
-* Bumped package version to `1.2`.
 * New `dishpy mut` command: builds the project, uploads it to the V5 brain, then opens a terminal session.
 * Improved build pipeline to have faster and simpler builds.
 * Uploads now shows progress and timer.
