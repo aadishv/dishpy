@@ -82,7 +82,41 @@ $ uvx dishpy==0.5.0
 │                 Options: package_path                                       │
 │                                                                             │
 ╰─────────────────────────────────────────────────────────────────────────────╯
+```
 
+To install it globally (downloads the full wheel so it doesn't have to access the network again):
+```bash
+$ uv pip install --system dishpy
+# or for a specific version:
+$ uv pip install --system dishpy==1.1.0
+# can be ran like:
+$ dishpy
+╭───────────────────────────────────── Help ──────────────────────────────────────╮
+│ dishpy 1.2.1 - VEX Competition Development Tool                                 │
+│                                                                                 │
+│ Commands:                                                                       │
+│ create    Create new directory and initialize project                           │
+│                 Options: --name <name> (required) --slot --template --package   │
+│ add       Add a previously registered package to a project                      │
+│                 Options: package                                                │
+│ mu        Build and upload project to VEX V5 brain                              │
+│                 Options: --verbose                                              │
+│ mut       Build, upload project to VEX V5 brain, then open terminal             │
+│ build     Build project to out directory                                        │
+│                 Options: --verbose                                              │
+│ upload    Upload project to VEX V5 brain                                        │
+│                 Options: path                                                   │
+│ vexcom    Run vexcom with specified arguments (auto-installs if needed)         │
+│                 Options: args                                                   │
+│ debug     debug DishPy CLI internals                                            │
+│ package   Package management commands                                           │
+│   list         List all available packages that have been registered with       │
+│ DishPy                                                                          │
+│   register     Register a package with DishPy                                   │
+│                 Options: package_path                                           │
+│ terminal  open terminal for the V5 brain                                        │
+│                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ## First Run
